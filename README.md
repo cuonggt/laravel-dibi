@@ -6,7 +6,7 @@
 
 You may use Composer to install Dibi into your Laravel project:
 
-    composer require laravel/horizon
+    composer require cuonggt/dibi
     
 After installing Dibi, publish its assets using the vendor:publish Artisan command:
 
