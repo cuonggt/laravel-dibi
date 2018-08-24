@@ -66,8 +66,45 @@ class MysqlDatabase extends AbstractDatabase
         ]);
     }
 
-    protected function getRows($table)
+    protected function getRows($table, $params)
     {
-        return DB::select('select * from '.$table.' limit 0,100');
+        $query = 'select * from '.$table;
+
+        list($sqlWhere, $bindings) = $this->mapParamsToSqlWhere(
+            $params['field'],
+            $params['operator'],
+            $params['keyword']
+        );
+
+        if (! empty($sqlWhere)) {
+            $query .= ' where '.$sqlWhere;
+        }
+
+        $query .= ' limit 0,100';
+
+        return DB::select($query, $bindings);
+    }
+
+    protected function mapParamsToSqlWhere($field, $operator, $keyword)
+    {
+        if (empty($field)) {
+            return ['', []];
+        }
+
+        $sqlWhere = $field . ' ' . $operator;
+
+        if ($operator == 'IS NULL' || $operator == 'IS NOT NULL') {
+            return [$sqlWhere, []];
+        }
+
+        if (empty($keyword)) {
+            return ['', []];
+        }
+
+        if ($operator == 'IN') {
+            return [$sqlWhere . '(' . $keyword . ')', []];
+        }
+
+        return [$sqlWhere.'?', [$keyword]];
     }
 }

@@ -26,9 +26,9 @@ abstract class AbstractDatabase
         return array_map([$this, 'mapColumnToObject'], $this->getColumns($table));
     }
 
-    public function rows($table)
+    public function rows($table, $params)
     {
-        return $this->getRows($table);
+        return $this->getRows($table, $params);
     }
 
     abstract protected function getTables();
@@ -39,5 +39,5 @@ abstract class AbstractDatabase
 
     abstract protected function mapColumnToObject($column);
 
-    abstract protected function getRows($table);
+    abstract protected function getRows($table, $params);
 }
