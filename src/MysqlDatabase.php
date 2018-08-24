@@ -80,6 +80,8 @@ class MysqlDatabase extends AbstractDatabase
             $query .= ' where '.$sqlWhere;
         }
 
+        $query .= ' order by '.$params['sorting'].' '.$params['direction'];
+
         $query .= ' limit 0,100';
 
         return DB::select($query, $bindings);

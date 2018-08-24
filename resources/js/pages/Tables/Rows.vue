@@ -13,6 +13,8 @@
                     field: '',
                     operator: '=',
                     keyword: '',
+                    sorting: '',
+                    direction: 'asc',
                 }
             };
         },
@@ -43,6 +45,8 @@
                     field: this.columns[0].field,
                     operator: '=',
                     keyword: '',
+                    sorting: this.columns[0].field,
+                    direction: 'asc'
                 };
                 this.loadRows(false);
             },
@@ -56,10 +60,12 @@
             },
 
             loadRows(filter = true) {
-                let url = '/dibi/api/tables/' + this.table + '/rows';
+                let url = '/dibi/api/tables/' + this.table + '/rows?' +
+                    'sorting=' + this.searchForm.sorting +
+                    '&direction=' + this.searchForm.direction;
 
                 if (filter) {
-                    url += '?field=' + this.searchForm.field +
+                    url += '&field=' + this.searchForm.field +
                         '&operator=' + this.searchForm.operator +
                         '&keyword=' + this.searchForm.keyword;
                 }
@@ -78,6 +84,30 @@
                 }
 
                 return false;
+            },
+
+            sortingDirectionClassHeader(current, sorting, direction) {
+                if (current != sorting) {
+                    return 'sorting';
+                }
+
+                return 'sorting_' + direction;
+            },
+
+            updateSorting(sorting) {
+                if (this.searchForm.sorting == sorting) {
+                    if (this.searchForm.direction == 'asc') {
+                        this.searchForm.direction = 'desc';
+                    } else {
+                        this.searchForm.direction = 'asc';
+                    }
+                } else {
+                    this.searchForm.direction = 'asc';
+                }
+
+                this.searchForm.sorting = sorting;
+
+                this.loadRows();
             }
         }
     }
@@ -105,24 +135,30 @@
                         </button>
                     </form>
                 </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th v-for="(column, index) in columns" :key="index">
-                                {{ column.field }}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(row, index) in rows" :key="index">
-                            <td v-for="(column, index) in columns" :key="index">
-                                {{ row[column.field] }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th
+                                    v-for="(column, index) in columns"
+                                    :key="index"
+                                    :class="sortingDirectionClassHeader(column.field, searchForm.sorting, searchForm.direction)"
+                                    @click.prevent="updateSorting(column.field)"
+                                >
+                                    {{ column.field }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(row, index) in rows" :key="index">
+                                <td v-for="(column, index) in columns" :key="index">
+                                    {{ row[column.field] }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
