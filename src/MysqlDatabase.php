@@ -2,7 +2,7 @@
 
 namespace Cuonggt\Dibi;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class MysqlDatabase extends AbstractDatabase
 {
@@ -56,14 +56,14 @@ class MysqlDatabase extends AbstractDatabase
 
     protected function mapColumnToObject($column)
     {
-        return [
+        return (new Column)->setRaw((array) $column)->map([
             'field' => $column->Field,
             'type' => $column->Type,
-            'null' => $column->Null,
+            'nullable' => $column->Null == 'YES',
             'key' => $column->Key,
             'default' => $column->Default,
             'extra' => $column->Extra,
-        ];
+        ]);
     }
 
     protected function getRows($table)

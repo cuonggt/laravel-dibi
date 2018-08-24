@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import axios from 'axios';
+import numeral from 'numeral';
 import router from './router';
 import App from './components/App.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -23,6 +24,14 @@ window.Bus = new Vue({name: 'Bus'});
 Vue.config.errorHandler = function (err, vm, info) {
     console.error(err);
 };
+
+Vue.mixin({
+    methods: {
+        formatNumber(number, format = '0,0') {
+            return numeral(number).format(format);
+        }
+    }
+});
 
 new Vue({
     el: '#root',

@@ -51,7 +51,7 @@
                         </tr>
                         <tr>
                             <td scope="row">Number of rows</td>
-                            <td>{{ data.rows }}</td>
+                            <td>{{ formatNumber(data.rows) }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Row format</td>
@@ -59,27 +59,27 @@
                         </tr>
                         <tr>
                             <td scope="row">Avg. row length</td>
-                            <td>{{ data.avgRowLength }}</td>
+                            <td>{{ formatNumber(data.avgRowLength) }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Auto increment</td>
-                            <td>{{ data.autoIncrement }}</td>
+                            <td>{{ formatNumber(data.autoIncrement) }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Data size</td>
-                            <td>{{ data.dataLength }}</td>
+                            <td>{{ formatNumber(data.dataLength, '0.0 ib') }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Max data size</td>
-                            <td>{{ data.maxDataLength }}</td>
+                            <td>{{ formatNumber(data.maxDataLength, '0 b') }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Index size</td>
-                            <td>{{ data.indexLength }}</td>
+                            <td>{{ formatNumber(data.indexLength, '0 b') }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Free data size</td>
-                            <td>{{ data.dataFree }}</td>
+                            <td>{{ formatNumber(data.dataFree, '0.0 ib') }}</td>
                         </tr>
                     </tbody>
                 </table>

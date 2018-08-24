@@ -2,8 +2,6 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
-use Dibi;
-
 class HomeController extends Controller
 {
     /**

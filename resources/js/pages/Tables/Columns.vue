@@ -52,7 +52,7 @@
                         <tr v-for="(column, index) in columns" :key="index">
                             <td>{{ column.field }}</td>
                             <td>{{ column.type }}</td>
-                            <td>{{ column.null }}</td>
+                            <td>{{ column.nullable ? 'YES' : 'NO' }}</td>
                             <td>{{ column.key }}</td>
                             <td>{{ column.default }}</td>
                             <td>{{ column.extra }}</td>

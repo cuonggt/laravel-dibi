@@ -2,7 +2,7 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
-use Dibi;
+use Cuonggt\Dibi\Dibi;
 
 class TableColumnsController extends Controller
 {
