@@ -6,6 +6,8 @@
             return {
                 columns: [],
                 rows: [],
+                total: 0,
+                count: 0,
                 operators: [
                     '=', '<>', '>', '<', '>=', '<=', 'IN', 'LIKE', 'IS NULL', 'IS NOT NULL'
                 ],
@@ -24,7 +26,7 @@
         },
 
         computed: {
-            keywordDisabled: function () {
+            isNullOrNotNullOperator: function () {
                 return this.searchForm.operator == 'IS NULL' || this.searchForm.operator == 'IS NOT NULL';
             }
         },
@@ -70,14 +72,17 @@
                         '&keyword=' + this.searchForm.keyword;
                 }
 
+
                 return this.$http.get(url)
                     .then(response => {
-                        this.rows = response.data;
+                        this.total = response.data.total;
+                        this.count = response.data.count;
+                        this.rows = response.data.data;
                     });
             },
 
             refreshDataIfNeeded() {
-                if (this.keywordDisabled) {
+                if (this.isNullOrNotNullOperator) {
                     this.loadRows();
 
                     return true;
@@ -126,7 +131,7 @@
                         <select class="form-control form-control-sm my-1 mr-2" v-model="searchForm.operator" @change="refreshDataIfNeeded()">
                             <option v-for="(operator, index) in operators" :key="index" :value="operator">{{ operator }}</option>
                         </select>
-                        <input type="search" class="form-control form-control-sm my-1 mr-2" placeholder="Search" v-model="searchForm.keyword" :disabled="keywordDisabled">
+                        <input type="search" class="form-control form-control-sm my-1 mr-2" placeholder="Search" v-model="searchForm.keyword" :disabled="isNullOrNotNullOperator">
                         <button type="submit" class="btn btn-primary btn-sm my-1 mr-2" @click.prevent="loadRows()">
                             <font-awesome-icon icon="search" /> Filter
                         </button>
@@ -158,6 +163,15 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="dataTables_info">
+                            <span v-if="count < total">{{ count }} {{ count > 1 ? 'rows' : 'row' }} of {{ total }} match filter</span>
+                            <span v-else>{{ total }} {{ total > 1 ? 'rows' : 'row' }} in table</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,4 +2,6 @@
 
 return [
     'type' => 'mysql',
+
+    'limit' => 100,
 ];
