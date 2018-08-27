@@ -2,6 +2,7 @@
 
 namespace Cuonggt\Dibi;
 
+use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\DB;
 
 abstract class AbstractDatabase
@@ -36,11 +37,36 @@ abstract class AbstractDatabase
 
         $count = $query->count();
 
-        $data = $query->orderBy($params['sorting'], $params['direction'])
+        $data = $query
+                    ->selectRaw('*, '.$this->generateTableKey($table).' as __id__')
+                    ->orderBy($params['sorting'], $params['direction'])
                     ->take(config('dibi.limit', 100))
                     ->get();
 
         return compact('total', 'count', 'data');
+    }
+
+    protected function generateTableKey($table)
+    {
+        $keyName = $this->getKeyName($table);
+
+        if (! $keyName) {
+            return '"'.Uuid::uuid4().'"';
+        }
+
+        if (is_array($keyName)) {
+            $keys = [];
+
+            foreach ($keyName as $v) {
+                array_push($keys, $v, '"_"');
+            }
+
+            array_pop($keys);
+
+            return 'concat('.implode(',', $keys).')';
+        }
+
+        return $keyName;
     }
 
     protected function buildSelectQuery($table, $params)
@@ -77,4 +103,6 @@ abstract class AbstractDatabase
     abstract protected function getColumns($table);
 
     abstract protected function mapColumnToObject($column);
+
+    abstract protected function getKeyName($table);
 }

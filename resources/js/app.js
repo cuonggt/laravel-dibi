@@ -25,6 +25,18 @@ Vue.config.errorHandler = function (err, vm, info) {
     console.error(err);
 };
 
+Vue.filter('str_limit', function (value, limit = 100, end = '...') {
+    if (typeof value !== 'string') {
+        return value;
+    }
+
+    if (value.length < limit) {
+        return value;
+    }
+
+    return value.slice(0, limit).trim() + end;
+});
+
 Vue.mixin({
     methods: {
         formatNumber(number, format = '0,0') {

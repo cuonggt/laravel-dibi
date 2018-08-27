@@ -1,3 +1,13 @@
 div.dataTables_wrapper div.dataTables_filter {
     text-align: left;
 }
+
+.text-null {
+    color: #ddd;
+}
+
+.table-striped tbody tr.row-selected {
+    color: #eee;
+    background-color: #42a5f5;
+    border-color: #42a5f5;
+}

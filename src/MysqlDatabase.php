@@ -65,4 +65,26 @@ class MysqlDatabase extends AbstractDatabase
             'extra' => $column->Extra,
         ]);
     }
+
+    protected function getKeyName($table)
+    {
+        $columns = DB::select(
+            'select * from information_schema.columns where table_schema = ? and table_name = ? and column_key = ?',
+            [$this->name, $table, 'PRI']
+        );
+
+        $count = count($columns);
+
+        if ($count  > 1) {
+            return array_map(function ($column) {
+                return $column->COLUMN_NAME;
+            }, $columns);
+        }
+
+        if ($count == 1) {
+            return $columns[0]->COLUMN_NAME;
+        }
+
+        return false;
+    }
 }

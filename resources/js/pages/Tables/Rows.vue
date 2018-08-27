@@ -1,4 +1,6 @@
 <script type="text/ecmascript-6">
+    import _ from 'lodash';
+
     export default {
         props: ['table'],
 
@@ -17,7 +19,8 @@
                     keyword: '',
                     sorting: '',
                     direction: 'asc',
-                }
+                },
+                selectedRow: null,
             };
         },
 
@@ -113,6 +116,18 @@
                 this.searchForm.sorting = sorting;
 
                 this.loadRows();
+            },
+
+            getRowId(row) {
+                return _.get(row, '__id__');
+            },
+
+            selectRow(row) {
+                if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
+                    this.selectedRow = row;
+                }
+
+                // open modal edit field value
             }
         }
     }
@@ -156,9 +171,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(row, index) in rows" :key="index">
+                            <tr
+                                v-for="(row, index) in rows"
+                                :key="index"
+                                :class="{ 'row-selected': getRowId(selectedRow) === getRowId(row)}"
+                                @click="selectRow(row)"
+                            >
                                 <td v-for="(column, index) in columns" :key="index">
-                                    {{ row[column.field] }}
+                                    <span v-if="row[column.field] === null" class="text-null">NULL</span>
+                                    <span v-else>{{ row[column.field] | str_limit }}</span>
                                 </td>
                             </tr>
                         </tbody>
