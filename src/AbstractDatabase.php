@@ -111,6 +111,8 @@ abstract class AbstractDatabase
 
     abstract protected function getTables();
 
+    abstract protected function getTableByName($table);
+
     abstract protected function mapTableToObject($table);
 
     abstract protected function getColumns($table);
