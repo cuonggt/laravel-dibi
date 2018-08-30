@@ -96,6 +96,19 @@ abstract class AbstractDatabase
         return $query->where($params['field'], $params['operator'], $params['keyword']);
     }
 
+    public function updateRow($table, $params)
+    {
+        $query = DB::table($table);
+
+        foreach ($params['row'] as $k => $v) {
+            if ($k != '__id__') {
+                $query->where($k, $v);
+            }
+        }
+
+        return $query->update([$params['column']['field'] => $params['value']]);
+    }
+
     abstract protected function getTables();
 
     abstract protected function mapTableToObject($table);

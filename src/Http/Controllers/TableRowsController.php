@@ -18,4 +18,9 @@ class TableRowsController extends Controller
 
         return Dibi::service()->rows($table, $params);
     }
+
+    public function update($table)
+    {
+        return Dibi::service()->updateRow($table, request(['row', 'column', 'value']));
+    }
 }

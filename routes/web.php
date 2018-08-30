@@ -8,6 +8,7 @@ Route::prefix('api')->group(function () {
     Route::get('/tables/{table}', 'TablesController@show')->name('dibi.tables.show');
     Route::get('/tables/{table}/columns', 'TableColumnsController@index')->name('dibi.tables.columns.index');
     Route::get('/tables/{table}/rows', 'TableRowsController@index')->name('dibi.tables.rows.index');
+    Route::put('/tables/{table}/rows', 'TableRowsController@update')->name('dibi.tables.rows.update');
 });
 
 // Catch-all Route...

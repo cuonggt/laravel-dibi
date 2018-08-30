@@ -21,6 +21,11 @@
                     direction: 'asc',
                 },
                 selectedRow: null,
+                selectedColumn: null,
+                cellForm: {
+                    value: null,
+                    busy: false
+                }
             };
         },
 
@@ -37,6 +42,8 @@
         watch: {
             table: function () {
                 this.refreshData();
+                this.selectedRow = null;
+                this.selectedColumn = null;
             }
         },
 
@@ -122,12 +129,48 @@
                 return _.get(row, '__id__');
             },
 
-            selectRow(row) {
+            onCellClick(row, column) {
                 if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
                     this.selectedRow = row;
+                } else {
+                    this.selectedColumn = column;
+                    this.cellForm = {
+                        value: this.selectedRow[this.selectedColumn.field],
+                        busy: false
+                    };
+
+                    $('#modal-edit-cell-value').modal('show');
+                }
+            },
+
+            updateCell() {
+                if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
+                    $('#modal-edit-cell-value').modal('hide');
+
+                    return false;
                 }
 
-                // open modal edit field value
+                this.cellForm.busy = true;
+
+                this.$http.put('/dibi/api/tables/' + this.table + '/rows', {
+                    row: this.selectedRow,
+                    column: this.selectedColumn,
+                    value: this.cellForm.value
+                }).then(response => {
+                    this.selectedRow[this.selectedColumn.field] = this.cellForm.value;
+
+                    this.rows = this.rows.map((row) => {
+                        if (this.getRowId(row) === this.getRowId(this.selectedRow)) {
+                            return this.selectedRow;
+                        }
+
+                        return row;
+                    });
+
+                    this.cellForm.busy = false;
+
+                    $('#modal-edit-cell-value').modal('hide');
+                });
             }
         }
     }
@@ -175,9 +218,12 @@
                                 v-for="(row, index) in rows"
                                 :key="index"
                                 :class="{ 'row-selected': getRowId(selectedRow) === getRowId(row)}"
-                                @click="selectRow(row)"
                             >
-                                <td v-for="(column, index) in columns" :key="index">
+                                <td
+                                    v-for="(column, index) in columns"
+                                    :key="index"
+                                    @click="onCellClick(row, column)"
+                                >
                                     <span v-if="row[column.field] === null" class="text-null">NULL</span>
                                     <span v-else>{{ row[column.field] | str_limit }}</span>
                                 </td>
@@ -191,6 +237,30 @@
                         <div class="dataTables_info">
                             <span v-if="count < total">{{ count }} {{ count > 1 ? 'rows' : 'row' }} of {{ total }} match filter</span>
                             <span v-else>{{ total }} {{ total > 1 ? 'rows' : 'row' }} in table</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modal-edit-cell-value" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" v-if="selectedRow && selectedColumn">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Field: "{{ selectedColumn.field }}" - {{ selectedColumn.type }} {{ selectedColumn.nullable ? '' : 'NOT NULL' }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <textarea class="form-control" rows="7" v-model="cellForm.value"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" :disabled="cellForm.busy" @click="updateCell()">
+                                <font-awesome-icon icon="save" /> Save
+                            </button>
                         </div>
                     </div>
                 </div>

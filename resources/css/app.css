@@ -6,6 +6,10 @@ div.dataTables_wrapper div.dataTables_filter {
     color: #ddd;
 }
 
+.table-striped tbody tr {
+    cursor: pointer;
+}
+
 .table-striped tbody tr.row-selected {
     color: #eee;
     background-color: #42a5f5;
