@@ -3,7 +3,6 @@
 namespace Cuonggt\Dibi;
 
 use InvalidArgumentException;
-use Cuonggt\Dibi\MysqlDatabase;
 
 class DatabaseProviderFactory
 {

@@ -59,7 +59,7 @@ class MysqlDatabase extends AbstractDatabase
         return (new Column)->setRaw((array) $column)->map([
             'field' => $column->Field,
             'type' => $column->Type,
-            'nullable' => $column->Null == 'YES',
+            'nullable' => $column->{'Null'} == 'YES',
             'key' => $column->Key,
             'default' => $column->Default,
             'extra' => $column->Extra,
@@ -75,7 +75,7 @@ class MysqlDatabase extends AbstractDatabase
 
         $count = count($columns);
 
-        if ($count  > 1) {
+        if ($count > 1) {
             return array_map(function ($column) {
                 return $column->COLUMN_NAME;
             }, $columns);
