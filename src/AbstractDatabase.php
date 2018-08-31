@@ -29,6 +29,11 @@ abstract class AbstractDatabase
         return array_map([$this, 'mapColumnToObject'], $this->getColumns($table));
     }
 
+    public function indexes($table)
+    {
+        return array_map([$this, 'mapIndexToObject'], $this->getIndexes($table));
+    }
+
     public function rows($table, $params)
     {
         $query = $this->buildSelectQuery($table, $params);
@@ -118,6 +123,10 @@ abstract class AbstractDatabase
     abstract protected function getColumns($table);
 
     abstract protected function mapColumnToObject($column);
+
+    abstract protected function getIndexes($table);
+
+    abstract protected function mapIndexToObject($index);
 
     abstract protected function getKeyName($table);
 }

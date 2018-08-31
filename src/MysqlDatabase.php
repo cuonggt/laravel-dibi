@@ -66,6 +66,29 @@ class MysqlDatabase extends AbstractDatabase
         ]);
     }
 
+    protected function getIndexes($table)
+    {
+        return DB::select(
+            'select * from information_schema.statistics where table_schema = ? and table_name = ?',
+            [$this->name, $table]
+        );
+    }
+
+    protected function mapIndexToObject($index)
+    {
+        return (new TableIndex)->setRaw((array) $index)->map([
+            'nonUnique' => $index->NON_UNIQUE,
+            'keyName' => $index->INDEX_NAME,
+            'seqInIndex' => $index->SEQ_IN_INDEX,
+            'columnName' => $index->COLUMN_NAME,
+            'collation' => $index->COLLATION,
+            'cardinality' => $index->CARDINALITY,
+            'subPart' => $index->SUB_PART,
+            'packed' => $index->PACKED,
+            'comment' => $index->COMMENT,
+        ]);
+    }
+
     protected function getKeyName($table)
     {
         $columns = DB::select(
