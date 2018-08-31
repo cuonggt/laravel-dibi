@@ -11,4 +11,6 @@ interface DatabaseInterface
     public function columns($table);
 
     public function rows($table);
+
+    public function updateRow($table, $params);
 }
