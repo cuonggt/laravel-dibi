@@ -275,7 +275,7 @@
                                     @click="updateCellWithNull()"
                                     v-if="selectedColumn.nullable"
                                 >
-                                    <font-awesome-icon icon="save" /> Set NULL
+                                    <font-awesome-icon icon="bullseye" /> Set NULL
                                 </button>
                             </div>
                         </div>
