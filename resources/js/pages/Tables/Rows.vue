@@ -23,7 +23,7 @@
                 selectedRow: null,
                 selectedColumn: null,
                 cellForm: {
-                    value: null,
+                    value: '',
                     busy: false
                 }
             };
@@ -171,6 +171,12 @@
 
                     $('#modal-edit-cell-value').modal('hide');
                 });
+            },
+
+            updateCellWithNull() {
+                this.cellForm.value = null;
+
+                this.updateCell();
             }
         }
     }
@@ -253,7 +259,25 @@
                         </div>
 
                         <div class="modal-body">
-                            <textarea class="form-control" rows="7" v-model="cellForm.value"></textarea>
+                            <div class="form-group">
+                                <textarea
+                                    class="form-control"
+                                    rows="7"
+                                    v-model="cellForm.value"
+                                ></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <button
+                                    type="button"
+                                    class="btn btn-warning"
+                                    :disabled="cellForm.busy"
+                                    @click="updateCellWithNull()"
+                                    v-if="selectedColumn.nullable"
+                                >
+                                    <font-awesome-icon icon="save" /> Set NULL
+                                </button>
+                            </div>
                         </div>
 
                         <div class="modal-footer">
