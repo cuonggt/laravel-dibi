@@ -93,7 +93,7 @@ abstract class AbstractDatabase implements DatabaseInterface
     }
 
     /**
-     * Get the key name for the given table
+     * Get the key name for the given table.
      *
      * @param  string  $table
      * @return string
@@ -102,8 +102,8 @@ abstract class AbstractDatabase implements DatabaseInterface
     {
         $keyName = $this->getKeyName($table);
 
-        if (!$keyName) {
-            return '"' . Uuid::uuid4() . '"';
+        if (! $keyName) {
+            return '"'.Uuid::uuid4().'"';
         }
 
         if (is_array($keyName)) {
@@ -115,7 +115,7 @@ abstract class AbstractDatabase implements DatabaseInterface
 
             array_pop($keys);
 
-            return 'concat(' . implode(',', $keys) . ')';
+            return 'concat('.implode(',', $keys).')';
         }
 
         return $keyName;
