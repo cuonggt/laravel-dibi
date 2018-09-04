@@ -6,6 +6,12 @@ use Cuonggt\Dibi\Dibi;
 
 class TableRowsController extends Controller
 {
+    /**
+     * Get list of top rows for the given table.
+     *
+     * @param  string  $table
+     * @return \Illuminate\Http\Response
+     */
     public function index($table)
     {
         $params = [
@@ -19,6 +25,12 @@ class TableRowsController extends Controller
         return Dibi::service()->rows($table, $params);
     }
 
+    /**
+     * Update the table's row.
+     *
+     * @param  string  $table
+     * @return \Illuminate\Http\Response
+     */
     public function update($table)
     {
         return Dibi::service()->updateRow(

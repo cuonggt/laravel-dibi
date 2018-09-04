@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\DB;
 
 class MysqlDatabase extends AbstractDatabase
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function getTables()
     {
         return DB::select('select * from information_schema.tables where table_schema = ?', [$this->name]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getTableByName($table)
     {
         $tables = DB::select(
@@ -21,6 +27,9 @@ class MysqlDatabase extends AbstractDatabase
         return array_first($tables);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function mapTableToObject($table)
     {
         $encoding = array_first(explode('_', $table->TABLE_COLLATION));
@@ -49,11 +58,17 @@ class MysqlDatabase extends AbstractDatabase
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getColumns($table)
     {
         return DB::select('show columns from '.$table);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function mapColumnToObject($column)
     {
         return (new Column)->setRaw((array) $column)->map([
@@ -66,6 +81,9 @@ class MysqlDatabase extends AbstractDatabase
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getIndexes($table)
     {
         return DB::select(
@@ -74,6 +92,9 @@ class MysqlDatabase extends AbstractDatabase
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function mapIndexToObject($index)
     {
         return (new TableIndex)->setRaw((array) $index)->map([
@@ -89,6 +110,9 @@ class MysqlDatabase extends AbstractDatabase
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getKeyName($table)
     {
         $columns = DB::select(

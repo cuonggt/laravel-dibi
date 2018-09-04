@@ -4,9 +4,21 @@ namespace Cuonggt\Dibi;
 
 class Dibi
 {
+    /**
+     * The Dibi's database instance.
+     *
+     * @var \Cuonggt\Dibi\AbstractDatabase
+     */
+    protected static $db;
+
+    /**
+     * Get the Dibi's database instance.
+     *
+     * @return \Cuonggt\Dibi\AbstractDatabase
+     */
     public static function service()
     {
-        return (new DatabaseProviderFactory)->make(
+        return static::$db ?: static::$db = (new DatabaseProviderFactory)->make(
             config('dibi.type'),
             config('database.connections.'.config('database.default').'.database')
         );
