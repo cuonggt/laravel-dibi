@@ -93,7 +93,7 @@ abstract class AbstractDatabase implements DatabaseInterface
     }
 
     /**
-     * Generate a virtual field name for the given table's primary key
+     * Generate a virtual field name for the given table's primary key.
      *
      * @param  string  $table
      * @return string
