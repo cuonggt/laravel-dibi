@@ -1,13 +1,27 @@
 language: php
 
 php:
+  - 7.0
   - 7.1
   - 7.2
 
-sudo: false
+services:
+  - mysql
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+
+dist: trusty
+
+sudo: required
 
 before_install:
   - phpenv config-rm xdebug.ini
+  - mysql -e 'create database testdibi;'
 
 install: travis_retry composer install --no-interaction --prefer-dist --no-suggest
 

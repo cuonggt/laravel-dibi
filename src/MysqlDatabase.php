@@ -9,7 +9,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function getTables()
+    public function getTables()
     {
         return DB::select('select * from information_schema.tables where table_schema = ?', [$this->name]);
     }
@@ -17,7 +17,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function getTableByName($table)
+    public function getTableByName($table)
     {
         $tables = DB::select(
             'select * from information_schema.tables where table_schema = ? and table_name = ? limit 1',
@@ -30,7 +30,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function mapTableToObject($table)
+    public function mapTableToObject($table)
     {
         $encoding = array_first(explode('_', $table->TABLE_COLLATION));
 
@@ -61,7 +61,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function getColumns($table)
+    public function getColumns($table)
     {
         return DB::select('show columns from '.$table);
     }
@@ -69,7 +69,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function mapColumnToObject($column)
+    public function mapColumnToObject($column)
     {
         return (new Column)->setRaw((array) $column)->map([
             'field' => $column->Field,
@@ -84,7 +84,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function getIndexes($table)
+    public function getIndexes($table)
     {
         return DB::select(
             'select * from information_schema.statistics where table_schema = ? and table_name = ?',
@@ -95,7 +95,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function mapIndexToObject($index)
+    public function mapIndexToObject($index)
     {
         return (new TableIndex)->setRaw((array) $index)->map([
             'nonUnique' => $index->NON_UNIQUE,
@@ -113,7 +113,7 @@ class MysqlDatabase extends AbstractDatabase
     /**
      * {@inheritdoc}
      */
-    protected function getKeyName($table)
+    public function getKeyName($table)
     {
         $columns = DB::select(
             'select * from information_schema.columns where table_schema = ? and table_name = ? and column_key = ?',

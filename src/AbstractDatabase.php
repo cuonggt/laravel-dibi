@@ -98,7 +98,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  string  $table
      * @return string
      */
-    protected function generateTableKey($table)
+    public function generateTableKey($table)
     {
         $keyName = $this->getKeyName($table);
 
@@ -128,7 +128,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  array  $params
      * @return array
      */
-    protected function buildSelectQuery($table, $params)
+    public function buildSelectQuery($table, $params)
     {
         $query = DB::table($table);
 
@@ -160,7 +160,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      *
      * @return array
      */
-    abstract protected function getTables();
+    abstract public function getTables();
 
     /**
      * Get the raw table for the given name.
@@ -168,7 +168,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  string  $table
      * @return object
      */
-    abstract protected function getTableByName($table);
+    abstract public function getTableByName($table);
 
     /**
      * Map the raw table object to a Dibi Table instance.
@@ -176,7 +176,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  object  $table
      * @return \Cuonggt\Dibi\Table
      */
-    abstract protected function mapTableToObject($table);
+    abstract public function mapTableToObject($table);
 
     /**
      * Get list of columns for the given table.
@@ -184,7 +184,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  string  $table
      * @return array
      */
-    abstract protected function getColumns($table);
+    abstract public function getColumns($table);
 
     /**
      * Map the raw column object to a Dibi Column instance.
@@ -192,7 +192,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  object  $column
      * @return \Cuonggt\Dibi\Column
      */
-    abstract protected function mapColumnToObject($column);
+    abstract public function mapColumnToObject($column);
 
     /**
      * Get list of indexes for the given table.
@@ -200,7 +200,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  string  $table
      * @return array
      */
-    abstract protected function getIndexes($table);
+    abstract public function getIndexes($table);
 
     /**
      * Map the raw index object to a Dibi TableIndex instance.
@@ -208,7 +208,7 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  object  $index
      * @return \Cuonggt\Dibi\TableIndex
      */
-    abstract protected function mapIndexToObject($index);
+    abstract public function mapIndexToObject($index);
 
     /**
      * Get the primary key for the given table.
@@ -216,5 +216,5 @@ abstract class AbstractDatabase implements DatabaseInterface
      * @param  string  $table
      * @return array|string
      */
-    abstract protected function getKeyName($table);
+    abstract public function getKeyName($table);
 }
