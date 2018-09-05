@@ -93,7 +93,7 @@ abstract class AbstractDatabase implements DatabaseInterface
     }
 
     /**
-     * Get the key name for the given table.
+     * Generate a virtual field name for the given table's primary key
      *
      * @param  string  $table
      * @return string
@@ -181,6 +181,7 @@ abstract class AbstractDatabase implements DatabaseInterface
     /**
      * Get list of columns for the given table.
      *
+     * @param  string  $table
      * @return array
      */
     abstract protected function getColumns($table);
@@ -196,6 +197,7 @@ abstract class AbstractDatabase implements DatabaseInterface
     /**
      * Get list of indexes for the given table.
      *
+     * @param  string  $table
      * @return array
      */
     abstract protected function getIndexes($table);
@@ -209,9 +211,10 @@ abstract class AbstractDatabase implements DatabaseInterface
     abstract protected function mapIndexToObject($index);
 
     /**
-     * Get the key name for the given table.
+     * Get the primary key for the given table.
      *
-     * @return array
+     * @param  string  $table
+     * @return array|string
      */
     abstract protected function getKeyName($table);
 }
