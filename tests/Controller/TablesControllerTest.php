@@ -4,7 +4,7 @@ namespace Cuonggt\Dibi\Tests\Controller;
 
 class TablesControllerTest extends AbstractControllerTest
 {
-    public function test_it_can_listing_all_tables()
+    public function test_it_returns_list_of_tables()
     {
         $response = $this->get('/dibi/api/tables');
 

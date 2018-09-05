@@ -4,7 +4,7 @@ namespace Cuonggt\Dibi\Tests\Controller;
 
 class TableColumnsControllerTest extends AbstractControllerTest
 {
-    public function test_it_can_listing_columns_for_the_given_table()
+    public function test_it_returns_list_of_columns_for_the_given_table()
     {
         $response = $this->get('/dibi/api/tables/package_tests/columns');
 

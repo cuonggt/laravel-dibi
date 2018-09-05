@@ -44,6 +44,7 @@ abstract class IntegrationTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'testdibi');
+
         $app['config']->set('database.connections.testdibi', [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
