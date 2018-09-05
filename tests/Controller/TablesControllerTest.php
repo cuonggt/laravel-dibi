@@ -10,7 +10,16 @@ class TablesControllerTest extends AbstractControllerTest
 
         $response->assertJson([
             ['name' => 'migrations'],
-            ['name' => 'users'],
+            ['name' => 'package_tests'],
+        ]);
+    }
+
+    public function test_it_returns_a_table_by_name()
+    {
+        $response = $this->get('/dibi/api/tables/package_tests');
+
+        $response->assertJson([
+            'name' => 'package_tests',
         ]);
     }
 }
