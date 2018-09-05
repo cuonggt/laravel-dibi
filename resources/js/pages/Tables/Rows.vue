@@ -82,7 +82,6 @@
                         '&keyword=' + this.searchForm.keyword;
                 }
 
-
                 return this.$http.get(url)
                     .then(response => {
                         this.total = response.data.total;
