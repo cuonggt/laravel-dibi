@@ -15,15 +15,6 @@ abstract class IntegrationTest extends TestCase
     {
         parent::setUp();
 
-        // $this->loadLaravelMigrations(['--database' => 'testdibi']);
-
-        // $this->loadMigrationsFrom(realpath(__DIR__.'/database/migrations'));
-
-        // $this->artisan('migrate', [
-        //     '--database' => 'testdibi',
-        //     '--realpath' => realpath(__DIR__.'/database/migrations'),
-        // ]);
-
         $this->loadMigrationsFrom([
             '--database' => 'testdibi',
             '--realpath' => realpath(__DIR__.'/database/migrations'),
