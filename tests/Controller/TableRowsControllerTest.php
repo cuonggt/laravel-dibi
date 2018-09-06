@@ -36,4 +36,29 @@ class TableRowsControllerTest extends AbstractControllerTest
             ],
         ]);
     }
+
+    public function test_it_can_update_field_value_for_the_given_row()
+    {
+        DB::table('package_tests')->insert(
+            ['name' => 'foo']
+        );
+
+        $response = $this->put('/dibi/api/tables/package_tests/rows', [
+            'row' => [
+                'id' => 1,
+                'name' => 'foo',
+            ],
+            'column' => [
+                'field' => 'name',
+            ],
+            'value' => 'name (updated)',
+        ]);
+
+        $this->assertEquals($response->content(), 1);
+
+        $this->assertDatabaseHas('package_tests', [
+            'id' => 1,
+            'name' => 'name (updated)',
+        ]);
+    }
 }
