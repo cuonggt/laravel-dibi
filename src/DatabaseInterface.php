@@ -45,6 +45,15 @@ interface DatabaseInterface
     public function rows($table, $params);
 
     /**
+     * Add a row to the given table.
+     *
+     * @param  string  $table
+     * @param  array  $row
+     * @return int
+     */
+    public function addRow($table, $row);
+
+    /**
      * Update a table's row.
      *
      * @param  string  $table
@@ -54,4 +63,13 @@ interface DatabaseInterface
      * @return int
      */
     public function updateRow($table, $row, $column, $value = null);
+
+    /**
+     * Delete a row from the given table.
+     *
+     * @param  string  $table
+     * @param  array  $row
+     * @return int
+     */
+    public function deleteRow($table, $row);
 }

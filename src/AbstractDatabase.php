@@ -79,6 +79,14 @@ abstract class AbstractDatabase implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
+    public function addRow($table, $row)
+    {
+        return DB::table($table)->insert($row);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function updateRow($table, $row, $column, $value = null)
     {
         $query = DB::table($table);
@@ -90,6 +98,22 @@ abstract class AbstractDatabase implements DatabaseInterface
         }
 
         return $query->update([$column['field'] => $value]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteRow($table, $row)
+    {
+        $query = DB::table($table);
+
+        foreach ($row as $k => $v) {
+            if ($k != '__id__') {
+                $query->where($k, $v);
+            }
+        }
+
+        return $query->delete();
     }
 
     /**

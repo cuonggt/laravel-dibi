@@ -26,6 +26,20 @@ class TableRowsController extends Controller
     }
 
     /**
+     * Add row to the given table.
+     *
+     * @param  string  $table
+     * @return \Illuminate\Http\Response
+     */
+    public function store($table)
+    {
+        return Dibi::service()->addRow(
+            $table,
+            request('row')
+        );
+    }
+
+    /**
      * Update the table's row.
      *
      * @param  string  $table
@@ -38,6 +52,20 @@ class TableRowsController extends Controller
             request('row'),
             request('column'),
             request('value')
+        );
+    }
+
+    /**
+     * Delete row from the given table.
+     *
+     * @param  string  $table
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($table)
+    {
+        return Dibi::service()->deleteRow(
+            $table,
+            request('row')
         );
     }
 }

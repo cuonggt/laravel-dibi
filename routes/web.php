@@ -9,7 +9,9 @@ Route::prefix('api')->group(function () {
     Route::get('/tables/{table}/columns', 'TableColumnsController@index')->name('dibi.tables.columns.index');
     Route::get('/tables/{table}/indexes', 'TableIndexesController@index')->name('dibi.tables.indexes.index');
     Route::get('/tables/{table}/rows', 'TableRowsController@index')->name('dibi.tables.rows.index');
+    Route::post('/tables/{table}/rows', 'TableRowsController@store')->name('dibi.tables.rows.store');
     Route::put('/tables/{table}/rows', 'TableRowsController@update')->name('dibi.tables.rows.update');
+    Route::delete('/tables/{table}/rows', 'TableRowsController@destroy')->name('dibi.tables.rows.destroy');
 });
 
 // Catch-all Route...
