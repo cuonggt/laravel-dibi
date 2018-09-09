@@ -2,8 +2,17 @@
 
 namespace Cuonggt\Dibi;
 
+use Closure;
+
 class Dibi
 {
+    /**
+     * The callback that should be used to authenticate Horizon users.
+     *
+     * @var \Closure
+     */
+    public static $authUsing;
+
     /**
      * The Dibi's database instance.
      *
@@ -32,6 +41,21 @@ class Dibi
      */
     public static function check($request)
     {
-        return true;
+        return (static::$authUsing ? : function () {
+            return app()->environment('local');
+        })($request);
+    }
+
+    /**
+     * Set the callback that should be used to authenticate Horizon users.
+     *
+     * @param  \Closure  $callback
+     * @return static
+     */
+    public static function auth(Closure $callback)
+    {
+        static::$authUsing = $callback;
+
+        return new static;
     }
 }
