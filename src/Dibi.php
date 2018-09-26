@@ -41,7 +41,7 @@ class Dibi
      */
     public static function check($request)
     {
-        return (static::$authUsing ? : function () {
+        return (static::$authUsing ?: function () {
             return app()->environment('local');
         })($request);
     }
