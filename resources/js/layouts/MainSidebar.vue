@@ -1,16 +1,25 @@
 <script type="text/ecmascript-6">
     export default {
+        /**
+         * The component's data.
+         */
         data() {
             return {
                 tables: [],
             };
         },
 
+        /**
+         * Prepare the component.
+         */
         mounted() {
             this.loadTables();
         },
 
         methods: {
+            /**
+             * Load the tables.
+             */
             loadTables() {
                 return this.$http.get('/dibi/api/tables')
                     .then(response => {
@@ -18,7 +27,7 @@
                     });
             }
         }
-    }
+    };
 </script>
 
 <template>

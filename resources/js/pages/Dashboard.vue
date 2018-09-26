@@ -3,7 +3,7 @@
 
     export default {
         components: {Layout},
-    }
+    };
 </script>
 
 <template>

@@ -2,8 +2,14 @@
     import _ from 'lodash';
 
     export default {
-        props: ['table'],
+        props: {
+            table: String,
+            required: true,
+        },
 
+        /**
+         * The component's data.
+         */
         data() {
             return {
                 columns: [],
@@ -29,6 +35,9 @@
             };
         },
 
+        /**
+         * Prepare the component.
+         */
         mounted() {
             this.refreshData();
         },
@@ -48,10 +57,16 @@
         },
 
         methods: {
+            /**
+             * Reload the data.
+             */
             refreshData() {
                 this.loadColumns();
             },
 
+            /**
+             * Reset search form to default.
+             */
             reset() {
                 this.searchForm = {
                     field: this.columns[0].field,
@@ -63,6 +78,9 @@
                 this.loadRows(false);
             },
 
+            /**
+             * Load the columns.
+             */
             loadColumns() {
                 return this.$http.get('/dibi/api/tables/' + this.table + '/columns')
                     .then(response => {
@@ -71,6 +89,9 @@
                     });
             },
 
+            /**
+             * Load the rows.
+             */
             loadRows(filter = true) {
                 let url = '/dibi/api/tables/' + this.table + '/rows?' +
                     'sorting=' + this.searchForm.sorting +
@@ -90,6 +111,9 @@
                     });
             },
 
+            /**
+             * If the operator is NULL or NOT NULL then reload the rows.
+             */
             refreshDataIfNeeded() {
                 if (this.isNullOrNotNullOperator) {
                     this.loadRows();
@@ -100,6 +124,9 @@
                 return false;
             },
 
+            /**
+             * Get header class with sorting direction.
+             */
             sortingDirectionClassHeader(current, sorting, direction) {
                 if (current != sorting) {
                     return 'sorting';
@@ -108,6 +135,9 @@
                 return 'sorting_' + direction;
             },
 
+            /**
+             * Reload the rows when update sorting.
+             */
             updateSorting(sorting) {
                 if (this.searchForm.sorting == sorting) {
                     if (this.searchForm.direction == 'asc') {
@@ -124,10 +154,16 @@
                 this.loadRows();
             },
 
+            /**
+             * Get row's __id__.
+             */
             getRowId(row) {
                 return _.get(row, '__id__');
             },
 
+            /**
+             * Show modal edit cell value.
+             */
             onCellClick(row, column) {
                 if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
                     this.selectedRow = row;
@@ -142,6 +178,9 @@
                 }
             },
 
+            /**
+             * Update cell value.
+             */
             updateCell() {
                 if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
                     $('#modal-edit-cell-value').modal('hide');
@@ -172,13 +211,16 @@
                 });
             },
 
+            /**
+             * Update cell value to null.
+             */
             updateCellWithNull() {
                 this.cellForm.value = null;
 
                 this.updateCell();
             }
         }
-    }
+    };
 </script>
 
 <template>

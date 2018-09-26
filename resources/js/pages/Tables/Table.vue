@@ -2,10 +2,13 @@
     import Layout from '../../layouts/MainLayout.vue';
 
     export default {
-        props: ['table'],
+        props: {
+            table: String,
+            required: true,
+        },
 
         components: {Layout},
-    }
+    };
 </script>
 
 <template>

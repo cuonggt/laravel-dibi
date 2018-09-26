@@ -1,7 +1,13 @@
 <script type="text/ecmascript-6">
     export default {
-        props: ['table'],
+        props: {
+            table: String,
+            required: true,
+        },
 
+        /**
+         * The component's data.
+         */
         data() {
             return {
                 columns: [],
@@ -9,6 +15,9 @@
             };
         },
 
+        /**
+         * Prepare the component.
+         */
         mounted() {
             this.refreshData();
         },
@@ -20,11 +29,17 @@
         },
 
         methods: {
+            /**
+             * Reload the data.
+             */
             refreshData() {
                 this.loadColumns();
                 this.loadIndexes();
             },
 
+            /**
+             * Load the columns.
+             */
             loadColumns() {
                 return this.$http.get('/dibi/api/tables/' + this.table + '/columns')
                     .then(response => {
@@ -32,6 +47,9 @@
                     });
             },
 
+            /**
+             * Load the indexes.
+             */
             loadIndexes() {
                 return this.$http.get('/dibi/api/tables/' + this.table + '/indexes')
                     .then(response => {
@@ -39,7 +57,7 @@
                     });
             }
         }
-    }
+    };
 </script>
 
 <template>

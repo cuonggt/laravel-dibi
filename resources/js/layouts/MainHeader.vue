@@ -9,7 +9,7 @@
                 $('body').toggleClass('sidebar-mobile-show');
             }
         }
-    }
+    };
 </script>
 
 <template>

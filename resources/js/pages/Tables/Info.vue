@@ -1,18 +1,30 @@
 <script type="text/ecmascript-6">
     export default {
-        props: ['table'],
+        props: {
+            table: String,
+            required: true,
+        },
 
+        /**
+         * The component's data.
+         */
         data() {
             return {
                 data: {},
             };
         },
 
+        /**
+         * Prepare the component.
+         */
         mounted() {
             this.loadTable();
         },
 
         methods: {
+            /**
+             * Load the table.
+             */
             loadTable() {
                 return this.$http.get('/dibi/api/tables/' + this.table)
                     .then(response => {
@@ -20,7 +32,7 @@
                     });
             }
         }
-    }
+    };
 </script>
 
 <template>
