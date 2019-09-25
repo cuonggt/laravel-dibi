@@ -109,7 +109,7 @@
     </loading-view>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
     import _ from 'lodash';
 
     export default {
@@ -147,10 +147,7 @@
             };
         },
 
-        /**
-         * Prepare the component.
-         */
-        mounted() {
+        created() {
             this.refreshData();
         },
 
@@ -161,7 +158,7 @@
         },
 
         watch: {
-            table: function () {
+            tableName: function () {
                 this.refreshData();
                 this.selectedRow = null;
                 this.selectedColumn = null;

@@ -49,6 +49,6 @@
             tableName: function () {
                 this.current = [this.$route.name || 'tables.data'];
             }
-        }
+        },
     };
 </script>

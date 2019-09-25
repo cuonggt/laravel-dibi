@@ -5632,11 +5632,7 @@ __webpack_require__.r(__webpack_exports__);
       loading: false
     };
   },
-
-  /**
-   * Prepare the component.
-   */
-  mounted: function mounted() {
+  created: function created() {
     this.refreshData();
   },
   computed: {
@@ -5645,7 +5641,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   watch: {
-    table: function table() {
+    tableName: function tableName() {
       this.refreshData();
       this.selectedRow = null;
       this.selectedColumn = null;
