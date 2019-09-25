@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-const webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -13,36 +12,21 @@ const webpack = require('webpack');
  */
 
 mix
-    .options({
-        uglify: {
-            uglifyOptions: {
-                compress: {
-                    drop_console: true,
-                }
-            }
-        }
-    })
-    .setPublicPath('public')
     .js('resources/js/app.js', 'public/js')
-    .styles([
-        'resources/css/carbon.css',
-        'resources/css/dataTables.bootstrap4.min.css',
-        'resources/css/app.css',
-    ], 'public/css/app.css')
-    // .copy('resources/img', 'public/img')
-    .sourceMaps()
-    .copy('public', '../../Sites/dibi/public/vendor/dibi')
-    // .copy('public', '../app/public/vendor/dibi')
+    .extract([
+        'vue',
+        'vue-router',
+        'lodash',
+        'axios',
+        'ant-design-vue',
+    ])
+    .setPublicPath('public')
+    .copy('public', '../../Sites/dibi-app/public/vendor/dibi')
+    .webpackConfig({
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'resources/js/'),
+            },
+        },
+    })
     .version();
-
-
-mix.webpackConfig({
-    plugins: [
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ],
-    resolve: {
-        alias: {
-            'vue$': 'vue/dist/vue.runtime.esm.js'
-        }
-    }
-});

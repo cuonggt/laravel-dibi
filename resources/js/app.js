@@ -1,61 +1,22 @@
 import Vue from 'vue';
-import _ from 'lodash';
+import router from '@/router';
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 import axios from 'axios';
-import numeral from 'numeral';
-import router from './router';
-import App from './components/App.vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Mixins from './mixins';
 
-library.add(fas);
+Vue.use(Antd);
 
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.config.productionTip = false;
 
-window.$ = window.jQuery = require('jquery');
-window.Popper = require('popper.js').default;
+Vue.mixin(Mixins);
 
-require('bootstrap');
-
-Vue.prototype.$http = axios.create();
-
+window.axios = axios;
 window.Bus = new Vue({name: 'Bus'});
 
-Vue.config.errorHandler = function (err, vm, info) {
-    console.error(err);
-};
-
-Vue.filter('str_limit', function (value, limit = 100, end = '...') {
-    if (typeof value !== 'string') {
-        return value;
-    }
-
-    if (value.length < limit) {
-        return value;
-    }
-
-    return value.slice(0, limit).trim() + end;
-});
-
-Vue.mixin({
-    methods: {
-        formatNumber(number, format = '0,0') {
-            return numeral(number).format(format);
-        }
-    }
-});
+import './components';
 
 new Vue({
-    el: '#root',
-
+    el: '#dibi',
     router,
-
-    /**
-     * The component's data.
-     */
-    data() {
-        return {}
-    },
-
-    render: h => h(App),
 });

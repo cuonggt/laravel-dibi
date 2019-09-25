@@ -69,7 +69,7 @@ abstract class AbstractDatabase implements DatabaseInterface
         $count = $query->count();
 
         $data = $query->selectRaw('*, '.$this->generateTableKey($table).' as __id__')
-            ->orderBy($params['sorting'], $params['direction'])
+            // ->orderBy($params['sorting'], $params['direction'])
             ->take(config('dibi.limit', 100))
             ->get();
 

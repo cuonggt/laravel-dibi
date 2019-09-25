@@ -1,48 +1,66 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Dashboard from '@/views/Dashboard';
+import TableDetail from '@/views/TableDetail';
+import TableData from '@/views/TableData';
+import TableStructure from '@/views/TableStructure';
+import TableInfo from '@/views/TableInfo';
+import Error403 from '@/views/403';
+import Error404 from '@/views/404';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
+    base: '/dibi',
     mode: 'history',
-    base: '/dibi/',
     routes: [
         {
+            name: 'dashboard',
             path: '/',
-            redirect: '/dashboard',
+            component: Dashboard,
+            props: true,
         },
         {
-            path: '/dashboard',
-            component: require('./pages/Dashboard.vue'),
-        },
-        {
-            path: '/tables/:table',
-            component: require('./pages/Tables/Table.vue'),
+            path: '/tables/:tableName',
+            component: TableDetail,
             props: true,
             children: [
                 {
                     path: '/',
-                    redirect: 'rows',
-                },
-                {
-                    path: 'rows',
-                    component: require('./pages/Tables/Rows.vue'),
-                    name: 'tables.show.rows',
+                    component: TableData,
+                    name: 'tables.data',
                     props: true,
                 },
                 {
-                    path: 'columns',
-                    component: require('./pages/Tables/Columns.vue'),
-                    name: 'tables.show.columns',
+                    path: 'structure',
+                    component: TableStructure,
+                    name: 'tables.structure',
                     props: true,
                 },
                 {
                     path: 'info',
-                    component: require('./pages/Tables/Info.vue'),
-                    name: 'tables.show.info',
+                    component: TableInfo,
+                    name: 'tables.info',
                     props: true,
                 },
             ],
         },
+        {
+        name: '403',
+            path: '/403',
+            component: Error403,
+        },
+        {
+            name: '404',
+            path: '/404',
+            component: Error404,
+        },
+        {
+            name: 'catch-all',
+            path: '*',
+            component: Error404,
+        },
     ],
 });
+
+export default router;
