@@ -12,6 +12,12 @@
         <app />
     </div>
 
+    <script>
+        window.config = {
+            perPage: {{ config('dibi.limit', 100) }}
+        };
+    </script>
+
     <!-- Scripts -->
     <script src="{{ mix('js/manifest.js', 'vendor/dibi') }}"></script>
     <script src="{{ mix('js/vendor.js', 'vendor/dibi') }}"></script>

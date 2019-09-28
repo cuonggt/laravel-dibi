@@ -3,5 +3,5 @@
 return [
     'type' => 'mysql',
 
-    'limit' => 100,
+    'limit' => 10,
 ];

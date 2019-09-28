@@ -5486,12 +5486,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -5605,31 +5615,31 @@ __webpack_require__.r(__webpack_exports__);
     tableName: String,
     required: true
   },
-
-  /**
-   * The component's data.
-   */
   data: function data() {
     return {
+      data: [],
+      pagination: {
+        current: 1,
+        pageSize: config.perPage
+      },
+      filters: {},
+      sorter: {},
+      loadingView: false,
+      loadingData: false,
       columns: [],
-      rows: [],
       total: 0,
-      count: 0,
       operators: ['=', '<>', '>', '<', '>=', '<=', 'IN', 'LIKE', 'IS NULL', 'IS NOT NULL'],
       searchForm: {
         field: '',
         operator: '=',
-        keyword: '',
-        sorting: '',
-        direction: 'asc'
+        keyword: ''
       },
       selectedRow: null,
       selectedColumn: null,
       cellForm: {
         value: '',
         busy: false
-      },
-      loading: false
+      }
     };
   },
   created: function created() {
@@ -5651,10 +5661,126 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * Reload the data.
      */
-    refreshData: function refreshData() {
-      this.loading = true;
-      this.loadColumns();
-      this.loading = false;
+    refreshData: function () {
+      var _refreshData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var columnResponse;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.loadingView = true;
+                _context.next = 3;
+                return axios.get('/dibi/api/tables/' + this.tableName + '/columns');
+
+              case 3:
+                columnResponse = _context.sent;
+                this.loadingView = false;
+                this.columns = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(columnResponse.data, function (item) {
+                  return {
+                    title: item.field,
+                    dataIndex: item.field,
+                    sorter: true,
+                    scopedSlots: {
+                      customRender: 'value'
+                    }
+                  };
+                });
+                this.pagination.current = 1;
+                this.sorter = {
+                  column: this.columns[0],
+                  columnKey: this.columns[0].dataIndex,
+                  field: this.columns[0].dataIndex,
+                  order: 'ascend'
+                };
+                this.searchForm = {
+                  field: this.columns[0].dataIndex,
+                  operator: '=',
+                  keyword: ''
+                };
+                _context.next = 11;
+                return this.fetchData();
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function refreshData() {
+        return _refreshData.apply(this, arguments);
+      }
+
+      return refreshData;
+    }(),
+    handleTableChange: function handleTableChange(pagination, filters, sorter) {
+      this.pagination = Object.assign(this.pagination, _objectSpread({}, pagination));
+      this.filters = Object.assign(this.filters, _objectSpread({}, filters));
+      this.sorter = Object.assign(this.sorter, _objectSpread({}, sorter));
+      this.fetchData();
+    },
+    fetchData: function () {
+      var _fetchData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var filter,
+            url,
+            rowResponse,
+            _rowResponse$data,
+            data,
+            total,
+            count,
+            pagination,
+            _args2 = arguments;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                filter = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : true;
+                this.loadingData = true;
+                url = '/dibi/api/tables/' + this.tableName + '/rows?' + 'page=' + this.pagination.current + '&per_page=' + this.pagination.pageSize + '&sort_key=' + this.sorter.field + '&sort_direction=' + (this.sorter.order == 'ascend' ? 'asc' : 'desc');
+
+                if (filter) {
+                  url += '&field=' + this.searchForm.field + '&operator=' + this.searchForm.operator + '&keyword=' + this.searchForm.keyword;
+                }
+
+                _context2.next = 6;
+                return axios.get(url);
+
+              case 6:
+                rowResponse = _context2.sent;
+                _rowResponse$data = rowResponse.data, data = _rowResponse$data.data, total = _rowResponse$data.total, count = _rowResponse$data.count;
+                pagination = _objectSpread({}, this.pagination);
+                pagination.total = count;
+                this.pagination = pagination;
+                this.data = rowResponse.data.data;
+                this.total = total;
+                this.loadingData = false;
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function fetchData() {
+        return _fetchData.apply(this, arguments);
+      }
+
+      return fetchData;
+    }(),
+    onChangeSearchField: function onChangeSearchField(value) {
+      this.searchForm.field = value;
+    },
+    onChangeSearchOperator: function onChangeSearchOperator(value) {
+      this.searchForm.operator = value;
+      this.refreshDataIfNeeded();
     },
 
     /**
@@ -5662,46 +5788,11 @@ __webpack_require__.r(__webpack_exports__);
      */
     reset: function reset() {
       this.searchForm = {
-        field: this.columns[0].field,
+        field: this.columns[0].dataIndex,
         operator: '=',
-        keyword: '',
-        sorting: this.columns[0].field,
-        direction: 'asc'
+        keyword: ''
       };
-      this.loadRows(false);
-    },
-
-    /**
-     * Load the columns.
-     */
-    loadColumns: function loadColumns() {
-      var _this = this;
-
-      return axios.get('/dibi/api/tables/' + this.tableName + '/columns').then(function (response) {
-        _this.columns = response.data;
-
-        _this.reset();
-      });
-    },
-
-    /**
-     * Load the rows.
-     */
-    loadRows: function loadRows() {
-      var _this2 = this;
-
-      var filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-      var url = '/dibi/api/tables/' + this.tableName + '/rows?' + 'sorting=' + this.searchForm.sorting + '&direction=' + this.searchForm.direction;
-
-      if (filter) {
-        url += '&field=' + this.searchForm.field + '&operator=' + this.searchForm.operator + '&keyword=' + this.searchForm.keyword;
-      }
-
-      return axios.get(url).then(function (response) {
-        _this2.total = response.data.total;
-        _this2.count = response.data.count;
-        _this2.rows = response.data.data;
-      });
+      this.fetchData(false);
     },
 
     /**
@@ -5709,7 +5800,7 @@ __webpack_require__.r(__webpack_exports__);
      */
     refreshDataIfNeeded: function refreshDataIfNeeded() {
       if (this.isNullOrNotNullOperator) {
-        this.loadRows();
+        this.fetchData();
         return true;
       }
 
@@ -5717,94 +5808,61 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * Get header class with sorting direction.
-     */
-    sortingDirectionClassHeader: function sortingDirectionClassHeader(current, sorting, direction) {
-      if (current != sorting) {
-        return 'sorting';
-      }
-
-      return 'sorting_' + direction;
-    },
-
-    /**
-     * Reload the rows when update sorting.
-     */
-    updateSorting: function updateSorting(sorting) {
-      if (this.searchForm.sorting == sorting) {
-        if (this.searchForm.direction == 'asc') {
-          this.searchForm.direction = 'desc';
-        } else {
-          this.searchForm.direction = 'asc';
-        }
-      } else {
-        this.searchForm.direction = 'asc';
-      }
-
-      this.searchForm.sorting = sorting;
-      this.loadRows();
-    },
-
-    /**
      * Get row's __id__.
      */
     getRowId: function getRowId(row) {
-      return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.get(row, '__id__');
-    },
-
+      return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.get(row, '__id__');
+    }
     /**
      * Show modal edit cell value.
      */
-    onCellClick: function onCellClick(row, column) {
-      if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
-        this.selectedRow = row;
-      } else {
-        this.selectedColumn = column;
-        this.cellForm = {
-          value: this.selectedRow[this.selectedColumn.field],
-          busy: false
-        };
-        $('#modal-edit-cell-value').modal('show');
-      }
-    },
+    // onCellClick(row, column) {
+    //     if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
+    //         this.selectedRow = row;
+    //     } else {
+    //         this.selectedColumn = column;
+    //         this.cellForm = {
+    //             value: this.selectedRow[this.selectedColumn.field],
+    //             busy: false
+    //         };
+    //         $('#modal-edit-cell-value').modal('show');
+    //     }
+    // },
 
     /**
      * Update cell value.
      */
-    updateCell: function updateCell() {
-      var _this3 = this;
-
-      if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
-        $('#modal-edit-cell-value').modal('hide');
-        return false;
-      }
-
-      this.cellForm.busy = true;
-      axios.put('/dibi/api/tables/' + this.tableName + '/rows', {
-        row: this.selectedRow,
-        column: this.selectedColumn,
-        value: this.cellForm.value
-      }).then(function (response) {
-        _this3.selectedRow[_this3.selectedColumn.field] = _this3.cellForm.value;
-        _this3.rows = _this3.rows.map(function (row) {
-          if (_this3.getRowId(row) === _this3.getRowId(_this3.selectedRow)) {
-            return _this3.selectedRow;
-          }
-
-          return row;
-        });
-        _this3.cellForm.busy = false;
-        $('#modal-edit-cell-value').modal('hide');
-      });
-    },
+    // updateCell() {
+    //     if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
+    //         $('#modal-edit-cell-value').modal('hide');
+    //         return false;
+    //     }
+    //     this.cellForm.busy = true;
+    //     axios.put('/dibi/api/tables/' + this.tableName + '/rows', {
+    //         row: this.selectedRow,
+    //         column: this.selectedColumn,
+    //         value: this.cellForm.value
+    //     }).then(response => {
+    //         this.selectedRow[this.selectedColumn.field] = this.cellForm.value;
+    //         this.rows = this.rows.map((row) => {
+    //             if (this.getRowId(row) === this.getRowId(this.selectedRow)) {
+    //                 return this.selectedRow;
+    //             }
+    //             return row;
+    //         });
+    //         this.cellForm.busy = false;
+    //         $('#modal-edit-cell-value').modal('hide');
+    //     });
+    // },
 
     /**
      * Update cell value to null.
      */
-    updateCellWithNull: function updateCellWithNull() {
-      this.cellForm.value = null;
-      this.updateCell();
-    }
+    // updateCellWithNull() {
+    //     this.cellForm.value = null;
+    //     this.updateCell();
+    // }
+
   }
 });
 
@@ -33867,426 +33925,191 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("loading-view", { attrs: { loading: _vm.loading } }, [
-    _c("div", { staticClass: "card-body" }, [
-      _c(
-        "div",
-        { staticClass: "dataTables_wrapper container-fluid dt-bootstrap4" },
-        [
-          _c("div", { staticClass: "dataTables_filter" }, [
-            _c("form", { staticClass: "form-inline" }, [
-              _c("label", { staticClass: "my-1 mr-2" }, [_vm._v("Search: ")]),
+  return _c(
+    "loading-view",
+    { attrs: { loading: _vm.loadingView } },
+    [
+      !_vm.loadingView
+        ? _c(
+            "a-form",
+            { attrs: { layout: "inline" } },
+            [
+              _c("a-form-item", { attrs: { label: "Search:" } }),
               _vm._v(" "),
               _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.searchForm.field,
-                      expression: "searchForm.field"
-                    }
-                  ],
-                  staticClass: "form-control form-control-sm my-1 mr-2",
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.searchForm,
-                        "field",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
-                  }
-                },
-                _vm._l(_vm.columns, function(column, index) {
-                  return _c(
-                    "option",
-                    { key: index, domProps: { value: column.field } },
-                    [_vm._v(_vm._s(column.field))]
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.searchForm.operator,
-                      expression: "searchForm.operator"
-                    }
-                  ],
-                  staticClass: "form-control form-control-sm my-1 mr-2",
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.searchForm,
-                          "operator",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      },
-                      function($event) {
-                        return _vm.refreshDataIfNeeded()
-                      }
-                    ]
-                  }
-                },
-                _vm._l(_vm.operators, function(operator, index) {
-                  return _c(
-                    "option",
-                    { key: index, domProps: { value: operator } },
-                    [_vm._v(_vm._s(operator))]
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.searchForm.keyword,
-                    expression: "searchForm.keyword"
-                  }
-                ],
-                staticClass: "form-control form-control-sm my-1 mr-2",
-                attrs: {
-                  type: "search",
-                  placeholder: "Search",
-                  disabled: _vm.isNullOrNotNullOperator
-                },
-                domProps: { value: _vm.searchForm.keyword },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.searchForm, "keyword", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary btn-sm my-1 mr-2",
-                  attrs: { type: "submit" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.loadRows()
-                    }
-                  }
-                },
+                "a-form-item",
                 [
-                  _vm._v(
-                    "\n                        Filter\n                    "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-outline-primary btn-sm my-1",
-                  attrs: { type: "submit" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.reset()
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n                        Reset\n                    "
-                  )
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "table-responsive" }, [
-            _c(
-              "table",
-              { staticClass: "table table-striped table-hover dataTable" },
-              [
-                _c("thead", [
                   _c(
-                    "tr",
-                    _vm._l(_vm.columns, function(column, index) {
+                    "a-select",
+                    {
+                      staticStyle: { width: "120px" },
+                      attrs: { defaultValue: _vm.searchForm.field },
+                      on: { change: _vm.onChangeSearchField }
+                    },
+                    _vm._l(_vm.columns, function(column, key) {
                       return _c(
-                        "th",
-                        {
-                          key: index,
-                          class: _vm.sortingDirectionClassHeader(
-                            column.field,
-                            _vm.searchForm.sorting,
-                            _vm.searchForm.direction
-                          ),
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.updateSorting(column.field)
-                            }
-                          }
-                        },
+                        "a-select-option",
+                        { key: key, attrs: { value: column.dataIndex } },
                         [
                           _vm._v(
-                            "\n                                " +
-                              _vm._s(column.field) +
-                              "\n                            "
+                            "\n                    " +
+                              _vm._s(column.dataIndex) +
+                              "\n                "
                           )
                         ]
                       )
                     }),
-                    0
+                    1
                   )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.rows, function(row, index) {
-                    return _c(
-                      "tr",
-                      {
-                        key: index,
-                        class: {
-                          "row-selected":
-                            _vm.getRowId(_vm.selectedRow) === _vm.getRowId(row)
-                        }
-                      },
-                      _vm._l(_vm.columns, function(column, index) {
-                        return _c(
-                          "td",
-                          {
-                            key: index,
-                            on: {
-                              click: function($event) {
-                                return _vm.onCellClick(row, column)
-                              }
-                            }
-                          },
-                          [
-                            row[column.field] === null
-                              ? _c("span", { staticClass: "text-null" }, [
-                                  _vm._v("NULL")
-                                ])
-                              : _c("span", [_vm._v(_vm._s(row[column.field]))])
-                          ]
-                        )
-                      }),
-                      0
-                    )
-                  }),
-                  0
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-12" }, [
-              _c("div", { staticClass: "dataTables_info" }, [
-                _vm.count < _vm.total
-                  ? _c("span", [
-                      _vm._v(
-                        _vm._s(_vm.count) +
-                          " " +
-                          _vm._s(_vm.count > 1 ? "rows" : "row") +
-                          " of " +
-                          _vm._s(_vm.total) +
-                          " match filter"
-                      )
-                    ])
-                  : _c("span", [
-                      _vm._v(
-                        _vm._s(_vm.total) +
-                          " " +
-                          _vm._s(_vm.total > 1 ? "rows" : "row") +
-                          " in table"
-                      )
-                    ])
-              ])
-            ])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "modal-edit-cell-value",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-hidden": "true"
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-dialog", attrs: { role: "document" } },
-            [
-              _vm.selectedRow && _vm.selectedColumn
-                ? _c("div", { staticClass: "modal-content" }, [
-                    _c("div", { staticClass: "modal-header" }, [
-                      _c("h5", { staticClass: "modal-title" }, [
-                        _vm._v(
-                          'Field: "' +
-                            _vm._s(_vm.selectedColumn.field) +
-                            '" - ' +
-                            _vm._s(_vm.selectedColumn.type) +
-                            " " +
-                            _vm._s(
-                              _vm.selectedColumn.nullable ? "" : "NOT NULL"
-                            )
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "close",
-                          attrs: {
-                            type: "button",
-                            "data-dismiss": "modal",
-                            "aria-label": "Close"
-                          }
-                        },
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "a-form-item",
+                [
+                  _c(
+                    "a-select",
+                    {
+                      staticStyle: { width: "120px" },
+                      attrs: { defaultValue: _vm.searchForm.operator },
+                      on: { change: _vm.onChangeSearchOperator }
+                    },
+                    _vm._l(_vm.operators, function(operator, key) {
+                      return _c(
+                        "a-select-option",
+                        { key: key, attrs: { value: operator } },
                         [
-                          _c("span", { attrs: { "aria-hidden": "true" } }, [
-                            _vm._v("×")
-                          ])
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(operator) +
+                              "\n                "
+                          )
                         ]
                       )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("textarea", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.cellForm.value,
-                              expression: "cellForm.value"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { rows: "7" },
-                          domProps: { value: _vm.cellForm.value },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.cellForm,
-                                "value",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "form-group" }, [
-                        _vm.selectedColumn.nullable
-                          ? _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-warning",
-                                attrs: {
-                                  type: "button",
-                                  disabled: _vm.cellForm.busy
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.updateCellWithNull()
-                                  }
-                                }
-                              },
-                              [
-                                _c("font-awesome-icon", {
-                                  attrs: { icon: "bullseye" }
-                                }),
-                                _vm._v(
-                                  " Set NULL\n                            "
-                                )
-                              ],
-                              1
-                            )
-                          : _vm._e()
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-footer" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: { type: "button", "data-dismiss": "modal" }
-                        },
-                        [_vm._v("Close")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: {
-                            type: "button",
-                            disabled: _vm.cellForm.busy
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.updateCell()
-                            }
-                          }
-                        },
-                        [
-                          _c("font-awesome-icon", { attrs: { icon: "save" } }),
-                          _vm._v(" Save\n                        ")
-                        ],
-                        1
-                      )
-                    ])
-                  ])
-                : _vm._e()
-            ]
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "a-form-item",
+                [
+                  _c("a-input", {
+                    attrs: {
+                      placeholder: "Search",
+                      disabled: _vm.isNullOrNotNullOperator
+                    },
+                    model: {
+                      value: _vm.searchForm.keyword,
+                      callback: function($$v) {
+                        _vm.$set(_vm.searchForm, "keyword", $$v)
+                      },
+                      expression: "searchForm.keyword"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "a-form-item",
+                [
+                  _c(
+                    "a-button",
+                    {
+                      attrs: { type: "primary" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.fetchData($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Filter")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "a-form-item",
+                [
+                  _c(
+                    "a-button",
+                    {
+                      attrs: { type: "default" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.reset($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Reset")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
           )
-        ]
-      )
-    ])
-  ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("a-table", {
+        attrs: {
+          columns: _vm.columns,
+          rowKey: function(record) {
+            return _vm.getRowId(record)
+          },
+          dataSource: _vm.data,
+          pagination: _vm.pagination,
+          loading: _vm.loadingData,
+          scroll: { x: true }
+        },
+        on: { change: _vm.handleTableChange },
+        scopedSlots: _vm._u([
+          {
+            key: "value",
+            fn: function(value) {
+              return _c("span", {}, [
+                value === null
+                  ? _c("span", { staticClass: "text-null" }, [_vm._v("NULL")])
+                  : _c("span", [_vm._v(_vm._s(value))])
+              ])
+            }
+          }
+        ])
+      }),
+      _vm._v(" "),
+      !_vm.loadingData
+        ? _c("div", [
+            _vm.pagination.total < _vm.total
+              ? _c("p", [
+                  _vm._v(
+                    _vm._s(_vm.pagination.total) +
+                      " " +
+                      _vm._s(_vm.pagination.total > 1 ? "rows" : "row") +
+                      " of " +
+                      _vm._s(_vm.total) +
+                      " match filter"
+                  )
+                ])
+              : _c("p", [
+                  _vm._v(
+                    _vm._s(_vm.total) +
+                      " " +
+                      _vm._s(_vm.total > 1 ? "rows" : "row") +
+                      " in table"
+                  )
+                ])
+          ])
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

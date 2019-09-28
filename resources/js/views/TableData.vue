@@ -1,111 +1,107 @@
 <template>
-    <loading-view :loading="loading">
-        <div class="card-body">
-            <div class="dataTables_wrapper container-fluid dt-bootstrap4">
-                <div class="dataTables_filter">
-                    <form class="form-inline">
-                        <label class="my-1 mr-2">Search: </label>
-                        <select class="form-control form-control-sm my-1 mr-2" v-model="searchForm.field">
-                            <option v-for="(column, index) in columns" :key="index" :value="column.field">{{ column.field }}</option>
-                        </select>
-                        <select class="form-control form-control-sm my-1 mr-2" v-model="searchForm.operator" @change="refreshDataIfNeeded()">
-                            <option v-for="(operator, index) in operators" :key="index" :value="operator">{{ operator }}</option>
-                        </select>
-                        <input type="search" class="form-control form-control-sm my-1 mr-2" placeholder="Search" v-model="searchForm.keyword" :disabled="isNullOrNotNullOperator">
-                        <button type="submit" class="btn btn-primary btn-sm my-1 mr-2" @click.prevent="loadRows()">
-                            Filter
-                        </button>
-                        <button type="submit" class="btn btn-outline-primary btn-sm my-1" @click.prevent="reset()">
-                            Reset
-                        </button>
-                    </form>
-                </div>
+    <loading-view :loading="loadingView">
+        <a-form layout="inline" v-if="! loadingView">
+            <a-form-item label="Search:">
+            </a-form-item>
 
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover dataTable">
-                        <thead>
-                            <tr>
-                                <th
-                                    v-for="(column, index) in columns"
-                                    :key="index"
-                                    :class="sortingDirectionClassHeader(column.field, searchForm.sorting, searchForm.direction)"
-                                    @click.prevent="updateSorting(column.field)"
-                                >
-                                    {{ column.field }}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(row, index) in rows"
-                                :key="index"
-                                :class="{ 'row-selected': getRowId(selectedRow) === getRowId(row)}"
-                            >
-                                <td
-                                    v-for="(column, index) in columns"
-                                    :key="index"
-                                    @click="onCellClick(row, column)"
-                                >
-                                    <span v-if="row[column.field] === null" class="text-null">NULL</span>
-                                    <span v-else>{{ row[column.field] }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <a-form-item>
+                <a-select :defaultValue="searchForm.field"
+                    style="width: 120px"
+                    @change="onChangeSearchField">
+                    <a-select-option v-for="(column, key) in columns"
+                        :key="key"
+                        :value="column.dataIndex">
+                        {{ column.dataIndex }}
+                    </a-select-option>
+                </a-select>
+            </a-form-item>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="dataTables_info">
-                            <span v-if="count < total">{{ count }} {{ count > 1 ? 'rows' : 'row' }} of {{ total }} match filter</span>
-                            <span v-else>{{ total }} {{ total > 1 ? 'rows' : 'row' }} in table</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a-form-item>
+                <a-select :defaultValue="searchForm.operator"
+                    style="width: 120px"
+                    @change="onChangeSearchOperator">
+                    <a-select-option v-for="(operator, key) in operators"
+                        :key="key"
+                        :value="operator">
+                        {{ operator }}
+                    </a-select-option>
+                </a-select>
+            </a-form-item>
 
-            <div class="modal fade" id="modal-edit-cell-value" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" v-if="selectedRow && selectedColumn">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Field: "{{ selectedColumn.field }}" - {{ selectedColumn.type }} {{ selectedColumn.nullable ? '' : 'NOT NULL' }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+            <a-form-item>
+                <a-input placeholder="Search"
+                    v-model="searchForm.keyword"
+                    :disabled="isNullOrNotNullOperator" />
+            </a-form-item>
 
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <textarea
-                                    class="form-control"
-                                    rows="7"
-                                    v-model="cellForm.value"
-                                ></textarea>
-                            </div>
+            <a-form-item>
+                <a-button type="primary" @click.prevent="fetchData">Filter</a-button>
+            </a-form-item>
 
-                            <div class="form-group">
-                                <button
-                                    type="button"
-                                    class="btn btn-warning"
-                                    :disabled="cellForm.busy"
-                                    @click="updateCellWithNull()"
-                                    v-if="selectedColumn.nullable"
-                                >
-                                    <font-awesome-icon icon="bullseye" /> Set NULL
-                                </button>
-                            </div>
-                        </div>
+            <a-form-item>
+                <a-button type="default" @click.prevent="reset">Reset</a-button>
+            </a-form-item>
+        </a-form>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" :disabled="cellForm.busy" @click="updateCell()">
-                                <font-awesome-icon icon="save" /> Save
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <a-table :columns="columns"
+            :rowKey="record => getRowId(record)"
+            :dataSource="data"
+            :pagination="pagination"
+            :loading="loadingData"
+            :scroll="{ x: true }"
+            @change="handleTableChange">
+            <span slot="value" slot-scope="value">
+                <span v-if="value === null" class="text-null">NULL</span>
+                <span v-else>{{ value }}</span>
+            </span>
+        </a-table>
+
+        <div v-if="! loadingData">
+            <p v-if="pagination.total < total">{{ pagination.total }} {{ pagination.total > 1 ? 'rows' : 'row' }} of {{ total }} match filter</p>
+            <p v-else>{{ total }} {{ total > 1 ? 'rows' : 'row' }} in table</p>
         </div>
+
+        <!-- <div class="modal fade" id="modal-edit-cell-value" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" v-if="selectedRow && selectedColumn">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Field: "{{ selectedColumn.field }}" - {{ selectedColumn.type }} {{ selectedColumn.nullable ? '' : 'NOT NULL' }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea
+                                class="form-control"
+                                rows="7"
+                                v-model="cellForm.value"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <button
+                                type="button"
+                                class="btn btn-warning"
+                                :disabled="cellForm.busy"
+                                @click="updateCellWithNull()"
+                                v-if="selectedColumn.nullable"
+                            >
+                                <font-awesome-icon icon="bullseye" /> Set NULL
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" :disabled="cellForm.busy" @click="updateCell()">
+                            <font-awesome-icon icon="save" /> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
     </loading-view>
 </template>
 
@@ -118,24 +114,26 @@
             required: true,
         },
 
-        /**
-         * The component's data.
-         */
         data() {
             return {
+                data: [],
+                pagination: {
+                    current: 1,
+                    pageSize: config.perPage,
+                },
+                filters: {},
+                sorter: {},
+                loadingView: false,
+                loadingData: false,
                 columns: [],
-                rows: [],
                 total: 0,
-                count: 0,
                 operators: [
-                    '=', '<>', '>', '<', '>=', '<=', 'IN', 'LIKE', 'IS NULL', 'IS NOT NULL'
+                    '=', '<>', '>', '<', '>=', '<=', 'IN', 'LIKE', 'IS NULL', 'IS NOT NULL',
                 ],
                 searchForm: {
                     field: '',
                     operator: '=',
                     keyword: '',
-                    sorting: '',
-                    direction: 'asc',
                 },
                 selectedRow: null,
                 selectedColumn: null,
@@ -143,7 +141,6 @@
                     value: '',
                     busy: false
                 },
-                loading: false,
             };
         },
 
@@ -169,44 +166,56 @@
             /**
              * Reload the data.
              */
-            refreshData() {
-                this.loading = true;
-                this.loadColumns();
-                this.loading = false;
-            },
+            async refreshData() {
+                this.loadingView = true;
 
-            /**
-             * Reset search form to default.
-             */
-            reset() {
+                const columnResponse = await axios.get('/dibi/api/tables/' + this.tableName + '/columns');
+
+                this.loadingView = false;
+
+                this.columns = _.map(columnResponse.data, item => {
+                    return {
+                        title: item.field,
+                        dataIndex: item.field,
+                        sorter: true,
+                        scopedSlots: { customRender: 'value' },
+                    };
+                });
+
+                this.pagination.current = 1;
+
+                this.sorter = {
+                    column: this.columns[0],
+                    columnKey: this.columns[0].dataIndex,
+                    field: this.columns[0].dataIndex,
+                    order: 'ascend',
+                };
+
                 this.searchForm = {
-                    field: this.columns[0].field,
+                    field: this.columns[0].dataIndex,
                     operator: '=',
                     keyword: '',
-                    sorting: this.columns[0].field,
-                    direction: 'asc'
                 };
-                this.loadRows(false);
+
+                await this.fetchData();
             },
 
-            /**
-             * Load the columns.
-             */
-            loadColumns() {
-                return axios.get('/dibi/api/tables/' + this.tableName + '/columns')
-                    .then(response => {
-                        this.columns = response.data;
-                        this.reset();
-                    });
+            handleTableChange(pagination, filters, sorter) {
+                this.pagination = Object.assign(this.pagination, {...pagination});
+                this.filters = Object.assign(this.filters, {...filters});
+                this.sorter = Object.assign(this.sorter, {...sorter});
+
+                this.fetchData();
             },
 
-            /**
-             * Load the rows.
-             */
-            loadRows(filter = true) {
+            async fetchData(filter = true) {
+                this.loadingData = true;
+
                 let url = '/dibi/api/tables/' + this.tableName + '/rows?' +
-                    'sorting=' + this.searchForm.sorting +
-                    '&direction=' + this.searchForm.direction;
+                    'page=' + this.pagination.current +
+                    '&per_page=' + this.pagination.pageSize +
+                    '&sort_key=' + this.sorter.field +
+                    '&sort_direction=' + (this.sorter.order == 'ascend' ? 'asc' : 'desc');
 
                 if (filter) {
                     url += '&field=' + this.searchForm.field +
@@ -214,12 +223,40 @@
                         '&keyword=' + this.searchForm.keyword;
                 }
 
-                return axios.get(url)
-                    .then(response => {
-                        this.total = response.data.total;
-                        this.count = response.data.count;
-                        this.rows = response.data.data;
-                    });
+                const rowResponse = await axios.get(url);
+
+                const { data, total, count } = rowResponse.data;
+
+                const pagination = { ...this.pagination };
+                pagination.total = count;
+                this.pagination = pagination;
+
+                this.data = rowResponse.data.data;
+                this.total = total;
+
+                this.loadingData = false;
+            },
+
+            onChangeSearchField(value) {
+                this.searchForm.field = value;
+            },
+
+            onChangeSearchOperator(value) {
+                this.searchForm.operator = value;
+
+                this.refreshDataIfNeeded();
+            },
+
+            /**
+             * Reset search form to default.
+             */
+            reset() {
+                this.searchForm = {
+                    field: this.columns[0].dataIndex,
+                    operator: '=',
+                    keyword: '',
+                };
+                this.fetchData(false);
             },
 
             /**
@@ -227,42 +264,12 @@
              */
             refreshDataIfNeeded() {
                 if (this.isNullOrNotNullOperator) {
-                    this.loadRows();
+                    this.fetchData();
 
                     return true;
                 }
 
                 return false;
-            },
-
-            /**
-             * Get header class with sorting direction.
-             */
-            sortingDirectionClassHeader(current, sorting, direction) {
-                if (current != sorting) {
-                    return 'sorting';
-                }
-
-                return 'sorting_' + direction;
-            },
-
-            /**
-             * Reload the rows when update sorting.
-             */
-            updateSorting(sorting) {
-                if (this.searchForm.sorting == sorting) {
-                    if (this.searchForm.direction == 'asc') {
-                        this.searchForm.direction = 'desc';
-                    } else {
-                        this.searchForm.direction = 'asc';
-                    }
-                } else {
-                    this.searchForm.direction = 'asc';
-                }
-
-                this.searchForm.sorting = sorting;
-
-                this.loadRows();
             },
 
             /**
@@ -275,61 +282,61 @@
             /**
              * Show modal edit cell value.
              */
-            onCellClick(row, column) {
-                if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
-                    this.selectedRow = row;
-                } else {
-                    this.selectedColumn = column;
-                    this.cellForm = {
-                        value: this.selectedRow[this.selectedColumn.field],
-                        busy: false
-                    };
+            // onCellClick(row, column) {
+            //     if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
+            //         this.selectedRow = row;
+            //     } else {
+            //         this.selectedColumn = column;
+            //         this.cellForm = {
+            //             value: this.selectedRow[this.selectedColumn.field],
+            //             busy: false
+            //         };
 
-                    $('#modal-edit-cell-value').modal('show');
-                }
-            },
+            //         $('#modal-edit-cell-value').modal('show');
+            //     }
+            // },
 
             /**
              * Update cell value.
              */
-            updateCell() {
-                if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
-                    $('#modal-edit-cell-value').modal('hide');
+            // updateCell() {
+            //     if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
+            //         $('#modal-edit-cell-value').modal('hide');
 
-                    return false;
-                }
+            //         return false;
+            //     }
 
-                this.cellForm.busy = true;
+            //     this.cellForm.busy = true;
 
-                axios.put('/dibi/api/tables/' + this.tableName + '/rows', {
-                    row: this.selectedRow,
-                    column: this.selectedColumn,
-                    value: this.cellForm.value
-                }).then(response => {
-                    this.selectedRow[this.selectedColumn.field] = this.cellForm.value;
+            //     axios.put('/dibi/api/tables/' + this.tableName + '/rows', {
+            //         row: this.selectedRow,
+            //         column: this.selectedColumn,
+            //         value: this.cellForm.value
+            //     }).then(response => {
+            //         this.selectedRow[this.selectedColumn.field] = this.cellForm.value;
 
-                    this.rows = this.rows.map((row) => {
-                        if (this.getRowId(row) === this.getRowId(this.selectedRow)) {
-                            return this.selectedRow;
-                        }
+            //         this.rows = this.rows.map((row) => {
+            //             if (this.getRowId(row) === this.getRowId(this.selectedRow)) {
+            //                 return this.selectedRow;
+            //             }
 
-                        return row;
-                    });
+            //             return row;
+            //         });
 
-                    this.cellForm.busy = false;
+            //         this.cellForm.busy = false;
 
-                    $('#modal-edit-cell-value').modal('hide');
-                });
-            },
+            //         $('#modal-edit-cell-value').modal('hide');
+            //     });
+            // },
 
             /**
              * Update cell value to null.
              */
-            updateCellWithNull() {
-                this.cellForm.value = null;
+            // updateCellWithNull() {
+            //     this.cellForm.value = null;
 
-                this.updateCell();
-            }
+            //     this.updateCell();
+            // }
         }
     };
 </script>

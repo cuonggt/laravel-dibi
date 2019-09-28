@@ -3,6 +3,7 @@
 namespace Cuonggt\Dibi;
 
 use Ramsey\Uuid\Uuid;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 abstract class AbstractDatabase implements DatabaseInterface
@@ -60,17 +61,25 @@ abstract class AbstractDatabase implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function rows($table, $params)
+    public function rows($table, Request $request)
     {
-        $query = $this->buildSelectQuery($table, $params);
+        $query = $this->buildSelectQuery($table, $request->only(['field', 'operator', 'keyword']));
 
         $total = DB::table($table)->count();
 
         $count = $query->count();
 
+        $currentPage = $request->input('page', 1);
+
+        $perPage = $request->input('per_page', config('dibi.limit'));
+
         $data = $query->selectRaw('*, '.$this->generateTableKey($table).' as __id__')
-            // ->orderBy($params['sorting'], $params['direction'])
-            ->take(config('dibi.limit', 100))
+            ->orderBy(
+                $request->sort_key,
+                $request->input('sort_direction', 'asc')
+            )
+            ->skip(($currentPage - 1) * $perPage)
+            ->take($perPage)
             ->get();
 
         return compact('total', 'count', 'data');

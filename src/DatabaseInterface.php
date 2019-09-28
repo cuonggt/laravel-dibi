@@ -2,6 +2,8 @@
 
 namespace Cuonggt\Dibi;
 
+use Illuminate\Http\Request;
+
 interface DatabaseInterface
 {
     /**
@@ -39,10 +41,10 @@ interface DatabaseInterface
      * Get list of top rows for the given table.
      *
      * @param  string  $table
-     * @param  array  $params
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function rows($table, $params);
+    public function rows($table, Request $request);
 
     /**
      * Add a row to the given table.
