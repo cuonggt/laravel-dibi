@@ -1,6 +1,6 @@
 # Dibi
 
-![screenshot](screenshot.png)
+![screenshot](https://user-images.githubusercontent.com/8156596/65955590-b1172700-e472-11e9-89cb-1aac2ab90f32.png)
 
 ## Installation
 
