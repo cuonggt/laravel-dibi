@@ -95,9 +95,10 @@
             async fetchInfo() {
                 this.loading = true;
 
-                const response = await axios.get('/dibi/api/tables/' + this.tableName);
+                const { data: info } = await axios.get('/dibi/api/tables/' + this.tableName);
 
-                this.info = response.data;
+                this.info = info;
+
                 this.loading = false;
             },
         },

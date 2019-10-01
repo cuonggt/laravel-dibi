@@ -18,12 +18,12 @@
 </template>
 
 <script>
-export default {
-    props: {
-        loading: {
-            type: Boolean,
-            default: true,
+    export default {
+        props: {
+            loading: {
+                type: Boolean,
+                default: true,
+            },
         },
-    },
-}
+    };
 </script>

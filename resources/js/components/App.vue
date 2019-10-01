@@ -36,7 +36,9 @@
             </a-layout-header>
 
             <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
-                <router-view />
+                <transition name="fade" mode="out-in">
+                    <router-view :key="$route.name + ($route.params.tableName || '')"></router-view>
+                </transition>
             </a-layout-content>
         </a-layout>
     </a-layout>
@@ -58,9 +60,9 @@
 
         methods: {
             async fetchTables() {
-                const response = await axios.get('/dibi/api/tables');
+                const { data: tables } = await axios.get('/dibi/api/tables');
 
-                this.tables = response.data;
+                this.tables = tables;
             },
         },
     };

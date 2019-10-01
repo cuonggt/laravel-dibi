@@ -43,18 +43,20 @@
             </a-form-item>
         </a-form>
 
-        <a-table :columns="columns"
-            :rowKey="record => getRowId(record)"
-            :dataSource="data"
-            :pagination="pagination"
-            :loading="loadingData"
-            :scroll="{ x: true }"
-            @change="handleTableChange">
-            <span slot="value" slot-scope="value">
-                <span v-if="value === null" class="text-null">NULL</span>
-                <span v-else>{{ value }}</span>
-            </span>
-        </a-table>
+        <div :style="{ paddingTop: '20px' }">
+            <a-table :columns="columns"
+                :rowKey="record => getRowId(record)"
+                :dataSource="data"
+                :pagination="pagination"
+                :loading="loadingData"
+                :scroll="{ x: true }"
+                @change="handleTableChange">
+                <span slot="value" slot-scope="value">
+                    <span v-if="value === null" class="text-null">NULL</span>
+                    <span v-else>{{ value }}</span>
+                </span>
+            </a-table>
+        </div>
 
         <div v-if="! loadingData">
             <p v-if="pagination.total < total">{{ pagination.total }} {{ pagination.total > 1 ? 'rows' : 'row' }} of {{ total }} match filter</p>
@@ -106,8 +108,6 @@
 </template>
 
 <script>
-    import _ from 'lodash';
-
     export default {
         props: {
             tableName: String,
@@ -223,15 +223,13 @@
                         '&keyword=' + this.searchForm.keyword;
                 }
 
-                const rowResponse = await axios.get(url);
-
-                const { data, total, count } = rowResponse.data;
+                const { data: { data, total, count } } = await axios.get(url);
 
                 const pagination = { ...this.pagination };
                 pagination.total = count;
                 this.pagination = pagination;
 
-                this.data = rowResponse.data.data;
+                this.data = data;
                 this.total = total;
 
                 this.loadingData = false;

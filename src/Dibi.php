@@ -58,4 +58,12 @@ class Dibi
 
         return new static;
     }
+
+    public static function config()
+    {
+        return [
+            'base' => '/dibi',
+            'perPage' => config('dibi.limit', 100),
+        ];
+    }
 }

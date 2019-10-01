@@ -13,9 +13,7 @@
     </div>
 
     <script>
-        window.config = {
-            perPage: {{ config('dibi.limit', 100) }}
-        };
+        window.config = @json(Dibi::config());
     </script>
 
     <!-- Scripts -->

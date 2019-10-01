@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "ant-design-vue": "^1.4.0-beta.0",
-        "numeral": "^2.0.6"
+        "numeral": "^2.0.6",
+        "vue-toasted": "^1.1.27"
     }
 }

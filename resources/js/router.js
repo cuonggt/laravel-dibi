@@ -7,11 +7,13 @@ import TableStructure from '@/views/TableStructure';
 import TableInfo from '@/views/TableInfo';
 import Error403 from '@/views/403';
 import Error404 from '@/views/404';
+import Error500 from '@/views/500';
 
 Vue.use(Router);
 
 const router = new Router({
-    base: '/dibi',
+    scrollBehavior,
+    base: window.config.base,
     mode: 'history',
     routes: [
         {
@@ -56,6 +58,11 @@ const router = new Router({
             component: Error404,
         },
         {
+            name: '500',
+            path: '/500',
+            component: Error500,
+        },
+        {
             name: 'catch-all',
             path: '*',
             component: Error404,
@@ -64,3 +71,22 @@ const router = new Router({
 });
 
 export default router;
+
+function scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+        return savedPosition;
+    }
+
+    if (to.hash) {
+        return { selector: to.hash };
+    }
+
+    const [component] = router.getMatchedComponents({ ...to }).slice(-1);
+
+    if (component && component.scrollToTop === false) {
+        return {};
+    }
+
+    return { x: 0, y: 0 };
+}
+

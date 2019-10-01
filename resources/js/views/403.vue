@@ -1,3 +1,3 @@
 <template>
-    <div>403</div>
+    <h2>403 Forbidden</h2>
 </template>
