@@ -78,12 +78,16 @@ abstract class AbstractDatabase implements DatabaseInterface
 
         $perPage = $request->input('per_page', config('dibi.limit'));
 
-        $data = $query->selectRaw('*, '.$this->generateTableKey($table).' as __id__')
-            ->orderBy(
+        $query = $query->selectRaw('*, '.$this->generateTableKey($table).' as __id__');
+
+        if (! empty($request->sort_key)) {
+            $query = $query->orderBy(
                 $request->sort_key,
                 $request->input('sort_direction', 'asc')
-            )
-            ->skip(($currentPage - 1) * $perPage)
+            );
+        }
+
+        $data = $query->skip(($currentPage - 1) * $perPage)
             ->take($perPage)
             ->get();
 
