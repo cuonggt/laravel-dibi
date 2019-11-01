@@ -1,5 +1,7 @@
 # Dibi
 
+[![Build Status](https://travis-ci.org/cuonggt/laravel-dibi.svg?branch=master)](https://travis-ci.org/cuonggt/laravel-dibi)
+
 ![screenshot](https://user-images.githubusercontent.com/8156596/68057862-29ca0700-fcef-11e9-84ff-c3e59026d13d.png)
 
 - [Introduction](#introduction)
