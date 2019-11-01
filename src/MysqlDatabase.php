@@ -2,6 +2,7 @@
 
 namespace Cuonggt\Dibi;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class MysqlDatabase extends AbstractDatabase
@@ -24,7 +25,7 @@ class MysqlDatabase extends AbstractDatabase
             [$this->name, $table]
         );
 
-        return array_first($tables);
+        return Arr::first($tables);
     }
 
     /**
@@ -32,7 +33,7 @@ class MysqlDatabase extends AbstractDatabase
      */
     public function mapTableToObject($table)
     {
-        $encoding = array_first(explode('_', $table->TABLE_COLLATION));
+        $encoding = Arr::first(explode('_', $table->TABLE_COLLATION));
 
         return (new Table)->setRaw((array) $table)->map([
             'name' => $table->TABLE_NAME,
