@@ -11,7 +11,7 @@ class MysqlDatabase extends AbstractDatabase
      */
     public function getTables()
     {
-        return DB::select('select * from information_schema.tables where table_schema = ?', [$this->name]);
+        return DB::select('SELECT * FROM information_schema.tables WHERE table_schema = ?', [$this->name]);
     }
 
     /**
@@ -20,7 +20,7 @@ class MysqlDatabase extends AbstractDatabase
     public function getTableByName($table)
     {
         $tables = DB::select(
-            'select * from information_schema.tables where table_schema = ? and table_name = ? limit 1',
+            'SELECT * FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1',
             [$this->name, $table]
         );
 
@@ -63,7 +63,7 @@ class MysqlDatabase extends AbstractDatabase
      */
     public function getColumns($table)
     {
-        return DB::select('show columns from '.$table);
+        return DB::select('SHOW COLUMNS FROM '.$table);
     }
 
     /**
@@ -87,7 +87,7 @@ class MysqlDatabase extends AbstractDatabase
     public function getIndexes($table)
     {
         return DB::select(
-            'select * from information_schema.statistics where table_schema = ? and table_name = ?',
+            'SELECT * FROM information_schema.statistics WHERE table_schema = ? AND table_name = ?',
             [$this->name, $table]
         );
     }
@@ -116,7 +116,7 @@ class MysqlDatabase extends AbstractDatabase
     public function getKeyName($table)
     {
         $columns = DB::select(
-            'select * from information_schema.columns where table_schema = ? and table_name = ? and column_key = ?',
+            'SELECT * FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_key = ?',
             [$this->name, $table, 'PRI']
         );
 

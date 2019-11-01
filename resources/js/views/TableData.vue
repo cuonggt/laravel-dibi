@@ -1,11 +1,11 @@
 <template>
     <loading-view :loading="loadingView">
         <a-form layout="inline" v-if="! loadingView">
-            <a-form-item label="Search:">
+            <a-form-item label="Filter">
             </a-form-item>
 
             <a-form-item>
-                <a-select :defaultValue="searchForm.field"
+                <a-select :defaultValue="filterField"
                     style="width: 120px"
                     @change="onChangeSearchField">
                     <a-select-option v-for="(column, key) in columns"
@@ -17,7 +17,7 @@
             </a-form-item>
 
             <a-form-item>
-                <a-select :defaultValue="searchForm.operator"
+                <a-select :defaultValue="filterOperator"
                     style="width: 120px"
                     @change="onChangeSearchOperator">
                     <a-select-option v-for="(operator, key) in operators"
@@ -29,17 +29,17 @@
             </a-form-item>
 
             <a-form-item>
-                <a-input placeholder="Search"
-                    v-model="searchForm.keyword"
+                <a-input :placeholder="filterValuePlaceholder"
+                    v-model="filterValue"
                     :disabled="isNullOrNotNullOperator" />
             </a-form-item>
 
             <a-form-item>
-                <a-button type="primary" @click.prevent="fetchData">Filter</a-button>
+                <a-button type="primary" @click.prevent="fetchData">Apply</a-button>
             </a-form-item>
 
             <a-form-item>
-                <a-button type="default" @click.prevent="reset">Reset</a-button>
+                <a-button type="default" @click.prevent="resetFilter">Reset</a-button>
             </a-form-item>
         </a-form>
 
@@ -62,48 +62,6 @@
             <p v-if="pagination.total < total">{{ pagination.total }} {{ pagination.total > 1 ? 'rows' : 'row' }} of {{ total }} match filter</p>
             <p v-else>{{ total }} {{ total > 1 ? 'rows' : 'row' }} in table</p>
         </div>
-
-        <!-- <div class="modal fade" id="modal-edit-cell-value" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" v-if="selectedRow && selectedColumn">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Field: "{{ selectedColumn.field }}" - {{ selectedColumn.type }} {{ selectedColumn.nullable ? '' : 'NOT NULL' }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <textarea
-                                class="form-control"
-                                rows="7"
-                                v-model="cellForm.value"
-                            ></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <button
-                                type="button"
-                                class="btn btn-warning"
-                                :disabled="cellForm.busy"
-                                @click="updateCellWithNull()"
-                                v-if="selectedColumn.nullable"
-                            >
-                                <font-awesome-icon icon="bullseye" /> Set NULL
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" :disabled="cellForm.busy" @click="updateCell()">
-                            <font-awesome-icon icon="save" /> Save
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </loading-view>
 </template>
 
@@ -128,19 +86,12 @@
                 columns: [],
                 total: 0,
                 operators: [
-                    '=', '<>', '>', '<', '>=', '<=', 'IN', 'LIKE', 'IS NULL', 'IS NOT NULL',
+                    '=', '<>', '>', '<', '>=', '<=', 'IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL',
                 ],
-                searchForm: {
-                    field: '',
-                    operator: '=',
-                    keyword: '',
-                },
-                selectedRow: null,
-                selectedColumn: null,
-                cellForm: {
-                    value: '',
-                    busy: false
-                },
+                filterField: '',
+                filterOperator: '=',
+                filterValue: '',
+                filterValuePlaceholder: 'EMPTY',
             };
         },
 
@@ -150,16 +101,27 @@
 
         computed: {
             isNullOrNotNullOperator: function () {
-                return this.searchForm.operator == 'IS NULL' || this.searchForm.operator == 'IS NOT NULL';
+                return this.filterOperator == 'IS NULL' || this.filterOperator == 'IS NOT NULL';
             }
         },
 
         watch: {
             tableName: function () {
                 this.refreshData();
-                this.selectedRow = null;
-                this.selectedColumn = null;
-            }
+            },
+
+            filterOperator: function (newVal) {
+                if (['IN', 'NOT IN'].includes(newVal)) {
+                    this.filterValuePlaceholder = '1,2,3';
+                } else if (['IS NULL', 'IS NOT NULL'].includes(newVal)) {
+                    this.filterValue = '';
+                    this.filterValuePlaceholder = '';
+                } else if (['LIKE', 'NOT LIKE'].includes(newVal)) {
+                    this.filterValuePlaceholder = 'Pattern';
+                } else {
+                    this.filterValuePlaceholder = 'EMPTY';
+                }
+            },
         },
 
         methods: {
@@ -191,13 +153,7 @@
                     order: 'ascend',
                 };
 
-                this.searchForm = {
-                    field: this.columns[0].dataIndex,
-                    operator: '=',
-                    keyword: '',
-                };
-
-                await this.fetchData();
+                this.resetFilter();
             },
 
             handleTableChange(pagination, filters, sorter) {
@@ -218,9 +174,9 @@
                     '&sort_direction=' + (this.sorter.order == 'ascend' ? 'asc' : 'desc');
 
                 if (filter) {
-                    url += '&field=' + this.searchForm.field +
-                        '&operator=' + this.searchForm.operator +
-                        '&keyword=' + this.searchForm.keyword;
+                    url += '&filter_field=' + this.filterField +
+                        '&filter_operator=' + this.filterOperator +
+                        '&filter_value=' + this.filterValue;
                 }
 
                 const { data: { data, total, count } } = await axios.get(url);
@@ -236,38 +192,22 @@
             },
 
             onChangeSearchField(value) {
-                this.searchForm.field = value;
+                this.filterField = value;
             },
 
             onChangeSearchOperator(value) {
-                this.searchForm.operator = value;
-
-                this.refreshDataIfNeeded();
+                this.filterOperator = value;
             },
 
             /**
-             * Reset search form to default.
+             * Reset filter form into default.
              */
-            reset() {
-                this.searchForm = {
-                    field: this.columns[0].dataIndex,
-                    operator: '=',
-                    keyword: '',
-                };
+            resetFilter() {
+                this.filterField = this.columns[0].dataIndex;
+                this.filterOperator = '=';
+                this.filterValue = '';
+
                 this.fetchData(false);
-            },
-
-            /**
-             * If the operator is NULL or NOT NULL then reload the rows.
-             */
-            refreshDataIfNeeded() {
-                if (this.isNullOrNotNullOperator) {
-                    this.fetchData();
-
-                    return true;
-                }
-
-                return false;
             },
 
             /**
@@ -276,65 +216,6 @@
             getRowId(row) {
                 return _.get(row, '__id__');
             },
-
-            /**
-             * Show modal edit cell value.
-             */
-            // onCellClick(row, column) {
-            //     if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
-            //         this.selectedRow = row;
-            //     } else {
-            //         this.selectedColumn = column;
-            //         this.cellForm = {
-            //             value: this.selectedRow[this.selectedColumn.field],
-            //             busy: false
-            //         };
-
-            //         $('#modal-edit-cell-value').modal('show');
-            //     }
-            // },
-
-            /**
-             * Update cell value.
-             */
-            // updateCell() {
-            //     if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
-            //         $('#modal-edit-cell-value').modal('hide');
-
-            //         return false;
-            //     }
-
-            //     this.cellForm.busy = true;
-
-            //     axios.put('/dibi/api/tables/' + this.tableName + '/rows', {
-            //         row: this.selectedRow,
-            //         column: this.selectedColumn,
-            //         value: this.cellForm.value
-            //     }).then(response => {
-            //         this.selectedRow[this.selectedColumn.field] = this.cellForm.value;
-
-            //         this.rows = this.rows.map((row) => {
-            //             if (this.getRowId(row) === this.getRowId(this.selectedRow)) {
-            //                 return this.selectedRow;
-            //             }
-
-            //             return row;
-            //         });
-
-            //         this.cellForm.busy = false;
-
-            //         $('#modal-edit-cell-value').modal('hide');
-            //     });
-            // },
-
-            /**
-             * Update cell value to null.
-             */
-            // updateCellWithNull() {
-            //     this.cellForm.value = null;
-
-            //     this.updateCell();
-            // }
-        }
+        },
     };
 </script>

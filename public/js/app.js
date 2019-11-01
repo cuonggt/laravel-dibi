@@ -5571,48 +5571,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     tableName: String,
@@ -5631,18 +5589,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loadingData: false,
       columns: [],
       total: 0,
-      operators: ['=', '<>', '>', '<', '>=', '<=', 'IN', 'LIKE', 'IS NULL', 'IS NOT NULL'],
-      searchForm: {
-        field: '',
-        operator: '=',
-        keyword: ''
-      },
-      selectedRow: null,
-      selectedColumn: null,
-      cellForm: {
-        value: '',
-        busy: false
-      }
+      operators: ['=', '<>', '>', '<', '>=', '<=', 'IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'],
+      filterField: '',
+      filterOperator: '=',
+      filterValue: '',
+      filterValuePlaceholder: 'EMPTY'
     };
   },
   created: function created() {
@@ -5650,14 +5601,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     isNullOrNotNullOperator: function isNullOrNotNullOperator() {
-      return this.searchForm.operator == 'IS NULL' || this.searchForm.operator == 'IS NOT NULL';
+      return this.filterOperator == 'IS NULL' || this.filterOperator == 'IS NOT NULL';
     }
   },
   watch: {
     tableName: function tableName() {
       this.refreshData();
-      this.selectedRow = null;
-      this.selectedColumn = null;
+    },
+    filterOperator: function filterOperator(newVal) {
+      if (['IN', 'NOT IN'].includes(newVal)) {
+        this.filterValuePlaceholder = '1,2,3';
+      } else if (['IS NULL', 'IS NOT NULL'].includes(newVal)) {
+        this.filterValue = '';
+        this.filterValuePlaceholder = '';
+      } else if (['LIKE', 'NOT LIKE'].includes(newVal)) {
+        this.filterValuePlaceholder = 'Pattern';
+      } else {
+        this.filterValuePlaceholder = 'EMPTY';
+      }
     }
   },
   methods: {
@@ -5697,15 +5658,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   field: this.columns[0].dataIndex,
                   order: 'ascend'
                 };
-                this.searchForm = {
-                  field: this.columns[0].dataIndex,
-                  operator: '=',
-                  keyword: ''
-                };
-                _context.next = 11;
-                return this.fetchData();
+                this.resetFilter();
 
-              case 11:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -5748,7 +5703,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 url = '/dibi/api/tables/' + this.tableName + '/rows?' + 'page=' + this.pagination.current + '&per_page=' + this.pagination.pageSize + '&sort_key=' + this.sorter.field + '&sort_direction=' + (this.sorter.order == 'ascend' ? 'asc' : 'desc');
 
                 if (filter) {
-                  url += '&field=' + this.searchForm.field + '&operator=' + this.searchForm.operator + '&keyword=' + this.searchForm.keyword;
+                  url += '&filter_field=' + this.filterField + '&filter_operator=' + this.filterOperator + '&filter_value=' + this.filterValue;
                 }
 
                 _context2.next = 6;
@@ -5782,35 +5737,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return fetchData;
     }(),
     onChangeSearchField: function onChangeSearchField(value) {
-      this.searchForm.field = value;
+      this.filterField = value;
     },
     onChangeSearchOperator: function onChangeSearchOperator(value) {
-      this.searchForm.operator = value;
-      this.refreshDataIfNeeded();
+      this.filterOperator = value;
     },
 
     /**
-     * Reset search form to default.
+     * Reset filter form into default.
      */
-    reset: function reset() {
-      this.searchForm = {
-        field: this.columns[0].dataIndex,
-        operator: '=',
-        keyword: ''
-      };
+    resetFilter: function resetFilter() {
+      this.filterField = this.columns[0].dataIndex;
+      this.filterOperator = '=';
+      this.filterValue = '';
       this.fetchData(false);
-    },
-
-    /**
-     * If the operator is NULL or NOT NULL then reload the rows.
-     */
-    refreshDataIfNeeded: function refreshDataIfNeeded() {
-      if (this.isNullOrNotNullOperator) {
-        this.fetchData();
-        return true;
-      }
-
-      return false;
     },
 
     /**
@@ -5819,56 +5759,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getRowId: function getRowId(row) {
       return _.get(row, '__id__');
     }
-    /**
-     * Show modal edit cell value.
-     */
-    // onCellClick(row, column) {
-    //     if (this.getRowId(this.selectedRow) !== this.getRowId(row)) {
-    //         this.selectedRow = row;
-    //     } else {
-    //         this.selectedColumn = column;
-    //         this.cellForm = {
-    //             value: this.selectedRow[this.selectedColumn.field],
-    //             busy: false
-    //         };
-    //         $('#modal-edit-cell-value').modal('show');
-    //     }
-    // },
-
-    /**
-     * Update cell value.
-     */
-    // updateCell() {
-    //     if (this.cellForm.value === this.selectedRow[this.selectedColumn.field]) {
-    //         $('#modal-edit-cell-value').modal('hide');
-    //         return false;
-    //     }
-    //     this.cellForm.busy = true;
-    //     axios.put('/dibi/api/tables/' + this.tableName + '/rows', {
-    //         row: this.selectedRow,
-    //         column: this.selectedColumn,
-    //         value: this.cellForm.value
-    //     }).then(response => {
-    //         this.selectedRow[this.selectedColumn.field] = this.cellForm.value;
-    //         this.rows = this.rows.map((row) => {
-    //             if (this.getRowId(row) === this.getRowId(this.selectedRow)) {
-    //                 return this.selectedRow;
-    //             }
-    //             return row;
-    //         });
-    //         this.cellForm.busy = false;
-    //         $('#modal-edit-cell-value').modal('hide');
-    //     });
-    // },
-
-    /**
-     * Update cell value to null.
-     */
-    // updateCellWithNull() {
-    //     this.cellForm.value = null;
-    //     this.updateCell();
-    // }
-
   }
 });
 
@@ -33982,7 +33872,7 @@ var render = function() {
             "a-form",
             { attrs: { layout: "inline" } },
             [
-              _c("a-form-item", { attrs: { label: "Search:" } }),
+              _c("a-form-item", { attrs: { label: "Filter" } }),
               _vm._v(" "),
               _c(
                 "a-form-item",
@@ -33991,7 +33881,7 @@ var render = function() {
                     "a-select",
                     {
                       staticStyle: { width: "120px" },
-                      attrs: { defaultValue: _vm.searchForm.field },
+                      attrs: { defaultValue: _vm.filterField },
                       on: { change: _vm.onChangeSearchField }
                     },
                     _vm._l(_vm.columns, function(column, key) {
@@ -34020,7 +33910,7 @@ var render = function() {
                     "a-select",
                     {
                       staticStyle: { width: "120px" },
-                      attrs: { defaultValue: _vm.searchForm.operator },
+                      attrs: { defaultValue: _vm.filterOperator },
                       on: { change: _vm.onChangeSearchOperator }
                     },
                     _vm._l(_vm.operators, function(operator, key) {
@@ -34047,15 +33937,15 @@ var render = function() {
                 [
                   _c("a-input", {
                     attrs: {
-                      placeholder: "Search",
+                      placeholder: _vm.filterValuePlaceholder,
                       disabled: _vm.isNullOrNotNullOperator
                     },
                     model: {
-                      value: _vm.searchForm.keyword,
+                      value: _vm.filterValue,
                       callback: function($$v) {
-                        _vm.$set(_vm.searchForm, "keyword", $$v)
+                        _vm.filterValue = $$v
                       },
-                      expression: "searchForm.keyword"
+                      expression: "filterValue"
                     }
                   })
                 ],
@@ -34076,7 +33966,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Filter")]
+                    [_vm._v("Apply")]
                   )
                 ],
                 1
@@ -34092,7 +33982,7 @@ var render = function() {
                       on: {
                         click: function($event) {
                           $event.preventDefault()
-                          return _vm.reset($event)
+                          return _vm.resetFilter($event)
                         }
                       }
                     },

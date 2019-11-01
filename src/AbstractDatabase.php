@@ -63,7 +63,12 @@ abstract class AbstractDatabase implements DatabaseInterface
      */
     public function rows($table, Request $request)
     {
-        $query = $this->buildSelectQuery($table, $request->only(['field', 'operator', 'keyword']));
+        $query = $this->buildSelectQuery(
+            $table,
+            $request->input('filter_field', ''),
+            $request->input('filter_operator', '='),
+            $request->input('filter_value', '')
+        );
 
         $total = DB::table($table)->count();
 
@@ -158,34 +163,44 @@ abstract class AbstractDatabase implements DatabaseInterface
      * Build select query.
      *
      * @param  string  $table
-     * @param  array  $params
+     * @param  string  $filterField
+     * @param  string  $filterOperator
+     * @param  string  $filterValue
      * @return array
      */
-    public function buildSelectQuery($table, $params)
+    public function buildSelectQuery($table, $filterField = '', $filterOperator = '=', $filterValue = '')
     {
         $query = DB::table($table);
 
-        if (empty($params['field'])) {
+        if (empty($filterField)) {
             return $query;
         }
 
-        if ($params['operator'] == 'IS NULL') {
-            return $query->whereNull($params['field']);
+        if ($filterOperator == 'IS NULL') {
+            return $query->whereNull($filterField);
         }
 
-        if ($params['operator'] == 'IS NOT NULL') {
-            return $query->whereNotNull($params['field']);
+        if ($filterOperator == 'IS NOT NULL') {
+            return $query->whereNotNull($filterField);
         }
 
-        if (empty($params['keyword'])) {
-            return $query;
+        if ($filterOperator == 'IN') {
+            return $query->whereIn($filterField, array_filter(explode(',', $filterValue)));
         }
 
-        if ($params['operator'] == 'IN') {
-            return $query->whereIn($params['field'], array_filter(explode(',', $params['keyword'])));
+        if ($filterOperator == 'NOT IN') {
+            return $query->whereNotIn($filterField, array_filter(explode(',', $filterValue)));
         }
 
-        return $query->where($params['field'], $params['operator'], $params['keyword']);
+        if ($filterOperator == 'LIKE') {
+            return $query->where($filterField, 'LIKE', '%'.$filterValue.'%');
+        }
+
+        if ($filterOperator == 'NOT LIKE') {
+            return $query->where($filterField, 'NOT LIKE', '%'.$filterValue.'%');
+        }
+
+        return $query->where($filterField, $filterOperator, $filterValue);
     }
 
     /**

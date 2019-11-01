@@ -10,6 +10,7 @@ class TableRowsController extends Controller
     /**
      * Get list of top rows for the given table.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $table
      * @return \Illuminate\Http\Response
      */
