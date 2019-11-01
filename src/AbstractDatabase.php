@@ -200,6 +200,10 @@ abstract class AbstractDatabase implements DatabaseInterface
             return $query->where($filterField, 'NOT LIKE', '%'.$filterValue.'%');
         }
 
+        if (empty($filterValue)) {
+            return $query;
+        }
+
         return $query->where($filterField, $filterOperator, $filterValue);
     }
 
