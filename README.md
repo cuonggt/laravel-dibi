@@ -1,5 +1,7 @@
 # Dibi
 
+![screenshot](https://user-images.githubusercontent.com/8156596/68057862-29ca0700-fcef-11e9-84ff-c3e59026d13d.png)
+
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Dashboard](#dashboard)
@@ -7,8 +9,6 @@
 - [License](#license)
 
 ## Introduction
-
-![screenshot](https://user-images.githubusercontent.com/8156596/68057862-29ca0700-fcef-11e9-84ff-c3e59026d13d.png)
 
 Laravel Dibi is an elegant GUI database management tool for your Laravel applications. It provides a quick access for browsing your database on local/dev server without installing any other applications. Currently it uses [Ant Design](https://www.antdv.com/) for styling.
 
