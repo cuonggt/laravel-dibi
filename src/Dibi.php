@@ -34,11 +34,11 @@ class Dibi
      *
      * @return array
      */
-    public static function scriptVariables()
+    public static function scriptVariables($options = [])
     {
-        return [
+        return array_merge([
             'path' => config('dibi.path'),
-        ];
+        ], $options);
     }
 
     /**

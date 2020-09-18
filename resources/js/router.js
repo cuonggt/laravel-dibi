@@ -14,8 +14,12 @@ const router = new Router({
     mode: 'history',
     routes: [
         {
-            name: 'dashboard',
             path: '/',
+            redirect: '/dashboard',
+        },
+        {
+            name: 'dashboard',
+            path: '/dashboard',
             component: Dashboard,
             props: true,
         },

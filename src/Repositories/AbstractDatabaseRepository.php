@@ -14,7 +14,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      *
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * Create a new database repository.

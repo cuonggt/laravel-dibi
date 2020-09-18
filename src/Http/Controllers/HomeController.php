@@ -13,9 +13,14 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $tables = $this->database->tables();
+
         return view('dibi::app', [
-            'tables' => $this->database->tables(),
-            'dibiScriptVariables' => Dibi::scriptVariables(),
+            'tables' => $tables,
+            'dibiScriptVariables' => Dibi::scriptVariables([
+                'database' => $this->database->name,
+                'tables' => $tables->toArray(),
+            ]),
             'assetsAreCurrent' => Dibi::assetsAreCurrent(),
         ]);
     }
