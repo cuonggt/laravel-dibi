@@ -2154,22 +2154,12 @@ pre code {
   box-shadow: 0 0 0 0.2rem rgba(64, 64, 200, 0.25);
 }
 
-.form-control::-webkit-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
-
 .form-control::-moz-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
 .form-control:-ms-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
-
-.form-control::-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
 }
@@ -4269,6 +4259,7 @@ input[type=button].btn-block {
   background-color: #4040c8;
   border: 0;
   border-radius: 1rem;
+  -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   -webkit-appearance: none;
           appearance: none;
@@ -4276,6 +4267,7 @@ input[type=button].btn-block {
 
 @media (prefers-reduced-motion: reduce) {
   .custom-range::-webkit-slider-thumb {
+    -webkit-transition: none;
     transition: none;
   }
 }
@@ -4300,6 +4292,7 @@ input[type=button].btn-block {
   background-color: #4040c8;
   border: 0;
   border-radius: 1rem;
+  -moz-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   -moz-appearance: none;
        appearance: none;
@@ -4307,6 +4300,7 @@ input[type=button].btn-block {
 
 @media (prefers-reduced-motion: reduce) {
   .custom-range::-moz-range-thumb {
+    -moz-transition: none;
     transition: none;
   }
 }
@@ -4334,12 +4328,14 @@ input[type=button].btn-block {
   background-color: #4040c8;
   border: 0;
   border-radius: 1rem;
+  -ms-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   appearance: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .custom-range::-ms-thumb {
+    -ms-transition: none;
     transition: none;
   }
 }
