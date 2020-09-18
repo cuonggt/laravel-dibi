@@ -16,6 +16,8 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: testdibi
+        ports:
+          - 3306
     strategy:
       fail-fast: true
       matrix:
@@ -56,4 +58,6 @@ jobs:
         run: composer require "illuminate/contracts=${{ matrix.laravel }}" --prefer-dist --no-interaction
 
       - name: Execute tests
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
         run: vendor/bin/phpunit --verbose

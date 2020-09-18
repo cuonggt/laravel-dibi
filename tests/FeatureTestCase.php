@@ -54,9 +54,9 @@ class FeatureTestCase extends TestCase
     {
         $config = $app->get('config');
 
-        $config->set('database.default', 'testdibi');
+        $config->set('database.default', 'testing');
 
-        $config->set('database.connections.testdibi', [
+        $config->set('database.connections.testing', [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
