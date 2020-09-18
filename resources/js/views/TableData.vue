@@ -69,16 +69,18 @@
                 </table>
             </div>
 
-            <div class="mt-4 mb-4">
-                <div class="col-sm-12 col-md-5">
-                    <div class="dataTables_info">
-                        Showing {{ from }} to {{ to }} of {{ total }} rows
+            <div class="mt-4 mb-4 ml-4 mr-4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info">
+                            Showing {{ from }} to {{ to }} of {{ total }} rows
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate">
-
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate">
+                            <pagination-links :total="total" :per-page="perPage" v-model="page" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,150 +89,160 @@
 </template>
 
 <script>
-    export default {
-        props: ['tableName', 'columns'],
+import PaginationLinks from '@/components/PaginationLinks';
 
-        data() {
-            return {
-                ready: false,
-                items: [],
-                from: 0,
-                to: 0,
-                total: 0,
-                operators: [
-                    '=', '<>', '>', '<', '>=', '<=', 'IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL',
-                ],
-                filtering: false,
-                filterForm: {
-                    field: this.columns[0].field,
-                    operator: '=',
-                    value: '',
-                    processing: false,
-                },
-                page: 1,
-                perPage: 15,
-                sortKey: this.columns[0].field,
-                sortDir: 'asc',
-                filterValuePlaceholder: 'EMPTY',
-            };
+export default {
+    components: {PaginationLinks},
+
+    props: ['tableName', 'columns'],
+
+    data() {
+        return {
+            ready: false,
+            items: [],
+            from: 0,
+            to: 0,
+            total: 0,
+            operators: [
+                '=', '<>', '>', '<', '>=', '<=', 'IN', 'NOT IN', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL',
+            ],
+            filtering: false,
+            filterForm: {
+                field: this.columns[0].field,
+                operator: '=',
+                value: '',
+                processing: false,
+            },
+            page: 1,
+            perPage: 15,
+            sortKey: this.columns[0].field,
+            sortDir: 'asc',
+            filterValuePlaceholder: 'EMPTY',
+        };
+    },
+
+    created() {
+        this.getRows(true);
+    },
+
+    computed: {
+        isNullOrNotNullOperator: function () {
+            return this.filterForm.operator == 'IS NULL' || this.filterForm.operator == 'IS NOT NULL';
+        }
+    },
+
+    watch: {
+        tableName: function () {
+            this.resetFilterForm(true);
         },
 
-        created() {
-            this.getRows(true);
+        page: function () {
+            this.getRows(false);
         },
 
-        computed: {
-            isNullOrNotNullOperator: function () {
-                return this.filterForm.operator == 'IS NULL' || this.filterForm.operator == 'IS NOT NULL';
+        'filterForm.operator': function (newVal) {
+            if (['IN', 'NOT IN'].includes(newVal)) {
+                this.filterValuePlaceholder = '1,2,3';
+            } else if (['IS NULL', 'IS NOT NULL'].includes(newVal)) {
+                this.filterValue = '';
+                this.filterValuePlaceholder = '';
+            } else if (['LIKE', 'NOT LIKE'].includes(newVal)) {
+                this.filterValuePlaceholder = 'Pattern';
+            } else {
+                this.filterValuePlaceholder = 'EMPTY';
             }
         },
+    },
 
-        watch: {
-            tableName: function () {
-                this.resetFilterForm(true);
-            },
+    methods: {
+        resetFilterForm(refreshing = false) {
+            this.filterForm = {
+                field: this.columns[0].field,
+                operator: '=',
+                value: '',
+                processing: false,
+            };
 
-            'filterForm.operator': function (newVal) {
-                if (['IN', 'NOT IN'].includes(newVal)) {
-                    this.filterValuePlaceholder = '1,2,3';
-                } else if (['IS NULL', 'IS NOT NULL'].includes(newVal)) {
-                    this.filterValue = '';
-                    this.filterValuePlaceholder = '';
-                } else if (['LIKE', 'NOT LIKE'].includes(newVal)) {
-                    this.filterValuePlaceholder = 'Pattern';
-                } else {
-                    this.filterValuePlaceholder = 'EMPTY';
-                }
-            },
+            this.page = 1;
+            this.perPage = 15;
+            this.sortKey = this.columns[0].field;
+            this.sortDir = 'asc';
+
+            this.filtering = false;
+
+            this.getRows(refreshing);
         },
 
-        methods: {
-            resetFilterForm(refreshing = false) {
-                this.filterForm = {
-                    field: this.columns[0].field,
-                    operator: '=',
-                    value: '',
-                    processing: false,
-                };
+        getRows(refreshing = false) {
+            if (refreshing) {
+                this.ready = false;
+            }
 
-                this.page = 1;
-                this.perPage = 15;
-                this.sortKey = this.columns[0].field;
-                this.sortDir = 'asc';
+            let url = '/dibi/api/tables/' + this.tableName + '/rows?' +
+                'page=' + this.page +
+                '&per_page=' + this.perPage +
+                '&sort_key=' + this.sortKey +
+                '&sort_direction=' + this.sortDir;
 
-                this.filtering = false;
+            if (this.filtering) {
+                url += '&filter_field=' + this.filterForm.field +
+                    '&filter_operator=' + this.filterForm.operator +
+                    '&filter_value=' + this.filterForm.value;
+            }
 
-                this.getRows(refreshing);
-            },
+            this.filterForm.processing = true;
 
-            getRows(refreshing = false) {
-                if (refreshing) {
-                    this.ready = false;
-                }
+            axios.get(url)
+                .then(response => {
+                    const { data, from, to, total } = response.data;
 
-                let url = '/dibi/api/tables/' + this.tableName + '/rows?' +
-                    'page=' + this.page +
-                    '&per_page=' + this.perPage +
-                    '&sort_key=' + this.sortKey +
-                    '&sort_direction=' + this.sortDir;
+                    this.items = data;
+                    this.from = from;
+                    this.to = to;
+                    this.total = total;
 
-                if (this.filtering) {
-                    url += '&filter_field=' + this.filterForm.field +
-                        '&filter_operator=' + this.filterForm.operator +
-                        '&filter_value=' + this.filterForm.value;
-                }
+                    this.ready = true;
+                    this.filterForm.processing = false;
 
-                this.filterForm.processing = true;
+                    Bus.$emit('resources-loaded');
+                });
+        },
 
-                axios.get(url)
-                    .then(response => {
-                        const { data, from, to, total } = response.data;
+        applyFilter() {
+            this.filtering = true;
+            this.getRows(false);
+        },
 
-                        this.items = data;
-                        this.from = from;
-                        this.to = to;
-                        this.total = total;
+        /**
+         * Get row's __id__.
+         */
+        getRowId(row) {
+            return _.get(row, '__id__');
+        },
 
-                        this.ready = true;
-                        this.filterForm.processing = false;
-                    });
-            },
-
-            applyFilter() {
-                this.filtering = true;
-                this.getRows(false);
-            },
-
-            /**
-             * Get row's __id__.
-             */
-            getRowId(row) {
-                return _.get(row, '__id__');
-            },
-
-            updateSorting(sortKey) {
-                if (this.sortKey == sortKey) {
-                    if (this.sortDir == 'asc') {
-                        this.sortDir = 'desc';
-                    } else {
-                        this.sortDir = 'asc';
-                    }
+        updateSorting(sortKey) {
+            if (this.sortKey == sortKey) {
+                if (this.sortDir == 'asc') {
+                    this.sortDir = 'desc';
                 } else {
                     this.sortDir = 'asc';
                 }
+            } else {
+                this.sortDir = 'asc';
+            }
 
-                this.sortKey = sortKey;
+            this.sortKey = sortKey;
 
-                this.getRows(false);
-            },
-
-            sortingDirectionClassHeader(current, sorting, direction) {
-                if (current != sorting) {
-                    return 'sorting';
-                }
-
-                return 'sorting_' + direction;
-            },
+            this.getRows(false);
         },
-    };
+
+        sortingDirectionClassHeader(current, sorting, direction) {
+            if (current != sorting) {
+                return 'sorting';
+            }
+
+            return 'sorting_' + direction;
+        },
+    },
+};
 </script>

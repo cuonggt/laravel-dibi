@@ -31,27 +31,27 @@
 </template>
 
 <script>
-    import fetchData from '@/fetchData';
+import fetchData from '@/fetchData';
 
-    export default {
-        beforeRouteEnter: fetchData(params => {
-            return {
-                inititalColumns: Dibi.path + '/api/tables/' + params.tableName + '/columns',
-            };
-        }),
+export default {
+    beforeRouteEnter: fetchData(params => {
+        return {
+            inititalColumns: Dibi.path + '/api/tables/' + params.tableName + '/columns',
+        };
+    }),
 
-        beforeRouteUpdate: fetchData(params => {
-            return {
-                columns: Dibi.path + '/api/tables/' + params.tableName + '/columns',
-            };
-        }),
+    beforeRouteUpdate: fetchData(params => {
+        return {
+            columns: Dibi.path + '/api/tables/' + params.tableName + '/columns',
+        };
+    }),
 
-        props: ['tableName', 'inititalColumns'],
+    props: ['tableName', 'inititalColumns'],
 
-        data() {
-            return {
-                columns: this.inititalColumns,
-            };
-        },
-    };
+    data() {
+        return {
+            columns: this.inititalColumns,
+        };
+    },
+};
 </script>

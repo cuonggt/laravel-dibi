@@ -60,32 +60,32 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            tableName: {
-                type: String,
-                required: true,
-            },
+export default {
+    props: {
+        tableName: {
+            type: String,
+            required: true,
         },
+    },
 
-        data() {
-            return {
-                info: {},
-                loading: false,
-            };
-        },
+    data() {
+        return {
+            info: {},
+            loading: false,
+        };
+    },
 
-        mounted() {
-            this.fetchInfo();
-        },
+    mounted() {
+        this.fetchInfo();
+    },
 
-        methods: {
-            fetchInfo() {
-                axios.get('/dibi/api/tables/' + this.tableName)
-                    .then(({ data }) => {
-                        this.info = data;
-                    });
-            },
+    methods: {
+        fetchInfo() {
+            axios.get('/dibi/api/tables/' + this.tableName)
+                .then(({ data }) => {
+                    this.info = data;
+                });
         },
-    };
+    },
+};
 </script>

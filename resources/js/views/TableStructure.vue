@@ -57,26 +57,26 @@
 </template>
 
 <script>
-    export default {
-        props: ['tableName', 'columns'],
+export default {
+    props: ['tableName', 'columns'],
 
-        data() {
-            return {
-                indexes: [],
-            };
-        },
+    data() {
+        return {
+            indexes: [],
+        };
+    },
 
-        created() {
-            this.getTableStructure();
-        },
+    created() {
+        this.getTableStructure();
+    },
 
-        methods: {
-            getTableStructure() {
-                axios.get('/dibi/api/tables/' + this.tableName + '/indexes')
-                    .then(({ data }) => {
-                        this.indexes = data;
-                    });
-            },
+    methods: {
+        getTableStructure() {
+            axios.get('/dibi/api/tables/' + this.tableName + '/indexes')
+                .then(({ data }) => {
+                    this.indexes = data;
+                });
         },
-    };
+    },
+};
 </script>
