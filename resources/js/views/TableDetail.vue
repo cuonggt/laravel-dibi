@@ -1,54 +1,57 @@
 <template>
     <div>
-        <a-menu
-            v-model="current"
-            mode="horizontal"
-        >
-            <a-menu-item key="tables.data">
-                <router-link :to="{ name: 'tables.data', tableName: tableName }">
-                    <a-icon type="ordered-list" />
-                    <span>Data</span>
-                </router-link>
-            </a-menu-item>
-            <a-menu-item key="tables.structure">
-                <router-link :to="{ name: 'tables.structure', tableName: tableName }">
-                    <a-icon type="layout" />
-                    <span>Structure</span>
-                </router-link>
-            </a-menu-item>
-            <a-menu-item key="tables.info">
-                <router-link :to="{ name: 'tables.info', tableName: tableName }">
-                    <a-icon type="info" />
-                    <span>Table Info</span>
-                </router-link>
-            </a-menu-item>
-        </a-menu>
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5>Table <strong>{{ tableName }}</strong></h5>
+            </div>
 
-        <div :style="{ paddingTop: '20px' }">
-            <router-view />
+            <ul class="nav nav-tabs mb-2">
+                <li class="nav-item">
+                    <router-link :to="{ name: 'tables.data', tableName: tableName }" class="nav-link" active-class="active">
+                        Data
+                    </router-link>
+                </li>
+
+                <li class="nav-item">
+                    <router-link :to="{ name: 'tables.structure', tableName: tableName }" class="nav-link" active-class="active">
+                        Structure
+                    </router-link>
+                </li>
+
+                <li class="nav-item">
+                    <router-link :to="{ name: 'tables.info', tableName: tableName }" class="nav-link" active-class="active">
+                        Table Info
+                    </router-link>
+                </li>
+            </ul>
+
+            <router-view :columns="columns" />
         </div>
     </div>
 </template>
 
 <script>
+    import fetchData from '@/fetchData';
+
     export default {
-        props: {
-            tableName: {
-                type: String,
-                required: true,
-            },
-        },
+        beforeRouteEnter: fetchData(params => {
+            return {
+                inititalColumns: Dibi.path + '/api/tables/' + params.tableName + '/columns',
+            };
+        }),
+
+        beforeRouteUpdate: fetchData(params => {
+            return {
+                columns: Dibi.path + '/api/tables/' + params.tableName + '/columns',
+            };
+        }),
+
+        props: ['tableName', 'inititalColumns'],
 
         data() {
             return {
-                current: [this.$route.name || 'tables.data'],
+                columns: this.inititalColumns,
             };
-        },
-
-        watch: {
-            tableName: function () {
-                this.current = [this.$route.name || 'tables.data'];
-            },
         },
     };
 </script>

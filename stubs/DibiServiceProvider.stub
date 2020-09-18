@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Gate;
+use Cuonggt\Dibi\DibiApplicationServiceProvider;
+
+class DibiServiceProvider extends DibiApplicationServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Register the Dibi gate.
+     *
+     * This gate determines who can access Dibi in non-local environments.
+     *
+     * @return void
+     */
+    protected function gate()
+    {
+        Gate::define('viewDibi', function ($user) {
+            return in_array($user->email, [
+                //
+            ]);
+        });
+    }
+}

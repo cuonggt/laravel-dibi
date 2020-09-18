@@ -2,7 +2,7 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
-use Cuonggt\Dibi\Http\Middleware\Authenticate;
+use Cuonggt\Dibi\Contracts\DatabaseRepository;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -12,8 +12,8 @@ class Controller extends BaseController
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(DatabaseRepository $database)
     {
-        $this->middleware(Authenticate::class);
+        $this->database = $database;
     }
 }

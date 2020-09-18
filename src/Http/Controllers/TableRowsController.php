@@ -2,7 +2,6 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
-use Cuonggt\Dibi\Dibi;
 use Illuminate\Http\Request;
 
 class TableRowsController extends Controller
@@ -16,7 +15,7 @@ class TableRowsController extends Controller
      */
     public function index(Request $request, $table)
     {
-        return Dibi::service()->rows($table, $request);
+        return $this->database->rows($table, $request);
     }
 
     /**
@@ -25,11 +24,11 @@ class TableRowsController extends Controller
      * @param  string  $table
      * @return \Illuminate\Http\Response
      */
-    public function store($table)
+    public function store(Request $request, $table)
     {
-        return Dibi::service()->addRow(
+        return $this->database->addRow(
             $table,
-            request('row')
+            $request->row
         );
     }
 
@@ -39,13 +38,13 @@ class TableRowsController extends Controller
      * @param  string  $table
      * @return \Illuminate\Http\Response
      */
-    public function update($table)
+    public function update(Request $request, $table)
     {
-        return Dibi::service()->updateRow(
+        return $this->database->updateRow(
             $table,
-            request('row'),
-            request('column'),
-            request('value')
+            $request->row,
+            $request->column,
+            $request->value
         );
     }
 
@@ -55,11 +54,11 @@ class TableRowsController extends Controller
      * @param  string  $table
      * @return \Illuminate\Http\Response
      */
-    public function destroy($table)
+    public function destroy(Request $request, $table)
     {
-        return Dibi::service()->deleteRow(
+        return $this->database->deleteRow(
             $table,
-            request('row')
+            $request->row
         );
     }
 }

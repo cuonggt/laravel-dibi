@@ -2,6 +2,8 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
+use Cuonggt\Dibi\Dibi;
+
 class HomeController extends Controller
 {
     /**
@@ -11,6 +13,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dibi::app');
+        return view('dibi::app', [
+            'tables' => $this->database->tables(),
+            'dibiScriptVariables' => Dibi::scriptVariables(),
+            'assetsAreCurrent' => Dibi::assetsAreCurrent(),
+        ]);
     }
 }

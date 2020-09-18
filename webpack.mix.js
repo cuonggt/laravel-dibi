@@ -11,22 +11,27 @@ const mix = require('laravel-mix');
  |
  */
 
-mix
-    .js('resources/js/app.js', 'public/js')
-    .extract([
-        'vue',
-        'vue-router',
-        'lodash',
-        'axios',
-        'ant-design-vue',
-    ])
+mix.options({
+    terser: {
+        terserOptions: {
+            compress: {
+                drop_console: true,
+            },
+        },
+    },
+})
     .setPublicPath('public')
-    .copy('public', '../../Sites/dibi-app/public/vendor/dibi')
+    .js('resources/js/app.js', 'public')
+    .sass('resources/sass/app.scss', 'public')
+    .version()
+    .copy('resources/img', 'public/img')
+    .copy('public', '../../Sites/laravel8x/public/vendor/dibi')
     .webpackConfig({
         resolve: {
+            symlinks: false,
             alias: {
                 '@': path.resolve(__dirname, 'resources/js/'),
             },
         },
-    })
-    .version();
+        plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
+    });

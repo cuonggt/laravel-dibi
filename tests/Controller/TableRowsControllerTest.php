@@ -8,12 +8,11 @@ class TableRowsControllerTest extends AbstractControllerTest
 {
     public function test_it_can_select_from_empty_table()
     {
-        $response = $this->get('/dibi/api/tables/package_tests/rows?sorting=id&direction=asc');
+        $response = $this->get('/dibi/api/tables/package_tests/rows?sort_key=id&sort_dir=asc');
 
         $response->assertJson([
-            'total' => 0,
-            'count' => 0,
             'data' => [],
+            'total' => 0,
         ]);
     }
 
@@ -23,11 +22,10 @@ class TableRowsControllerTest extends AbstractControllerTest
             ['name' => 'foo']
         );
 
-        $response = $this->get('/dibi/api/tables/package_tests/rows?sorting=id&direction=asc');
+        $response = $this->get('/dibi/api/tables/package_tests/rows?sort_key=id&sort_dir=asc');
 
         $response->assertJson([
             'total' => 1,
-            'count' => 1,
             'data' => [
                 [
                     'id' => 1,
@@ -54,7 +52,7 @@ class TableRowsControllerTest extends AbstractControllerTest
             'value' => 'foo (updated)',
         ]);
 
-        $this->assertEquals($response->content(), 1);
+        $this->assertEquals($response->status(), 200);
 
         $this->assertDatabaseHas('package_tests', [
             'id' => 1,

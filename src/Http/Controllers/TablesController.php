@@ -2,8 +2,6 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
-use Cuonggt\Dibi\Dibi;
-
 class TablesController extends Controller
 {
     /**
@@ -13,7 +11,7 @@ class TablesController extends Controller
      */
     public function index()
     {
-        return Dibi::service()->tables();
+        return $this->database->tables();
     }
 
     /**
@@ -24,6 +22,6 @@ class TablesController extends Controller
      */
     public function show($name)
     {
-        return response()->json(Dibi::service()->table($name));
+        return response()->json($this->database->table($name));
     }
 }

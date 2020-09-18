@@ -2,8 +2,11 @@
 
 namespace Cuonggt\Dibi;
 
+use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Cuonggt\Dibi\Contracts\DatabaseRepository;
+use Cuonggt\Dibi\Repositories\MysqlDatabaseRepository;
 
 class DibiServiceProvider extends ServiceProvider
 {
@@ -14,6 +17,10 @@ class DibiServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (! config('dibi.enabled')) {
+            return;
+        }
+
         $this->registerRoutes();
         $this->registerResources();
         $this->defineAssetPublishing();
@@ -27,8 +34,9 @@ class DibiServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::group([
-            'prefix' => config('dibi.uri', 'dibi'),
+            'domain' => config('dibi.domain', null),
             'namespace' => 'Cuonggt\Dibi\Http\Controllers',
+            'prefix' => config('dibi.path'),
             'middleware' => config('dibi.middleware', 'web'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
@@ -53,7 +61,7 @@ class DibiServiceProvider extends ServiceProvider
     public function defineAssetPublishing()
     {
         $this->publishes([
-            DIBI_PATH.'/public' => public_path('vendor/dibi'),
+            __DIR__.'/../public' => public_path('vendor/dibi'),
         ], 'dibi-assets');
     }
 
@@ -64,11 +72,10 @@ class DibiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (! defined('DIBI_PATH')) {
-            define('DIBI_PATH', realpath(__DIR__.'/../'));
-        }
-
         $this->configure();
+        $this->registerPublishing();
+        $this->registerServices();
+        $this->registerCommands();
     }
 
     /**
@@ -81,5 +88,62 @@ class DibiServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/dibi.php', 'dibi'
         );
+    }
+
+    /**
+     * Register the package's publishable resources.
+     *
+     * @return void
+     */
+    protected function registerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            // $this->publishes([
+            //     __DIR__.'/../public' => public_path('vendor/dibi'),
+            // ], 'dibi-assets');
+
+            $this->publishes([
+                __DIR__.'/../config/dibi.php' => config_path('dibi.php'),
+            ], 'dibi-config');
+
+            $this->publishes([
+                __DIR__.'/../stubs/DibiServiceProvider.stub' => app_path('Providers/DibiServiceProvider.php'),
+            ], 'dibi-provider');
+        }
+    }
+
+    /**
+     * Register Dibi's services in the container.
+     *
+     * @return void
+     */
+    protected function registerServices()
+    {
+        $class = 'Cuonggt\\Dibi\\Repositories\\'.ucfirst(Dibi::driver()).'DatabaseRepository';
+
+        if (! class_exists($class)) {
+            throw new Exception('Database driver ['.Dibi::driver().'] is not supported.');
+        }
+
+        $this->app->bind(DatabaseRepository::class, $class);
+
+        $this->app->when(MysqlDatabaseRepository::class)
+            ->needs('$name')
+            ->give(Dibi::databaseName());
+    }
+
+    /**
+     * Register the Dibi Artisan commands.
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\InstallCommand::class,
+                Console\PublishCommand::class,
+            ]);
+        }
     }
 }

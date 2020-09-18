@@ -2,68 +2,60 @@
 
 namespace Cuonggt\Dibi;
 
-use Closure;
+use RuntimeException;
+use Illuminate\Support\Facades\File;
 
 class Dibi
 {
-    /**
-     * The callback that should be used to authenticate Horizon users.
-     *
-     * @var \Closure
-     */
-    public static $authUsing;
+    use AuthorizesRequests;
 
     /**
-     * The Dibi's database instance.
-     *
-     * @var \Cuonggt\Dibi\AbstractDatabase
-     */
-    protected static $db;
-
-    /**
-     * Get the Dibi's database instance.
+     * Get the database driver.
      *
      * @return \Cuonggt\Dibi\AbstractDatabase
      */
-    public static function service()
+    public static function driver()
     {
-        return static::$db ?: static::$db = (new DatabaseProviderFactory)->make(
-            config('dibi.type'),
-            config('database.connections.'.config('database.default').'.database')
-        );
+        return config('database.connections.'.config('database.default').'.driver');
     }
 
     /**
-     * Determine if the given request can access the Dibi management.
+     * Get the database name.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
+     * @return \Cuonggt\Dibi\AbstractDatabase
      */
-    public static function check($request)
+    public static function databaseName()
     {
-        return (static::$authUsing ?: function () {
-            return app()->environment('local');
-        })($request);
+        return config('database.connections.'.config('database.default').'.database');
     }
 
     /**
-     * Set the callback that should be used to authenticate Horizon users.
+     * Get the default JavaScript variables for Dibi.
      *
-     * @param  \Closure  $callback
-     * @return static
+     * @return array
      */
-    public static function auth(Closure $callback)
-    {
-        static::$authUsing = $callback;
-
-        return new static;
-    }
-
-    public static function config()
+    public static function scriptVariables()
     {
         return [
-            'base' => '/dibi',
-            'perPage' => config('dibi.limit', 100),
+            'path' => config('dibi.path'),
         ];
+    }
+
+    /**
+     * Check if assets are up-to-date.
+     *
+     * @return bool
+     *
+     * @throws \RuntimeException
+     */
+    public static function assetsAreCurrent()
+    {
+        $publishedPath = public_path('vendor/dibi/mix-manifest.json');
+
+        if (! File::exists($publishedPath)) {
+            throw new RuntimeException('The Dibi assets are not published. Please run: php artisan dibi:publish');
+        }
+
+        return File::get($publishedPath) === File::get(__DIR__.'/../public/mix-manifest.json');
     }
 }

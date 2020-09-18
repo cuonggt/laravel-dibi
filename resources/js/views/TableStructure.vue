@@ -1,135 +1,81 @@
 <template>
-    <loading-view :loading="loading">
-        <a-table
-            :data-source="fields"
-            :columns="fieldColumns"
-            :row-key="record => record.field"
-            bordered
-            :pagination=false
-        >
-            <span slot="nullable" slot-scope="nullable">{{ nullable ? 'YES' : 'NO' }}</span>
-        </a-table>
+    <div>
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Allow Null</th>
+                    <th>Key</th>
+                    <th>Default</th>
+                    <th>Extra</th>
+                </tr>
+            </thead>
 
-        <div :style="{ paddingTop: '20px' }">
-            <a-table
-                :data-source="indexes"
-                :columns="indexColumns"
-                :row-key="record => record.keyName"
-                bordered
-                :pagination=false
-            >
-            </a-table>
-        </div>
-    </loading-view>
+            <tbody>
+                <tr v-for="column in columns">
+                    <td>{{ column.field }}</td>
+                    <td>{{ column.type }}</td>
+                    <td>{{ column.nullable ? 'YES' : 'NO' }}</td>
+                    <td>{{ column.key }}</td>
+                    <td>{{ column.default }}</td>
+                    <td>{{ column.extra }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-hover mt-4 mb-0">
+            <thead>
+                <tr>
+                    <th>Non_unique</th>
+                    <th>Key_name</th>
+                    <th>Seq_in_index</th>
+                    <th>Column_name</th>
+                    <th>Collation</th>
+                    <th>Cardinality</th>
+                    <th>Sub_part</th>
+                    <th>Packed</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="index in indexes">
+                    <td>{{ index.nonUnique }}</td>
+                    <td>{{ index.keyName }}</td>
+                    <td>{{ index.seqInIndex }}</td>
+                    <td>{{ index.columnName }}</td>
+                    <td>{{ index.collation }}</td>
+                    <td>{{ index.cardinality }}</td>
+                    <td>{{ index.subPart }}</td>
+                    <td>{{ index.packed }}</td>
+                    <td>{{ index.comment }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <script>
-    const fieldColumns = [
-        {
-            title: 'Field',
-            dataIndex: 'field',
-        },
-        {
-            title: 'Type',
-            dataIndex: 'type',
-        },
-        {
-            title: 'Allow Null',
-            dataIndex: 'nullable',
-            scopedSlots: { customRender: 'nullable' },
-        },
-        {
-            title: 'Key',
-            dataIndex: 'key',
-        },
-        {
-            title: 'Default',
-            dataIndex: 'default',
-        },
-        {
-            title: 'Extra',
-            dataIndex: 'extra',
-        },
-    ];
-
-    const indexColumns = [
-        {
-            title: 'Non_unique',
-            dataIndex: 'nonUnique',
-        },
-        {
-            title: 'Key_name',
-            dataIndex: 'keyName',
-        },
-        {
-            title: 'Seq_in_index',
-            dataIndex: 'seqInIndex',
-        },
-        {
-            title: 'Column_name',
-            dataIndex: 'columnName',
-        },
-        {
-            title: 'Collation',
-            dataIndex: 'collation',
-        },
-        {
-            title: 'Cardinality',
-            dataIndex: 'cardinality',
-        },
-        {
-            title: 'Sub_part',
-            dataIndex: 'subPart',
-        },
-        {
-            title: 'Packed',
-            dataIndex: 'packed',
-        },
-        {
-            title: 'Comment',
-            dataIndex: 'comment',
-        },
-    ];
-
     export default {
-        props: {
-            tableName: {
-                type: String,
-                required: true,
-            },
-        },
+        props: ['tableName', 'columns'],
 
         data() {
             return {
-                fields: [],
                 indexes: [],
-                fieldColumns,
-                indexColumns,
-                loading: false,
             };
         },
 
-        watch: {
-            tableName: function () {
-                this.fetchStructure();
-            }
-        },
-
         created() {
-            this.fetchStructure();
+            this.getTableStructure();
         },
 
         methods: {
-            async fetchStructure() {
-                this.loading = true;
-
-                const { data: fields } = await axios.get('/dibi/api/tables/' + this.tableName + '/columns');
-                const { data: indexes } = await axios.get('/dibi/api/tables/' + this.tableName + '/indexes');
-
-                this.fields = fields;
-                this.indexes = indexes;
-
-                this.loading = false;
+            getTableStructure() {
+                axios.get('/dibi/api/tables/' + this.tableName + '/indexes')
+                    .then(({ data }) => {
+                        this.indexes = data;
+                    });
             },
         },
     };

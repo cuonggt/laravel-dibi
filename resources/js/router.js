@@ -5,15 +5,12 @@ import TableDetail from '@/views/TableDetail';
 import TableData from '@/views/TableData';
 import TableStructure from '@/views/TableStructure';
 import TableInfo from '@/views/TableInfo';
-import Error403 from '@/views/403';
-import Error404 from '@/views/404';
-import Error500 from '@/views/500';
 
 Vue.use(Router);
 
 const router = new Router({
     scrollBehavior,
-    base: window.config.base,
+    base: window.Dibi.path,
     mode: 'history',
     routes: [
         {
@@ -28,7 +25,12 @@ const router = new Router({
             props: true,
             children: [
                 {
-                    path: '/',
+                    path: '',
+                    name: 'tables',
+                    redirect: 'data',
+                },
+                {
+                    path: 'data',
                     component: TableData,
                     name: 'tables.data',
                     props: true,
@@ -48,24 +50,11 @@ const router = new Router({
             ],
         },
         {
-        name: '403',
-            path: '/403',
-            component: Error403,
-        },
-        {
-            name: '404',
-            path: '/404',
-            component: Error404,
-        },
-        {
-            name: '500',
-            path: '/500',
-            component: Error500,
-        },
-        {
             name: 'catch-all',
             path: '*',
-            component: Error404,
+            redirect: () => {
+                window.location.href = '/404';
+            },
         },
     ],
 });

@@ -2,8 +2,6 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
-use Cuonggt\Dibi\Dibi;
-
 class TableIndexesController extends Controller
 {
     /**
@@ -14,6 +12,6 @@ class TableIndexesController extends Controller
      */
     public function index($table)
     {
-        return Dibi::service()->indexes($table);
+        return $this->database->indexes($table);
     }
 }

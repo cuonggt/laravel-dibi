@@ -20,6 +20,8 @@
         </whitelist>
     </filter>
     <php>
+        <env name="APP_ENV" value="self-testing"/>
+        <env name="APP_KEY" value="base64:+HB8DVzRb0DPyT4aBv1ixg+htia3ICgsF/r7AIilD5w="/>
         <env name="DB_HOST" value="127.0.0.1"/>
         <env name="DB_PORT" value="3306"/>
         <env name="DB_DATABASE" value="testdibi"/>
