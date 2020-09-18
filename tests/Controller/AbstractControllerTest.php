@@ -2,7 +2,6 @@
 
 namespace Cuonggt\Dibi\Tests\Controller;
 
-use Cuonggt\Dibi\Dibi;
 use Cuonggt\Dibi\Tests\FeatureTestCase;
 use Cuonggt\Dibi\Http\Middleware\Authorize;
 use Orchestra\Testbench\Http\Middleware\VerifyCsrfToken;
