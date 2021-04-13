@@ -2,7 +2,6 @@
 
 namespace Cuonggt\Dibi\Http\Middleware;
 
-use Cuonggt\Dibi\Dibi;
 use Illuminate\Support\Facades\Gate;
 
 class EnsureUserIsAuthorized

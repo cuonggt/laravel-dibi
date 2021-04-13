@@ -3,7 +3,6 @@
 namespace Cuonggt\Dibi;
 
 use Cuonggt\Dibi\Contracts\DatabaseRepository;
-use Cuonggt\Dibi\Dibi;
 use Cuonggt\Dibi\Repositories\MysqlDatabaseRepository;
 use Exception;
 use Illuminate\Support\ServiceProvider;

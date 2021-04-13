@@ -32,7 +32,7 @@ return [
     'middleware' => [
         'web',
         EnsureUserIsAuthorized::class,
-        EnsureUpToDateAssets::class
+        EnsureUpToDateAssets::class,
     ],
 
     /*
