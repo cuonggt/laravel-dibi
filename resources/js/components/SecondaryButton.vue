@@ -11,6 +11,6 @@ export default {
             type: String,
             default: 'button',
         },
-    }
+    },
 };
 </script>

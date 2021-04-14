@@ -32,22 +32,22 @@
 export default {
     props: {
         show: {
-            default: false
+            default: false,
         },
         maxWidth: {
-            default: '2xl'
+            default: '2xl',
         },
         closeable: {
-            default: true
+            default: true,
         },
     },
 
     methods: {
         close() {
             if (this.closeable) {
-                this.$emit('close')
+                this.$emit('close');
             }
-        }
+        },
     },
 
     watch: {
@@ -55,26 +55,26 @@ export default {
             immediate: true,
             handler: (show) => {
                 if (show) {
-                    document.body.style.overflow = 'hidden'
+                    document.body.style.overflow = 'hidden';
                 } else {
-                    document.body.style.overflow = null
+                    document.body.style.overflow = null;
                 }
-            }
-        }
+            },
+        },
     },
 
     created() {
         const closeOnEscape = (e) => {
             if (e.key === 'Escape' && this.show) {
-                this.close()
+                this.close();
             }
         }
 
-        document.addEventListener('keydown', closeOnEscape)
+        document.addEventListener('keydown', closeOnEscape);
 
         this.$once('hook:destroyed', () => {
-            document.removeEventListener('keydown', closeOnEscape)
-        })
+            document.removeEventListener('keydown', closeOnEscape);
+        });
     },
 
     computed: {
@@ -85,8 +85,8 @@ export default {
                 'lg': 'sm:max-w-lg',
                 'xl': 'sm:max-w-xl',
                 '2xl': 'sm:max-w-2xl',
-            }[this.maxWidth]
-        }
-    }
+            }[this.maxWidth];
+        },
+    },
 };
 </script>
