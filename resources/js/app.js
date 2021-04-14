@@ -1,10 +1,13 @@
 import Vue from 'vue';
-import router from '@/router';
 import axios from 'axios';
-import Base from './base';
 import _ from 'lodash';
+import PortalVue from 'portal-vue';
+import router from '@/router';
+import Base from './base';
 
 Vue.config.productionTip = false;
+
+Vue.use(PortalVue);
 
 Vue.mixin(Base);
 
@@ -20,8 +23,13 @@ if (token) {
 }
 
 // Components
-Vue.component('field-value', require('./components/FieldValue.vue').default);
-Vue.component('loader', require('./components/Loader.vue').default);
+Vue.component('x-button', require('./components/Button.vue').default);
+Vue.component('x-dialog-modal', require('./components/DialogModal.vue').default);
+Vue.component('x-field-value', require('./components/FieldValue.vue').default);
+Vue.component('x-input', require('./components/Input.vue').default);
+Vue.component('x-label', require('./components/Label.vue').default);
+Vue.component('x-loader', require('./components/Loader.vue').default);
+Vue.component('x-secondary-button', require('./components/SecondaryButton.vue').default);
 
 // Icons
 Vue.component('icon-chevron-left', require('./components/icons/ChevronLeft.vue').default);

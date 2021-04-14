@@ -19,6 +19,7 @@
         "moment": "^2.29.1",
         "moment-timezone": "^0.5.33",
         "numeral": "^2.0.6",
+        "portal-vue": "^2.1.7",
         "postcss-import": "^12.0.1",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat",
         "vue": "^2.6.12",

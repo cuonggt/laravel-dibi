@@ -39,7 +39,7 @@
 
             <template v-if="! ready">
                 <div class="flex-1 flex flex-col">
-                    <loader />
+                    <x-loader />
                 </div>
             </template>
 
@@ -77,7 +77,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="entry in entries">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns">
-                                            <field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
+                                            <x-field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -113,7 +113,8 @@
                                         <button
                                             class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none rounded-r-none"
                                             title="Page settings"
-                                            :disabled="loadEntries"
+                                            :disabled="loadingEntries"
+                                            @click.prevent="startSetting"
                                         >
                                             <icon-cog size="4"></icon-cog>
                                         </button>
@@ -152,29 +153,29 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <tr v-for="(column, key) in tableColumns">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="key + 1" />
+                                        <x-field-value :value="key + 1" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.column_name" />
+                                        <x-field-value :value="column.column_name" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.data_type" />
+                                        <x-field-value :value="column.data_type" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.collation" />
+                                        <x-field-value :value="column.collation" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ column.is_nullable ? 'YES' : 'NO' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.key" />
+                                        <x-field-value :value="column.key" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.column_default" />
+                                        <x-field-value :value="column.column_default" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.extra" />
+                                        <x-field-value :value="column.extra" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <field-value :value="column.comment" />
+                                        <x-field-value :value="column.comment" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -210,7 +211,7 @@
                             <tr v-for="row in tableInfo">
                                 <th scope="row" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4">{{ row.field }}</th>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <field-value :value="row.value" />
+                                    <x-field-value :value="row.value" />
                                 </td>
                             </tr>
                         </tbody>
@@ -218,6 +219,33 @@
                 </template>
             </template>
         </div>
+
+        <x-dialog-modal :show="setting" maxWidth="sm">
+            <template #title>
+                Page settings
+            </template>
+            <template #content>
+                <form @submit.prevent="setPageSettings">
+                    <div>
+                        <x-label for="limit" value="Limit" />
+                        <x-input id="limit" type="text" class="mt-1 block w-full" placecholder="Limit" v-model="pageSetingsForm.limit" required autofocus />
+                    </div>
+                    <div class="mt-4">
+                        <x-label for="offset" value="Offset" />
+                        <x-input id="offset" type="text" class="mt-1 block w-full" placecholder="Offset" v-model="pageSetingsForm.offset" required />
+                    </div>
+                </form>
+            </template>
+            <template #footer>
+                <x-secondary-button @click.native="closeModal">
+                    Nevermind
+                </x-secondary-button>
+
+                <x-button class="ml-2" @click.native="setPageSettings" :class="{ 'opacity-25': loadingEntries }" :disabled="loadingEntries">
+                    Go
+                </x-button>
+            </template>
+        </x-dialog-modal>
     </div>
 </template>
 
@@ -239,6 +267,11 @@ export default {
             sortDir: 'asc',
             ready: false,
             loadingEntries: true,
+            setting: false,
+            pageSetingsForm: {
+                offset: null,
+                limit: null,
+            },
         };
     },
 
@@ -345,6 +378,7 @@ export default {
             } else {
                 this.offset = 0;
             }
+
             this.loadEntries();
         },
 
@@ -352,6 +386,25 @@ export default {
             this.offset = this.offset + this.limit;
 
             this.loadEntries();
+        },
+
+        startSetting() {
+            this.pageSetingsForm = {
+                limit: this.limit,
+                offset: this.offset,
+            };
+            this.setting = true;
+        },
+
+        setPageSettings() {
+            this.limit = parseInt(this.pageSetingsForm.limit);
+            this.offset = parseInt(this.pageSetingsForm.offset);
+            this.loadEntries();
+            this.closeModal();
+        },
+
+        closeModal() {
+            this.setting = false;
         },
     },
 };

@@ -16,7 +16,7 @@
 <body>
     <div id="dibi" class="font-sans antialiased h-screen flex overflow-hidden bg-gray-200" v-cloak>
         <div class="flex flex-shrink-0">
-            <div class="flex flex-col">
+            <div class="flex flex-col w-64">
                 <div class="flex flex-col h-0 flex-1">
                     <!-- Logo -->
                     <div class="flex items-center h-16 px-4 bg-gray-900 text-xl text-white font-medium">
@@ -48,6 +48,10 @@
         </div>
 
         <router-view></router-view>
+
+        <!-- Modal Portal -->
+        <portal-target name="modal" multiple>
+        </portal-target>
     </div>
 
 <script>
