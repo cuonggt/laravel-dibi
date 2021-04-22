@@ -316,6 +316,12 @@ export default {
 
     watch: {
         tableName() {
+            this.filterEnabled = false;
+            this.filterForm = {
+                field: '__raw__',
+                operator: '=',
+                value: '',
+            };
             this.entries = [];
             this.offset = 0;
             this.sortKey = null;
