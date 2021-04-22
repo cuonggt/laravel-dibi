@@ -5,7 +5,7 @@
 <a href="https://packagist.org/packages/cuonggt/laravel-dibi"><img src="https://poser.pugx.org/cuonggt/laravel-dibi/license.svg" alt="License"></a>
 </p>
 
-![screenshot](https://user-images.githubusercontent.com/8156596/114495704-c0228c00-9c48-11eb-86c2-256dd48b2d54.png)
+![screenshot](https://user-images.githubusercontent.com/8156596/115648495-b9360080-a34f-11eb-86c5-4da253046f86.png)
 
 Laravel Dibi is an elegant GUI database management tool for your Laravel applications. It provides a quick access for browsing your database on local/dev server without installing any other applications.
 
