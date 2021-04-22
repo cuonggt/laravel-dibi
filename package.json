@@ -24,6 +24,7 @@
         "tailwindcss": "npm:@tailwindcss/postcss7-compat",
         "vue": "^2.6.12",
         "vue-router": "^3.5.1",
-        "vue-template-compiler": "^2.6.12"
+        "vue-template-compiler": "^2.6.12",
+        "vue-toasted": "^1.1.28"
     }
 }

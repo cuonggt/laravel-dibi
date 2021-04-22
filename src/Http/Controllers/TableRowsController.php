@@ -17,4 +17,9 @@ class TableRowsController extends Controller
     {
         return response()->json($this->database->rows($table, $request));
     }
+
+    public function filter(Request $request, $table)
+    {
+        return response()->json($this->database->rows($table, $request));
+    }
 }

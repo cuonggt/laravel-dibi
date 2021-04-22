@@ -33,6 +33,21 @@
                                 </button>
                             </div>
                         </div>
+
+                        <div class="mt-6 border-t-2 border-gray-200" v-if="tab == 'data' && filterEnabled">
+                            <div class="flex flex-col w-full">
+                                <div class="flex mt-4">
+                                    <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8" v-model="filterForm.field">
+                                        <option value="__raw__">Raw SQL</option>
+                                    </select>
+                                    <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2" v-model="filterForm.operator" v-show="filterForm.field != '__raw__'">
+                                        <option value="=">=</option>
+                                    </select>
+                                    <x-input class="flex-1 block w-full ml-2 px-4 py-2" placeholder="EMPTY" v-model="filterForm.value" />
+                                    <x-button class="ml-2" @click.native="loadEntries" :disabled="loadingEntries">Apply</x-button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,8 +90,8 @@
                                 </thead>
 
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr v-for="entry in entries">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns">
+                                    <tr v-for="(entry, index) in entries" :key="index">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns" :key="column.column_name">
                                             <x-field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
                                         </td>
                                     </tr>
@@ -89,7 +104,15 @@
                         <div class="px-12">
                             <div class="py-4">
                                 <div class="flex justify-between items-center">
-                                    <div class="flex"></div>
+                                    <div class="flex">
+                                        <button
+                                            class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150"
+                                            :class="filterEnabled ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                            @click="toggleFilter"
+                                        >
+                                            Filters
+                                        </button>
+                                    </div>
                                     <div class="text-sm text-gray-700">
                                         <span v-if="loadingEntries">Loading rows...</span>
                                         <span v-else>
@@ -106,7 +129,7 @@
                                             class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-r-none disabled:opacity-25"
                                             title="Previous page"
                                             :disabled="offset == 0 || loadingEntries"
-                                            @click.prevent="selectPreviousPage()"
+                                            @click.prevent="selectPreviousPage"
                                         >
                                             <icon-chevron-left size="4"></icon-chevron-left>
                                         </button>
@@ -122,7 +145,7 @@
                                             class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none disabled:opacity-25"
                                             title="Next page"
                                             :disabled="entries.length < limit || loadingEntries"
-                                            @click.prevent="selectNextPage()"
+                                            @click.prevent="selectNextPage"
                                         >
                                             <icon-chevron-right size="4"></icon-chevron-right>
                                         </button>
@@ -151,9 +174,9 @@
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="(column, key) in tableColumns">
+                                <tr v-for="(column, index) in tableColumns" :key="index">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="key + 1" />
+                                        <x-field-value :value="index + 1" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <x-field-value :value="column.column_name" />
@@ -194,7 +217,7 @@
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="index in tableIndexes">
+                                <tr v-for="index in tableIndexes" :key="index.index_name">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.index_name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.index_algorithm }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.is_unique }}</td>
@@ -208,7 +231,7 @@
                 <template v-if="tab == 'info'">
                     <table class="min-w-full divide-y divide-gray-200 text-gray-800">
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="row in tableInfo">
+                            <tr v-for="row in tableInfo" :key="row.field">
                                 <th scope="row" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4">{{ row.field }}</th>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <x-field-value :value="row.value" />
@@ -271,6 +294,12 @@ export default {
             pageSetingsForm: {
                 offset: null,
                 limit: null,
+            },
+            filterEnabled: false,
+            filterForm: {
+                field: '__raw__',
+                operator: '=',
+                value: '',
             },
         };
     },
@@ -347,13 +376,26 @@ export default {
         async loadEntries() {
             this.loadingEntries = true;
 
-            const { data } = await axios.get(
-                `${Dibi.path}/api/tables/${this.tableName}/rows?offset=${this.offset}&limit=${this.limit}&sort_key=${this.sortKey ? this.sortKey : ''}&sort_dir=${this.sortDir}`
-            );
+            const url = `${Dibi.path}/api/tables/${this.tableName}/rows?offset=${this.offset}&limit=${this.limit}&sort_key=${this.sortKey ? this.sortKey : ''}&sort_dir=${this.sortDir}`;
 
-            this.entries = data.data;
-            this.total = data.total;
-            this.loadingEntries = false;
+            const data = this.filterEnabled ? {
+                filters: [
+                    this.filterForm,
+                ],
+            } : {};
+
+            try {
+                const response = await axios.post(
+                    `${Dibi.path}/api/tables/${this.tableName}/rows/filter?offset=${this.offset}&limit=${this.limit}&sort_key=${this.sortKey ? this.sortKey : ''}&sort_dir=${this.sortDir}`,
+                    data
+                );
+
+                this.entries = response.data.data;
+                this.total = response.data.total;
+                this.loadingEntries = false;
+            } catch (error) {
+                this.loadingEntries = false;
+            }
         },
 
         updateSorting(sortKey) {
@@ -405,6 +447,14 @@ export default {
 
         closeModal() {
             this.setting = false;
+        },
+
+        toggleFilter() {
+            this.filterEnabled = !this.filterEnabled;
+
+            if (! this.filterEnabled) {
+                this.loadEntries();
+            }
         },
     },
 };

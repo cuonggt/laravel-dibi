@@ -85,7 +85,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      */
     public function rows($table, Request $request)
     {
-        $query = $this->buildSelectQuery($table);
+        $query = $this->buildSelectQuery($table, $request);
 
         $total = $query->count();
 
@@ -106,11 +106,20 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      * Build select query.
      *
      * @param  string  $table
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Database\Query\Builder
      */
-    protected function buildSelectQuery($table)
+    protected function buildSelectQuery($table, Request $request)
     {
-        return DB::table($table);
+        $query = DB::table($table);
+
+        foreach ($request->input('filters', []) as $filter) {
+            if ($filter['field'] == '__raw__' && ! empty($filter['value'])) {
+                $query->whereRaw($filter['value']);
+            }
+        }
+
+        return $query;
     }
 
     /**

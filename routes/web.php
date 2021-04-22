@@ -9,6 +9,7 @@ Route::namespace('Cuonggt\Dibi\Http\Controllers')
         Route::get('/api/tables', 'TablesController@index');
         Route::get('/api/tables/{table}', 'TablesController@show');
         Route::get('/api/tables/{table}/rows', 'TableRowsController@index');
+        Route::post('/api/tables/{table}/rows/filter', 'TableRowsController@filter');
 
         Route::get('/{view?}', 'HomeController@index')->where('view', '(.*)')->name('dibi');
     });
