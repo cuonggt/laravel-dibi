@@ -89,12 +89,12 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
 
         $total = $query->count();
 
-        if (! empty($request->sort_key)) {
-            $query = $query->orderBy(
+        $query->when(! empty($request->sort_key), function ($q) use ($request) {
+            return $q->orderBy(
                 $request->sort_key,
                 $request->input('sort_dir', 'asc')
             );
-        }
+        });
 
         return [
             'total' => $total,
@@ -116,10 +116,41 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
         foreach ($request->input('filters', []) as $filter) {
             if ($filter['field'] == '__raw__' && ! empty($filter['value'])) {
                 $query->whereRaw($filter['value']);
+            } elseif ($filter['field'] == '__any__') {
+                foreach ($this->columns($table)->pluck('column_name')->all() as $column) {
+                    $query->tap(function ($query) use ($column, $filter) {
+                        return $this->buildSubWhereClause($query, $column, $filter['operator'], $filter['value'], 'or');
+                    });
+                }
+            } else {
+                $query->tap(function ($query) use ($filter) {
+                    return $this->buildSubWhereClause($query, $filter['field'], $filter['operator'], $filter['value']);
+                });
             }
         }
 
         return $query;
+    }
+
+    public function buildSubWhereClause($query, $column, $operator = '=', $value = '', $boolean = 'and')
+    {
+        if (in_array($operator, ['IN', 'NOT IN'])) {
+            return $query->whereIn($column, array_filter(explode(',', $value)), $boolean, $operator == 'NOT IN');
+        }
+
+        if (in_array($operator, ['IS NULL', 'IS NOT NULL'])) {
+            return $query->whereNull($column, $boolean, $operator == 'IS NOT NULL');
+        }
+
+        if (in_array($operator, ['BETWEEN', 'NOT BETWEEN'])) {
+            return $query->whereBetween($column, explode(' AND ', strtoupper($value)), $boolean, $operator == 'NOT BETWEEN');
+        }
+
+        if (in_array($operator, ['LIKE', 'NOT LIKE'])) {
+            return $query->where($column, $operator, '%'.$value.'%', $boolean);
+        }
+
+        return $query->where($column, $operator, $value, $boolean);
     }
 
     /**

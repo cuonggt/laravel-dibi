@@ -36,16 +36,39 @@
 
                         <div class="mt-6 border-t-2 border-gray-200" v-if="tab == 'data' && filterEnabled">
                             <div class="flex flex-col w-full">
-                                <div class="flex mt-4">
-                                    <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8" v-model="filterForm.field">
-                                        <option value="__raw__">Raw SQL</option>
-                                    </select>
-                                    <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2" v-model="filterForm.operator" v-show="filterForm.field != '__raw__'">
-                                        <option value="=">=</option>
-                                    </select>
-                                    <x-input class="flex-1 block w-full ml-2 px-4 py-2" placeholder="EMPTY" v-model="filterForm.value" />
-                                    <x-button class="ml-2" @click.native="loadEntries" :disabled="loadingEntries">Apply</x-button>
-                                </div>
+                                <form>
+                                    <div class="flex mt-4">
+                                        <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8" v-model="filterForm.field">
+                                            <option v-for="column in tableColumns" :value="column.column_name">{{ column.column_name }}</option>
+                                            <hr>
+                                            <option value="__any__">Any column</option>
+                                            <option value="__raw__">Raw SQL</option>
+                                        </select>
+                                        <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2" v-model="filterForm.operator" v-show="filterForm.field != '__raw__'">
+                                            <option value="=">=</option>
+                                            <option value="<>"><></option>
+                                            <option value="<>"><></option>
+                                            <option value="<"><</option>
+                                            <option value=">">></option>
+                                            <option value="<="><=</option>
+                                            <option value=">=">>=</option>
+                                            <hr>
+                                            <option value="IN">IN</option>
+                                            <option value="NOT IN">NOT IN</option>
+                                            <hr>
+                                            <option value="IS NULL">IS NULL</option>
+                                            <option value="IS NOT NULL">IS NOT NULL</option>
+                                            <hr>
+                                            <option value="BETWEEN">BETWEEN</option>
+                                            <option value="NOT BETWEEN">NOT BETWEEN</option>
+                                            <hr>
+                                            <option value="LIKE">LIKE</option>
+                                            <option value="NOT LIKE">NOT LIKE</option>
+                                        </select>
+                                        <x-input class="flex-1 block w-full ml-2 px-4 py-2" :placeholder="filterValuePlaceholder" v-model="filterForm.value" :disabled="isNullOrNotNullOperator" />
+                                        <x-button class="ml-2" @click.native="loadEntries" :disabled="loadingEntries">Apply</x-button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -301,6 +324,7 @@ export default {
                 operator: '=',
                 value: '',
             },
+            filterValuePlaceholder: 'EMPTY',
         };
     },
 
@@ -312,10 +336,14 @@ export default {
         to() {
             return this.offset + this.entries.length;
         },
+
+        isNullOrNotNullOperator() {
+            return ['IS NULL', 'IS NOT NULL'].includes(this.filterForm.operator);
+        },
     },
 
     watch: {
-        tableName() {
+        tableName: function () {
             this.filterEnabled = false;
             this.filterForm = {
                 field: '__raw__',
@@ -328,7 +356,21 @@ export default {
             this.sortDir = 'asc';
             this.loadTable();
             this.loadEntries();
-        }
+        },
+        'filterForm.operator': function (newVal) {
+            if (['IN', 'NOT IN'].includes(newVal)) {
+                this.filterValuePlaceholder = '1,2,3';
+            } else if (['IS NULL', 'IS NOT NULL'].includes(newVal)) {
+                this.filterForm.value = '';
+                this.filterValuePlaceholder = '';
+            } else if (['BETWEEN', 'NOT BETWEEN'].includes(newVal)) {
+                this.filterValuePlaceholder = '1 AND 100';
+            } else if (['LIKE', 'NOT LIKE'].includes(newVal)) {
+                this.filterValuePlaceholder = 'Pattern';
+            } else {
+                this.filterValuePlaceholder = 'EMPTY';
+            }
+        },
     },
 
     mounted() {

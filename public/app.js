@@ -2847,6 +2847,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tableName'],
   data: function data() {
@@ -2873,7 +2896,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         field: '__raw__',
         operator: '=',
         value: ''
-      }
+      },
+      filterValuePlaceholder: 'EMPTY'
     };
   },
   computed: {
@@ -2882,6 +2906,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     to: function to() {
       return this.offset + this.entries.length;
+    },
+    isNullOrNotNullOperator: function isNullOrNotNullOperator() {
+      return ['IS NULL', 'IS NOT NULL'].includes(this.filterForm.operator);
     }
   },
   watch: {
@@ -2898,6 +2925,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.sortDir = 'asc';
       this.loadTable();
       this.loadEntries();
+    },
+    'filterForm.operator': function filterFormOperator(newVal) {
+      if (['IN', 'NOT IN'].includes(newVal)) {
+        this.filterValuePlaceholder = '1,2,3';
+      } else if (['IS NULL', 'IS NOT NULL'].includes(newVal)) {
+        this.filterForm.value = '';
+        this.filterValuePlaceholder = '';
+      } else if (['BETWEEN', 'NOT BETWEEN'].includes(newVal)) {
+        this.filterValuePlaceholder = '1 AND 100';
+      } else if (['LIKE', 'NOT LIKE'].includes(newVal)) {
+        this.filterValuePlaceholder = 'Pattern';
+      } else {
+        this.filterValuePlaceholder = 'EMPTY';
+      }
     }
   },
   mounted: function mounted() {
@@ -24168,134 +24209,237 @@ var render = function() {
                       { staticClass: "mt-6 border-t-2 border-gray-200" },
                       [
                         _c("div", { staticClass: "flex flex-col w-full" }, [
-                          _c(
-                            "div",
-                            { staticClass: "flex mt-4" },
-                            [
-                              _c(
-                                "select",
-                                {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.filterForm.field,
-                                      expression: "filterForm.field"
+                          _c("form", [
+                            _c(
+                              "div",
+                              { staticClass: "flex mt-4" },
+                              [
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.filterForm.field,
+                                        expression: "filterForm.field"
+                                      }
+                                    ],
+                                    staticClass:
+                                      "py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8",
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.filterForm,
+                                          "field",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
                                     }
-                                  ],
-                                  staticClass:
-                                    "py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8",
-                                  on: {
-                                    change: function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.$set(
-                                        _vm.filterForm,
-                                        "field",
-                                        $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      )
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "option",
-                                    { attrs: { value: "__raw__" } },
-                                    [_vm._v("Raw SQL")]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "select",
-                                {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.filterForm.operator,
-                                      expression: "filterForm.operator"
-                                    },
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value: _vm.filterForm.field != "__raw__",
-                                      expression:
-                                        "filterForm.field != '__raw__'"
-                                    }
-                                  ],
-                                  staticClass:
-                                    "py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2",
-                                  on: {
-                                    change: function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.$set(
-                                        _vm.filterForm,
-                                        "operator",
-                                        $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      )
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "=" } }, [
-                                    _vm._v("=")
-                                  ])
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("x-input", {
-                                staticClass:
-                                  "flex-1 block w-full ml-2 px-4 py-2",
-                                attrs: { placeholder: "EMPTY" },
-                                model: {
-                                  value: _vm.filterForm.value,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.filterForm, "value", $$v)
                                   },
-                                  expression: "filterForm.value"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "x-button",
-                                {
-                                  staticClass: "ml-2",
-                                  attrs: { disabled: _vm.loadingEntries },
-                                  nativeOn: {
-                                    click: function($event) {
-                                      return _vm.loadEntries($event)
+                                  [
+                                    _vm._l(_vm.tableColumns, function(column) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          domProps: {
+                                            value: column.column_name
+                                          }
+                                        },
+                                        [_vm._v(_vm._s(column.column_name))]
+                                      )
+                                    }),
+                                    _vm._v(" "),
+                                    _c("hr"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "__any__" } },
+                                      [_vm._v("Any column")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "__raw__" } },
+                                      [_vm._v("Raw SQL")]
+                                    )
+                                  ],
+                                  2
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.filterForm.operator,
+                                        expression: "filterForm.operator"
+                                      },
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value:
+                                          _vm.filterForm.field != "__raw__",
+                                        expression:
+                                          "filterForm.field != '__raw__'"
+                                      }
+                                    ],
+                                    staticClass:
+                                      "py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2",
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.filterForm,
+                                          "operator",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
                                     }
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "=" } }, [
+                                      _vm._v("=")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "<>" } }, [
+                                      _vm._v("<>")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "<>" } }, [
+                                      _vm._v("<>")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "<" } }, [
+                                      _vm._v("<")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: ">" } }, [
+                                      _vm._v(">")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "<=" } }, [
+                                      _vm._v("<=")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: ">=" } }, [
+                                      _vm._v(">=")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("hr"),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "IN" } }, [
+                                      _vm._v("IN")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "NOT IN" } },
+                                      [_vm._v("NOT IN")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("hr"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "IS NULL" } },
+                                      [_vm._v("IS NULL")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "IS NOT NULL" } },
+                                      [_vm._v("IS NOT NULL")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("hr"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "BETWEEN" } },
+                                      [_vm._v("BETWEEN")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "NOT BETWEEN" } },
+                                      [_vm._v("NOT BETWEEN")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("hr"),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "LIKE" } }, [
+                                      _vm._v("LIKE")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "NOT LIKE" } },
+                                      [_vm._v("NOT LIKE")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("x-input", {
+                                  staticClass:
+                                    "flex-1 block w-full ml-2 px-4 py-2",
+                                  attrs: {
+                                    placeholder: _vm.filterValuePlaceholder,
+                                    disabled: _vm.isNullOrNotNullOperator
+                                  },
+                                  model: {
+                                    value: _vm.filterForm.value,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.filterForm, "value", $$v)
+                                    },
+                                    expression: "filterForm.value"
                                   }
-                                },
-                                [_vm._v("Apply")]
-                              )
-                            ],
-                            1
-                          )
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "x-button",
+                                  {
+                                    staticClass: "ml-2",
+                                    attrs: { disabled: _vm.loadingEntries },
+                                    nativeOn: {
+                                      click: function($event) {
+                                        return _vm.loadEntries($event)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Apply")]
+                                )
+                              ],
+                              1
+                            )
+                          ])
                         ])
                       ]
                     )
