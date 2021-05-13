@@ -6,7 +6,7 @@ use Cuonggt\Dibi\Tests\FeatureTestCase;
 
 class TablesControllerTest extends FeatureTestCase
 {
-    public function test_it_returns_list_of_tables()
+    public function test_it_returns_list_of_tables(): void
     {
         $response = $this->get('/dibi/api/tables');
 
@@ -16,7 +16,7 @@ class TablesControllerTest extends FeatureTestCase
         ]);
     }
 
-    public function test_it_returns_a_table_by_name()
+    public function test_it_returns_a_table_by_name(): void
     {
         $response = $this->get('/dibi/api/tables/package_tests');
 
