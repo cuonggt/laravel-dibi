@@ -11,13 +11,18 @@ class TableRowsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $table
-     * @return \Illuminate\Http\JsonResponse.
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request, $table)
     {
         return response()->json($this->database->rows($table, $request));
     }
 
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $table
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function filter(Request $request, $table)
     {
         return response()->json($this->database->rows($table, $request));

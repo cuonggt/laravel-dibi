@@ -11,7 +11,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     /**
      * The database instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Illuminate\Database\ConnectionInterface
      */
     public $db;
 
@@ -132,6 +132,14 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
         return $query;
     }
 
+    /**
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  string  $value
+     * @param  string  $boolean
+     * @return \Illuminate\Database\Query\Builder
+     */
     public function buildSubWhereClause($query, $column, $operator = '=', $value = '', $boolean = 'and')
     {
         if (in_array($operator, ['IN', 'NOT IN'])) {
