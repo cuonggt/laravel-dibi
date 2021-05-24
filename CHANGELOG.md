@@ -3,6 +3,6 @@
 ## [Unreleased](https://github.com/laravel/vapor-ui/compare/v0.0.1...master)
 
 
-## v1.0.0 (2021-04-XX)
+## v0.0.1 (2021-05-24)
 
 Initial release
