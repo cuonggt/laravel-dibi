@@ -40,10 +40,9 @@ class FeatureTestCase extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return void
      */
-    protected function defineEnvironment($app)
+    protected function getEnvironmentSetUp($app)
     {
         Gate::define('viewDibi', function ($user = null) {
             return true;
