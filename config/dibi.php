@@ -45,6 +45,6 @@ return [
     |
     */
 
-    'db_connection' => env('DIBI_DB_CONNECTION', 'mysql'),
+    'db_connection' => env('DIBI_DB_CONNECTION'),
 
 ];

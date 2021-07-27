@@ -40,25 +40,13 @@ class FeatureTestCase extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
+     *
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function defineEnvironment($app)
     {
         Gate::define('viewDibi', function ($user = null) {
             return true;
         });
-
-        $config = $app->get('config');
-
-        $config->set('dibi.db_connection', 'testing');
-
-        $config->set('database.connections.testing', [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'testdibi'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-        ]);
     }
 }
