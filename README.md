@@ -23,6 +23,14 @@ After installing Dibi, publish its assets using the `dibi:install` Artisan comma
 php artisan dibi:install
 ```
 
+Currently, Dibi only supports MySQL. I hope other DB engines like SQL Server, PostgreSQL, SQLite, etc will be supported in near future.
+
+Dibi use connection config name `mysql` by default to connect. If you want to use other connection config name, specify it in the `.env` file:
+
+```
+DIBI_DB_CONNECTION = your_mysql
+```
+
 ### Dashboard Authorization
 
 Dibi exposes a dashboard at the `/dibi` URI. Within your `app/Providers/DibiServiceProvider.php` file, there is a `gate` method that controls access to the Dibi dashboard. By default, all visitors are restricted. You should modify this gate as needed to grant access to your Dibi dashboard:
