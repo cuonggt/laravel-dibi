@@ -5,13 +5,33 @@ namespace Cuonggt\Dibi;
 class Dibi
 {
     /**
+     * Get the database connection name.
+     *
+     * @return string
+     */
+    public static function connectionName()
+    {
+        return config('dibi.db_connection') ?? config('database.default');
+    }
+
+    /**
+     * Get the database setup.
+     *
+     * @return array
+     */
+    public static function connectionSetup()
+    {
+        return config('database.connections.'.static::connectionName());
+    }
+
+    /**
      * Get the database driver.
      *
      * @return string
      */
     public static function driver()
     {
-        return config('database.connections.'.config('dibi.db_connection').'.driver');
+        return static::connectionSetup()['driver'] ?? null;
     }
 
     /**
@@ -21,7 +41,7 @@ class Dibi
      */
     public static function databaseName()
     {
-        return config('database.connections.'.config('dibi.db_connection').'.database');
+        return static::connectionSetup()['database'] ?? null;
     }
 
     /**
