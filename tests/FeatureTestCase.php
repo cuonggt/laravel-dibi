@@ -5,7 +5,6 @@ namespace Cuonggt\Dibi\Tests;
 use Cuonggt\Dibi\Dibi;
 use Cuonggt\Dibi\DibiServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Gate;
 use Orchestra\Testbench\TestCase;
 
 class FeatureTestCase extends TestCase

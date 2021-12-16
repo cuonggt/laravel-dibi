@@ -61,7 +61,7 @@ class Dibi
     }
 
     /**
-     * Get the databae connection
+     * Get the databae connection.
      *
      * @return \Illuminate\Database\Connection
      */

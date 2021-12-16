@@ -2,7 +2,6 @@
 
 namespace Cuonggt\Dibi;
 
-use Cuonggt\Dibi\Dibi;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
