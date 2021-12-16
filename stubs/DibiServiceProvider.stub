@@ -29,8 +29,8 @@ class DibiServiceProvider extends DibiApplicationServiceProvider
      */
     protected function gate()
     {
-        Gate::define('viewDibi', function ($user) {
-            return in_array($user->email, [
+        Gate::define('viewDibi', function ($user = null) {
+            return in_array(optional($user)->email, [
                 //
             ]);
         });
