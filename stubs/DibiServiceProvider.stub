@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
+use Cuonggt\Dibi\Dibi;
+use Cuonggt\Dibi\DibiApplicationServiceProvider;
 
-class DibiServiceProvider extends ServiceProvider
+class DibiServiceProvider extends DibiApplicationServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -14,7 +15,9 @@ class DibiServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->gate();
+        parent::boot();
+
+        // Dibi::useDatabaseConnectionName('custom_mysql');
     }
 
     /**
@@ -26,20 +29,10 @@ class DibiServiceProvider extends ServiceProvider
      */
     protected function gate()
     {
-        Gate::define('viewDibi', function ($user = null) {
-            return in_array(optional($user)->email, [
+        Gate::define('viewDibi', function ($user) {
+            return in_array($user->email, [
                 //
             ]);
         });
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Cuonggt\Dibi\Http\Middleware;
 
-use Illuminate\Support\Facades\Gate;
+use Cuonggt\Dibi\Dibi;
 
 class EnsureUserIsAuthorized
 {
@@ -15,11 +15,6 @@ class EnsureUserIsAuthorized
      */
     public function handle($request, $next)
     {
-        $allowed = app()->environment('local')
-            || Gate::allows('viewDibi', [$request->user()]);
-
-        abort_unless($allowed, 403);
-
-        return $next($request);
+        return Dibi::check($request) ? $next($request) : abort(403);
     }
 }

@@ -2,9 +2,6 @@
 
 namespace Cuonggt\Dibi;
 
-use Cuonggt\Dibi\Contracts\DatabaseRepository;
-use Cuonggt\Dibi\Repositories\MysqlDatabaseRepository;
-use Exception;
 use Illuminate\Support\ServiceProvider;
 
 class DibiServiceProvider extends ServiceProvider
@@ -50,27 +47,5 @@ class DibiServiceProvider extends ServiceProvider
             Console\InstallCommand::class,
             Console\PublishCommand::class,
         ]);
-
-        $this->registerServices();
-    }
-
-    /**
-     * Register Dibi's services in the container.
-     *
-     * @return void
-     */
-    protected function registerServices()
-    {
-        $class = 'Cuonggt\\Dibi\\Repositories\\'.ucfirst(Dibi::driver()).'DatabaseRepository';
-
-        if (! class_exists($class)) {
-            throw new Exception('Database driver ['.Dibi::driver().'] is not supported.');
-        }
-
-        $this->app->bind(DatabaseRepository::class, $class);
-
-        $this->app->when(MysqlDatabaseRepository::class)
-            ->needs('$name')
-            ->give(Dibi::databaseName());
     }
 }

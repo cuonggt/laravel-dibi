@@ -2,46 +2,72 @@
 
 namespace Cuonggt\Dibi;
 
+use Closure;
+use Illuminate\Support\Facades\DB;
+
 class Dibi
 {
     /**
-     * Get the database connection name.
+     * The callback that should be used to authenticate Horizon users.
      *
-     * @return string
+     * @var \Closure
      */
-    public static function connectionName()
+    public static $authUsing;
+
+    /**
+     * Database Connection Name.
+     *
+     * @var string
+     */
+    public static $databaseConnectionName = 'mysql';
+
+    /**
+     * Determine if the given request can access the Horizon dashboard.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    public static function check($request)
     {
-        return config('dibi.db_connection') ?? config('database.default');
+        return (static::$authUsing ?: function () {
+            return app()->environment('local');
+        })($request);
     }
 
     /**
-     * Get the database setup.
+     * Set the callback that should be used to authenticate Horizon users.
      *
-     * @return array
+     * @param  \Closure  $callback
+     * @return static
      */
-    public static function connectionSetup()
+    public static function auth(Closure $callback)
     {
-        return config('database.connections.'.static::connectionName());
+        static::$authUsing = $callback;
+
+        return new static;
     }
 
     /**
-     * Get the database driver.
+     * Specify the database connection name that should be used by Dib.
      *
-     * @return string
+     * @param  string  $databaseConnectionName
+     * @return static
      */
-    public static function driver()
+    public static function useDatabaseConnectionName($databaseConnectionName)
     {
-        return static::connectionSetup()['driver'] ?? null;
+        static::$databaseConnectionName = $databaseConnectionName;
+
+        return new static;
     }
 
     /**
-     * Get the database name.
+     * Get the databae connection
      *
-     * @return string
+     * @return \Illuminate\Database\Connection
      */
-    public static function databaseName()
+    public static function databaseConnection()
     {
-        return static::connectionSetup()['database'] ?? null;
+        return DB::connection(static::$databaseConnectionName);
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Cuonggt\Dibi\Repositories;
 
 use Cuonggt\Dibi\Contracts\DatabaseRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 abstract class AbstractDatabaseRepository implements DatabaseRepository
 {
@@ -16,22 +15,14 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     public $db;
 
     /**
-     * The database name.
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
      * Create a new database repository.
      *
-     * @param  string   $name
+     * @param  \Illuminate\Database\ConnectionInterface  $db
      * @return void
      */
-    public function __construct($name)
+    public function __construct($db)
     {
-        $this->db = DB::connection(config('dibi.db_connection'));
-        $this->name = $name;
+        $this->db = $db;
     }
 
     /**
@@ -39,7 +30,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      */
     public function getName()
     {
-        return $this->name;
+        return $this->db->getDatabaseName();
     }
 
     /**
@@ -111,7 +102,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      */
     protected function buildSelectQuery($table, Request $request)
     {
-        $query = DB::table($table);
+        $query = $this->db->table($table);
 
         foreach ($request->input('filters', []) as $filter) {
             if ($filter['field'] == '__raw__' && ! empty($filter['value'])) {

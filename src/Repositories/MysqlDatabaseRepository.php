@@ -14,7 +14,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
      */
     protected function rawTables()
     {
-        return $this->db->select('SELECT * FROM information_schema.tables WHERE table_schema = ?', [$this->name]);
+        return $this->db->select('SELECT * FROM information_schema.tables WHERE table_schema = ?', [$this->getName()]);
     }
 
     /**
@@ -54,7 +54,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
         return Arr::first(
             $this->db->select(
                 'SELECT * FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1',
-                [$this->name, $tableName]
+                [$this->getName(), $tableName]
             )
         );
     }
@@ -91,7 +91,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     {
         return $this->db->select(
             'SELECT * FROM information_schema.statistics WHERE table_schema = ? AND table_name = ?',
-            [$this->name, $tableName]
+            [$this->getName(), $tableName]
         );
     }
 

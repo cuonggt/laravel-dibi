@@ -34,17 +34,4 @@ return [
         EnsureUserIsAuthorized::class,
         EnsureUpToDateAssets::class,
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Database Connection Name
-    |--------------------------------------------------------------------------
-    |
-    | This is the database connection config name that Dibi uses to connect to
-    | your database.
-    |
-    */
-
-    'db_connection' => env('DIBI_DB_CONNECTION'),
-
 ];

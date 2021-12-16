@@ -11,7 +11,7 @@ Laravel Dibi is an elegant GUI database management tool for your Laravel applica
 
 ## Installation
 
-The package can be installed in your project using Composer:
+You may install Dibi into your project using the Composer package manager:
 
 ```bash
 composer require cuonggt/laravel-dibi
@@ -25,15 +25,25 @@ php artisan dibi:install
 
 Currently, Dibi only supports MySQL. I hope other DB engines like SQL Server, PostgreSQL, SQLite, etc will be supported in near future.
 
-Dibi use connection config name `mysql` by default to connect. If you want to use other connection config name, specify it in the `.env` file:
+Dibi use database connection name `mysql` by default to connect. If you would like to use another database connection name, you may use the `Dibi::useDatabaseConnectionName` method. You may call this method from the `boot` method of your application's `App\Providers\DibiServiceProvider`:
 
-```
-DIBI_DB_CONNECTION = your_mysql
+```php
+/**
+ * Bootstrap any application services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    parent::boot();
+
+    Dibi::useDatabaseConnectionName('custom_mysql');
+}
 ```
 
 ### Dashboard Authorization
 
-Dibi exposes a dashboard at the `/dibi` URI. Within your `app/Providers/DibiServiceProvider.php` file, there is a `gate` method that controls access to the Dibi dashboard. By default, all visitors are restricted. You should modify this gate as needed to grant access to your Dibi dashboard:
+Dibi exposes a dashboard at the `/dibi` URI. By default, you will only be able to access this dashboard in the `local` environment. However, within your `app/Providers/DibiServiceProvider.php` file, there is an [authorization gate](https://laravel.com/docs/8.x/authorization#gates) definition. This authorization gate controls access to Dibi in **non-local** environments. You are free to modify this gate as needed to restrict access to your Dibi installation:
 
 ```php
 /**
@@ -45,9 +55,9 @@ Dibi exposes a dashboard at the `/dibi` URI. Within your `app/Providers/DibiServ
  */
 protected function gate()
 {
-    Gate::define('viewDibi', function ($user = null) {
-        return in_array(optional($user)->email, [
-            'cuong@gtk.vn',
+    Gate::define('viewDibi', function ($user) {
+        return in_array($user->email, [
+            'admin@example.com',
         ]);
     });
 }
@@ -55,7 +65,7 @@ protected function gate()
 
 ### Upgrading Dibi
 
-When upgrading to a new version of Dibi, you should re-publish Dibi's assets:
+When upgrading to a new major version of Dibi, it's important that you carefully review the upgrade guide. In addition, when upgrading to any new Dibi version, you should re-publish Dibi's assets:
 
 ```bash
 php artisan dibi:publish
@@ -102,9 +112,9 @@ Once the configuration file has been published, you may edit Dibi's middleware b
 ],
 ```
 
-### Specific Environments Only Installation
+### Local Only Installation
 
-If you plan to only use Dibi to assist your specific environments only development, you may install Dibi using the `--dev` flag:
+If you plan to only use Dibi to assist your local development, you may install Dibi using the `--dev` flag:
 
 ```bash
 composer require cuonggt/laravel-dibi --dev

@@ -9,7 +9,7 @@ class HomeController extends Controller
     /**
      * Single page application catch-all route.
      *
-     * @return mixed
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
