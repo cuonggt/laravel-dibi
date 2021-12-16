@@ -34,4 +34,5 @@ return [
         EnsureUserIsAuthorized::class,
         EnsureUpToDateAssets::class,
     ],
+
 ];
