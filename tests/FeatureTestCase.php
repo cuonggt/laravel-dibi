@@ -2,6 +2,7 @@
 
 namespace Cuonggt\Dibi\Tests;
 
+use Cuonggt\Dibi\Dibi;
 use Cuonggt\Dibi\DibiServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
@@ -44,7 +45,7 @@ class FeatureTestCase extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        Gate::define('viewDibi', function ($user = null) {
+        Dibi::auth(function () {
             return true;
         });
     }
