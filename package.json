@@ -16,7 +16,7 @@
         "cross-env": "^7.0.3",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.21",
-        "moment": "^2.29.1",
+        "moment": "^2.29.2",
         "moment-timezone": "^0.5.33",
         "numeral": "^2.0.6",
         "portal-vue": "^2.1.7",
