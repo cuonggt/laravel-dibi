@@ -4,12 +4,12 @@ namespace Cuonggt\Dibi\Tests;
 
 use Cuonggt\Dibi\Dibi;
 use Cuonggt\Dibi\DibiServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Orchestra\Testbench\TestCase;
 
 class FeatureTestCase extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     /**
      * Setup the test case.
