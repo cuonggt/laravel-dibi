@@ -26,7 +26,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -34,7 +34,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function tables()
     {
@@ -44,7 +44,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function table($tableName)
     {
@@ -52,7 +52,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function columns($table)
     {
@@ -62,7 +62,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function indexes($table)
     {
@@ -72,7 +72,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rows($table, Request $request)
     {
