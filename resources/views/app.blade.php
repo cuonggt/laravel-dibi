@@ -10,7 +10,7 @@
     <title>Dibi</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link href="{{ asset(mix('app.css', 'vendor/dibi')) }}" rel="stylesheet" type="text/css">
+    <link href="{{ mix('app.css', 'vendor/dibi') }}" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -59,6 +59,6 @@
 </script>
 
 <!-- Scripts -->
-<script src="{{ asset(mix('app.js', 'vendor/dibi')) }}"></script>
+<script src="{{ mix('app.js', 'vendor/dibi') }}"></script>
 </body>
 </html>
