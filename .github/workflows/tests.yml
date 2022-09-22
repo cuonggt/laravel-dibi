@@ -23,15 +23,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [7.3, 7.4, 8.0, 8.1]
-        laravel: [^8.0, ^9.0]
-        exclude:
-          - php: 7.3
-            laravel: ^9.0
-          - php: 7.4
-            laravel: ^9.0
+        php: [7.3, 7.4, '8.0', 8.1]
 
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+    name: PHP ${{ matrix.php }}
 
     steps:
       - name: Checkout code
@@ -41,14 +35,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          ini-values: error_reporting=E_ALL
           extensions: curl, dom, gd, json, libxml, mbstring, zip
           tools: composer:v2
           coverage: none
 
       - name: Install dependencies
-        run: |
-           composer require "illuminate/contracts=${{ matrix.laravel }}" "guzzlehttp/guzzle" --no-update
-           composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-stable --no-interaction --no-progress
 
       - name: Execute tests
         env:
