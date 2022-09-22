@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.0.4...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.0.5...master)
+
+## v0.0.5 (2022-09-22)
+### Updated:
+- update dependencies
 
 ## v0.0.4 (2022-09-22)
 ### Updated:
