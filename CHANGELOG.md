@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.0.3...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.0.4...master)
+
+## v0.0.4 (2022-09-22)
+### Updated:
+- Laravel 9 support (#32)
+- add php-cs-fixer
+- fix tests
+- update test workflow (#37)
 
 ## v0.0.3 (2021-12-16)
 ### Updated:
