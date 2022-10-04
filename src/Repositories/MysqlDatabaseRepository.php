@@ -14,7 +14,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
      */
     protected function rawTables()
     {
-        return $this->db->select('SELECT * FROM information_schema.tables WHERE table_schema = ?', [$this->getName()]);
+        return $this->db->select('SELECT * FROM information_schema.tables WHERE table_schema = ? ORDER BY table_name ASC', [$this->getName()]);
     }
 
     /**
