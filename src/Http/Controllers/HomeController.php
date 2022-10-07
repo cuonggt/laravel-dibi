@@ -16,7 +16,7 @@ class HomeController extends Controller
         $tables = $this->database->tables();
 
         return view('dibi::app', [
-            'tables' => $tables,
+            'tables' => $tables->pluck('name')->all(),
             'dibiScriptVariables' => Dibi::scriptVariables([
                 'database' => $this->database->getName(),
                 'tables' => $tables->toArray(),
