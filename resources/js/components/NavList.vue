@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 flex flex-col overflow-y-auto bg-gray-800">
+    <div class="flex-1 flex flex-col overflow-y-auto bg-gray-800 soft-scroll">
         <!-- Tables tabs -->
         <h3
             class="px-3 mt-8 text-xs leading-4 font-semibold text-gray-500 uppercase tracking-wider"

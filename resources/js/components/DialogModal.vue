@@ -6,7 +6,7 @@
                 </slot>
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4 overflow-y-auto soft-scroll" style="max-height: 80vh">
                 <slot name="content">
                 </slot>
             </div>
