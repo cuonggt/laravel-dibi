@@ -39,19 +39,20 @@
                                 <form>
                                     <div class="flex mt-4">
                                         <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8" v-model="filterForm.field">
-                                            <option v-for="column in tableColumns" :value="column.column_name">{{ column.column_name }}</option>
+                                            <option v-for="column in tableColumns" :key="`column-name-${column.column_name}`" :value="column.column_name">
+                                                {{ column.column_name }}
+                                            </option>
                                             <hr>
                                             <option value="__any__">Any column</option>
                                             <option value="__raw__">Raw SQL</option>
                                         </select>
                                         <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2" v-model="filterForm.operator" v-show="filterForm.field != '__raw__'">
                                             <option value="=">=</option>
-                                            <option value="<>"><></option>
-                                            <option value="<>"><></option>
-                                            <option value="<"><</option>
-                                            <option value=">">></option>
-                                            <option value="<="><=</option>
-                                            <option value=">=">>=</option>
+                                            <option value="<>">&lt;&gt;</option>
+                                            <option value="<">&lt;</option>
+                                            <option value=">">&gt;</option>
+                                            <option value="<=">&lt;=</option>
+                                            <option value=">=">&gt;=</option>
                                             <hr>
                                             <option value="IN">IN</option>
                                             <option value="NOT IN">NOT IN</option>
@@ -114,7 +115,7 @@
 
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="(entry, index) in entries" :key="index">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns" :key="column.column_name">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns" :key="column.column_name" v-on:click.prevent="openDetailEntry(entry)">
                                             <x-field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
                                         </td>
                                     </tr>
