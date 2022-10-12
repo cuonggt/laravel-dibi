@@ -5,6 +5,7 @@ import PortalVue from 'portal-vue';
 import Toasted from 'vue-toasted';
 import router from '@/router';
 import Base from './base';
+import NavList from './components/NavList.vue';
 
 Vue.config.productionTip = false;
 
@@ -65,6 +66,9 @@ Vue.component('icon-table', require('./components/icons/Table.vue').default);
 new Vue({
     el: '#dibi',
     router,
+    components: {
+        NavList,
+    },
     mounted() {
         Bus.$on('error', message => {
             this.$toasted.show(message, { type: 'error' });

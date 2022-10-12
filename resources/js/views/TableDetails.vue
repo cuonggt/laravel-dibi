@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-grow flex flex-col overflow-x-auto">
+    <div class="flex-grow flex flex-col overflow-x-auto soft-scroll">
         <div class="flex flex-col h-0 flex-1">
             <div class="bg-white w-full">
                 <div class="px-12">
@@ -39,19 +39,20 @@
                                 <form>
                                     <div class="flex mt-4">
                                         <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8" v-model="filterForm.field">
-                                            <option v-for="column in tableColumns" :value="column.column_name">{{ column.column_name }}</option>
+                                            <option v-for="column in tableColumns" :key="`column-name-${column.column_name}`" :value="column.column_name">
+                                                {{ column.column_name }}
+                                            </option>
                                             <hr>
                                             <option value="__any__">Any column</option>
                                             <option value="__raw__">Raw SQL</option>
                                         </select>
                                         <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2" v-model="filterForm.operator" v-show="filterForm.field != '__raw__'">
                                             <option value="=">=</option>
-                                            <option value="<>"><></option>
-                                            <option value="<>"><></option>
-                                            <option value="<"><</option>
-                                            <option value=">">></option>
-                                            <option value="<="><=</option>
-                                            <option value=">=">>=</option>
+                                            <option value="<>">&lt;&gt;</option>
+                                            <option value="<">&lt;</option>
+                                            <option value=">">&gt;</option>
+                                            <option value="<=">&lt;=</option>
+                                            <option value=">=">&gt;=</option>
                                             <hr>
                                             <option value="IN">IN</option>
                                             <option value="NOT IN">NOT IN</option>
@@ -84,7 +85,7 @@
             <template v-else>
                 <template v-if="tab == 'data'">
                     <div class="flex-1 flex flex-col overflow-y-auto bg-gray-200">
-                        <div class="block min-w-full overflow-x-auto">
+                        <div class="block min-w-full overflow-x-auto soft-scroll">
                             <table class="divide-y divide-gray-200 text-gray-800">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -114,7 +115,7 @@
 
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="(entry, index) in entries" :key="index">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns" :key="column.column_name">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns" :key="column.column_name" v-on:click.prevent="openDetailEntry(entry)">
                                             <x-field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
                                         </td>
                                     </tr>
@@ -180,7 +181,7 @@
                 </template>
 
                 <template v-if="tab == 'structure'">
-                    <div class="block min-w-full overflow-x-auto">
+                    <div class="block min-w-full overflow-x-auto soft-scroll">
                         <table class="divide-y divide-gray-200 text-gray-800">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -228,7 +229,7 @@
                         </table>
                     </div>
 
-                    <div class="block min-w-full overflow-x-auto mt-4">
+                    <div class="block min-w-full overflow-x-auto soft-scroll mt-4">
                         <table class="divide-y divide-gray-200 text-gray-800">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -274,11 +275,11 @@
                 <form @submit.prevent="setPageSettings">
                     <div>
                         <x-label for="limit" value="Limit" />
-                        <x-input id="limit" type="text" class="mt-1 block w-full" placecholder="Limit" v-model="pageSetingsForm.limit" required autofocus />
+                        <x-input id="limit" type="text" class="mt-1 block w-full" placecholder="Limit" v-model="pageSettingsForm.limit" required autofocus />
                     </div>
                     <div class="mt-4">
                         <x-label for="offset" value="Offset" />
-                        <x-input id="offset" type="text" class="mt-1 block w-full" placecholder="Offset" v-model="pageSetingsForm.offset" required />
+                        <x-input id="offset" type="text" class="mt-1 block w-full" placecholder="Offset" v-model="pageSettingsForm.offset" required />
                     </div>
                 </form>
             </template>
@@ -290,6 +291,29 @@
                 <x-button class="ml-2" @click.native="setPageSettings" :class="{ 'opacity-25': loadingEntries }" :disabled="loadingEntries">
                     Go
                 </x-button>
+            </template>
+        </x-dialog-modal>
+
+        <x-dialog-modal :show="showEntryDetail" max-width="7xl">
+            <template #title>
+                Entry detail
+            </template>
+            <template #content>
+                <div class="flex flex-col divide-y">
+                    <div v-for="(data, key) in detailEntry" :key="`entry-data-${key}`" class="flex">
+                        <div class="w-1/4 py-4 px-2">
+                            <h4 class="font-bold">{{ key }}</h4>
+                        </div>
+                        <div class="w-3/4 py-4 px-2 break-words">
+                            {{ data }}
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+                <x-secondary-button @click.native="closeDetailEntry">
+                    Close
+                </x-secondary-button>
             </template>
         </x-dialog-modal>
     </div>
@@ -314,7 +338,9 @@ export default {
             ready: false,
             loadingEntries: true,
             setting: false,
-            pageSetingsForm: {
+            showEntryDetail: false,
+            detailEntry: {},
+            pageSettingsForm: {
                 offset: null,
                 limit: null,
             },
@@ -479,7 +505,7 @@ export default {
         },
 
         startSetting() {
-            this.pageSetingsForm = {
+            this.pageSettingsForm = {
                 limit: this.limit,
                 offset: this.offset,
             };
@@ -487,8 +513,8 @@ export default {
         },
 
         setPageSettings() {
-            this.limit = parseInt(this.pageSetingsForm.limit);
-            this.offset = parseInt(this.pageSetingsForm.offset);
+            this.limit = parseInt(this.pageSettingsForm.limit);
+            this.offset = parseInt(this.pageSettingsForm.offset);
             this.loadEntries();
             this.closeModal();
         },
@@ -504,6 +530,16 @@ export default {
                 this.loadEntries();
             }
         },
+
+        openDetailEntry(entry) {
+            console.log(entry);
+            this.detailEntry = entry;
+            this.showEntryDetail = true;
+        },
+
+        closeDetailEntry() {
+            this.showEntryDetail = false;
+        }
     },
 };
 </script>
