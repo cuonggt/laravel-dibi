@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 const webpack = require('webpack');
 
 /*
@@ -12,26 +13,22 @@ const webpack = require('webpack');
  |
  */
 
-mix.options({
-    terser: {
-        terserOptions: {
-            compress: {
-                drop_console: true,
-            },
-        },
-    },
-})
-    .postCss('resources/css/dibi.css', 'public/app.css', [require('postcss-import'), require('tailwindcss')])
-    .setPublicPath('public')
+mix
     .js('resources/js/app.js', 'public')
+    .vue({version: 2})
+    .setPublicPath('public')
+    .postCss('resources/css/app.css', 'public', [
+        require('tailwindcss'),
+    ])
+    .alias({ '@': path.join(__dirname, 'resources/js/') })
     .version()
-    .webpackConfig({
-        resolve: {
-            symlinks: false,
-            alias: {
-                '@': path.resolve(__dirname, 'resources/js/'),
-            },
-        },
-        plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
-    })
-    .copyDirectory('public', '../../Sites/dibitest/public/vendor/dibi');
+    // .webpackConfig({
+    //     resolve: {
+    //         symlinks: false,
+    //         alias: {
+    //             '@': path.resolve(__dirname, 'resources/js/'),
+    //         },
+    //     },
+    //     // plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
+    // })
+    // .copyDirectory('public', '../../Sites/dibitest/public/vendor/dibi');
