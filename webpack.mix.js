@@ -1,6 +1,5 @@
 const mix = require('laravel-mix');
 const path = require('path');
-const webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -21,14 +20,4 @@ mix
         require('tailwindcss'),
     ])
     .alias({ '@': path.join(__dirname, 'resources/js/') })
-    .version()
-    // .webpackConfig({
-    //     resolve: {
-    //         symlinks: false,
-    //         alias: {
-    //             '@': path.resolve(__dirname, 'resources/js/'),
-    //         },
-    //     },
-    //     // plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
-    // })
-    // .copyDirectory('public', '../../Sites/dibitest/public/vendor/dibi');
+    .version();

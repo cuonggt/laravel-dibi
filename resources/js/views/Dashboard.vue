@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-grow flex flex-col overflow-x-auto soft-scroll">
+    <div class="grow flex flex-col overflow-x-auto soft-scroll">
         <div class="flex flex-col h-0 flex-1">
             <div class="bg-white w-full">
                 <div class="px-12">
