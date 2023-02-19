@@ -15,7 +15,7 @@
 
 <body>
     <div id="dibi" class="font-sans antialiased h-screen flex overflow-hidden bg-gray-200" v-cloak>
-        <div class="flex flex-shrink-0">
+        <div class="flex shrink-0">
             <div class="flex flex-col w-64">
                 <div class="flex flex-col h-0 flex-1">
                     <!-- Logo -->
@@ -24,7 +24,7 @@
                         <div class="ml-2" style="padding-top: 2px;">Dibi</div>
                     </div>
 
-                    <nav-list :tables="{{ json_encode($tables) }}" />                    
+                    <nav-list :tables="{{ json_encode($tables) }}" />
                 </div>
             </div>
         </div>

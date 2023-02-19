@@ -1,10 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    purge: [
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.vue',
-        './resources/js/**/*.js',
+    content: [
+        "./resources/**/*.blade.php",
+        "./resources/**/*.{js,ts}",
+        "./resources/**/*.vue",
     ],
 
     theme: {
@@ -12,12 +12,6 @@ module.exports = {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
-        },
-    },
-
-    variants: {
-        extend: {
-            opacity: ['disabled'],
         },
     },
 
