@@ -8,8 +8,8 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "lint": "eslint --cache --ext=js,ts,vue ./resources/js",
-        "lint:fix": "eslint --cache --ext=js,ts,vue ./resources/js --fix"
+        "lint": "eslint --cache --ext=js,ts,vue",
+        "lint:fix": "eslint --cache --ext=js,ts,vue --fix"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.3",
@@ -19,12 +19,14 @@
         "eslint": "^8.34.0",
         "eslint-plugin-vue": "^9.9.0",
         "laravel-mix": "^6.0.0",
+        "lint-staged": "^13.1.2",
         "lodash": "^4.17.21",
         "moment": "^2.29.2",
         "moment-timezone": "^0.5.33",
         "numeral": "^2.0.6",
         "portal-vue": "^2.1.7",
         "postcss": "^8.4.21",
+        "simple-git-hooks": "^2.8.1",
         "tailwindcss": "^3.2.7",
         "vue": "^2.6.12",
         "vue-loader": "^15.9.8",
@@ -34,5 +36,16 @@
     },
     "dependencies": {
         "@volar-plugins/vetur": "^0.1.0"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "npx lint-staged"
+    },
+    "lint-staged": {
+        "**/*.{js,ts,vue}": [
+            "eslint --cache --fix"
+        ],
+        "**/*.php": [
+            "./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php"
+        ]
     }
 }

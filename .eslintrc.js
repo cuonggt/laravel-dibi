@@ -9,6 +9,8 @@ module.exports = {
     ],
     ignorePatterns: [
         'node_modules/',
+        'public/',
+        'vendor/',
         '*.json',
     ],
     rules: {
