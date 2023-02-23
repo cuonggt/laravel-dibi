@@ -1,21 +1,20 @@
 <template>
     <div class="flex-1 flex flex-col overflow-y-auto bg-gray-800 soft-scroll">
+        <div class="px-2 py-2">
+            <x-input
+                v-model="keyword"
+                type="text"
+                placeholder="Search for item..."
+                class="w-full"
+            />
+        </div>
+
         <!-- Tables tabs -->
         <h3
-            class="px-3 mt-8 text-xs leading-4 font-semibold text-gray-500 uppercase tracking-wider"
+            class="px-2 mt-4 text-xs leading-4 font-semibold text-gray-500 uppercase tracking-wider"
         >
             Tables
         </h3>
-
-        <div>
-            <x-input
-                id="filter-table"
-                v-model="keyword"
-                type="text"
-                class="m-2 block"
-                placeholder="Search..."
-            />
-        </div>
 
         <nav class="px-2 py-4 bg-gray-800">
             <router-link
