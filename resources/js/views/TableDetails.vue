@@ -34,40 +34,97 @@
                             </div>
                         </div>
 
-                        <div class="mt-6 border-t-2 border-gray-200" v-if="tab == 'data' && filterEnabled">
+                        <div
+                            v-if="tab == 'data' && filterEnabled"
+                            class="mt-6 border-t-2 border-gray-200"
+                        >
                             <div class="flex flex-col w-full">
                                 <form>
                                     <div class="flex mt-4">
-                                        <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8" v-model="filterForm.field">
-                                            <option v-for="column in tableColumns" :key="`column-name-${column.column_name}`" :value="column.column_name">
+                                        <select
+                                            v-model="filterForm.field"
+                                            class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8"
+                                        >
+                                            <option
+                                                v-for="column in tableColumns"
+                                                :key="`column-name-${column.column_name}`"
+                                                :value="column.column_name"
+                                            >
                                                 {{ column.column_name }}
                                             </option>
                                             <hr>
-                                            <option value="__any__">Any column</option>
-                                            <option value="__raw__">Raw SQL</option>
+                                            <option value="__any__">
+                                                Any column
+                                            </option>
+                                            <option value="__raw__">
+                                                Raw SQL
+                                            </option>
                                         </select>
-                                        <select class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2" v-model="filterForm.operator" v-show="filterForm.field != '__raw__'">
-                                            <option value="=">=</option>
-                                            <option value="<>">&lt;&gt;</option>
-                                            <option value="<">&lt;</option>
-                                            <option value=">">&gt;</option>
-                                            <option value="<=">&lt;=</option>
-                                            <option value=">=">&gt;=</option>
+                                        <select
+                                            v-show="filterForm.field != '__raw__'"
+                                            v-model="filterForm.operator"
+                                            class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2"
+                                        >
+                                            <option value="=">
+                                                =
+                                            </option>
+                                            <option value="<>">
+                                                &lt;&gt;
+                                            </option>
+                                            <option value="<">
+                                                &lt;
+                                            </option>
+                                            <option value=">">
+                                                &gt;
+                                            </option>
+                                            <option value="<=">
+                                                &lt;=
+                                            </option>
+                                            <option value=">=">
+                                                &gt;=
+                                            </option>
                                             <hr>
-                                            <option value="IN">IN</option>
-                                            <option value="NOT IN">NOT IN</option>
+                                            <option value="IN">
+                                                IN
+                                            </option>
+                                            <option value="NOT IN">
+                                                NOT IN
+                                            </option>
                                             <hr>
-                                            <option value="IS NULL">IS NULL</option>
-                                            <option value="IS NOT NULL">IS NOT NULL</option>
+                                            <option value="IS NULL">
+                                                IS NULL
+                                            </option>
+                                            <option value="IS NOT NULL">
+                                                IS NOT NULL
+                                            </option>
                                             <hr>
-                                            <option value="BETWEEN">BETWEEN</option>
-                                            <option value="NOT BETWEEN">NOT BETWEEN</option>
+                                            <option value="BETWEEN">
+                                                BETWEEN
+                                            </option>
+                                            <option value="NOT BETWEEN">
+                                                NOT BETWEEN
+                                            </option>
                                             <hr>
-                                            <option value="LIKE">LIKE</option>
-                                            <option value="NOT LIKE">NOT LIKE</option>
+                                            <option value="LIKE">
+                                                LIKE
+                                            </option>
+                                            <option value="NOT LIKE">
+                                                NOT LIKE
+                                            </option>
                                         </select>
-                                        <x-input class="flex-1 block w-full ml-2 px-4 py-2" :placeholder="filterValuePlaceholder" v-model="filterForm.value" :disabled="isNullOrNotNullOperator" />
-                                        <x-button class="ml-2" @click.native="loadEntries" :disabled="loadingEntries">Apply</x-button>
+                                        <x-input
+                                            v-model="filterForm.value"
+                                            class="flex-1 block w-full ml-2 px-4 py-2"
+                                            :placeholder="filterValuePlaceholder"
+                                            :disabled="isNullOrNotNullOperator"
+                                        />
+                                        <x-button
+                                            class="ml-2"
+                                            :disabled="loadingEntries"
+                                            @click.native="loadEntries"
+                                        >
+                                            Apply
+                                        </x-button>
                                     </div>
                                 </form>
                             </div>
@@ -96,15 +153,39 @@
                                             @click.prevent="updateSorting(column.column_name)"
                                         >
                                             <div class="flex justify-between items-center">
-                                                <span></span>
+                                                <span />
                                                 <span>{{ column.column_name }}</span>
                                                 <span>
                                                     <span v-if="column.column_name == sortKey">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" v-if="sortDir == 'asc'">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                                        <svg
+                                                            v-if="sortDir == 'asc'"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-3 w-3"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M5 10l7-7m0 0l7 7m-7-7v18"
+                                                            />
                                                         </svg>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" v-else>
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                        <svg
+                                                            v-else
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-3 w-3"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                                                            />
                                                         </svg>
                                                     </span>
                                                 </span>
@@ -114,8 +195,16 @@
                                 </thead>
 
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr v-for="(entry, index) in entries" :key="index">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-for="column in tableColumns" :key="column.column_name" v-on:click.prevent="openDetailEntry(entry)">
+                                    <tr
+                                        v-for="(entry, index) in entries"
+                                        :key="index"
+                                    >
+                                        <td
+                                            v-for="column in tableColumns"
+                                            :key="column.column_name"
+                                            class="px-6 py-4 whitespace-nowrap text-sm"
+                                            @click.prevent="openDetailEntry(entry)"
+                                        >
                                             <x-field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
                                         </td>
                                     </tr>
@@ -155,7 +244,7 @@
                                             :disabled="offset == 0 || loadingEntries"
                                             @click.prevent="selectPreviousPage"
                                         >
-                                            <icon-chevron-left size="4"></icon-chevron-left>
+                                            <icon-chevron-left size="4" />
                                         </button>
                                         <button
                                             class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none rounded-r-none"
@@ -163,7 +252,7 @@
                                             :disabled="loadingEntries"
                                             @click.prevent="startSetting"
                                         >
-                                            <icon-cog size="4"></icon-cog>
+                                            <icon-cog size="4" />
                                         </button>
                                         <button
                                             class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none disabled:opacity-25"
@@ -171,7 +260,7 @@
                                             :disabled="entries.length < limit || loadingEntries"
                                             @click.prevent="selectNextPage"
                                         >
-                                            <icon-chevron-right size="4"></icon-chevron-right>
+                                            <icon-chevron-right size="4" />
                                         </button>
                                     </div>
                                 </div>
@@ -185,20 +274,68 @@
                         <table class="divide-y divide-gray-200 text-gray-800">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">#</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Column Name</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Data Type</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Collation</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Is Nullable</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Key</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Column Default</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Extra</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Comment</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        #
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Column Name
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Data Type
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Collation
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Is Nullable
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Key
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Column Default
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Extra
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Comment
+                                    </th>
                                 </tr>
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="(column, index) in tableColumns" :key="index">
+                                <tr
+                                    v-for="(column, index) in tableColumns"
+                                    :key="index"
+                                >
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <x-field-value :value="index + 1" />
                                     </td>
@@ -211,7 +348,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <x-field-value :value="column.collation" />
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ column.is_nullable ? 'YES' : 'NO' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {{ column.is_nullable ? 'YES' : 'NO' }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <x-field-value :value="column.key" />
                                     </td>
@@ -233,19 +372,50 @@
                         <table class="divide-y divide-gray-200 text-gray-800">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Index Name</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Index Algorithm</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Is Unique</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Column Name</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Index Name
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Index Algorithm
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Is Unique
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                    >
+                                        Column Name
+                                    </th>
                                 </tr>
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="index in tableIndexes" :key="index.index_name">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.index_name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.index_algorithm }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.is_unique }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ index.column_name }}</td>
+                                <tr
+                                    v-for="index in tableIndexes"
+                                    :key="index.index_name"
+                                >
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {{ index.index_name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {{ index.index_algorithm }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {{ index.is_unique }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {{ index.column_name }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -255,8 +425,16 @@
                 <template v-if="tab == 'info'">
                     <table class="min-w-full divide-y divide-gray-200 text-gray-800">
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="row in tableInfo" :key="row.field">
-                                <th scope="row" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4">{{ row.field }}</th>
+                            <tr
+                                v-for="row in tableInfo"
+                                :key="row.field"
+                            >
+                                <th
+                                    scope="row"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4"
+                                >
+                                    {{ row.field }}
+                                </th>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <x-field-value :value="row.value" />
                                 </td>
@@ -267,19 +445,43 @@
             </template>
         </div>
 
-        <x-dialog-modal :show="setting" maxWidth="sm">
+        <x-dialog-modal
+            :show="setting"
+            max-width="sm"
+        >
             <template #title>
                 Page settings
             </template>
             <template #content>
                 <form @submit.prevent="setPageSettings">
                     <div>
-                        <x-label for="limit" value="Limit" />
-                        <x-input id="limit" type="text" class="mt-1 block w-full" placecholder="Limit" v-model="pageSettingsForm.limit" required autofocus />
+                        <x-label
+                            for="limit"
+                            value="Limit"
+                        />
+                        <x-input
+                            id="limit"
+                            v-model="pageSettingsForm.limit"
+                            type="text"
+                            class="mt-1 block w-full"
+                            placecholder="Limit"
+                            required
+                            autofocus
+                        />
                     </div>
                     <div class="mt-4">
-                        <x-label for="offset" value="Offset" />
-                        <x-input id="offset" type="text" class="mt-1 block w-full" placecholder="Offset" v-model="pageSettingsForm.offset" required />
+                        <x-label
+                            for="offset"
+                            value="Offset"
+                        />
+                        <x-input
+                            id="offset"
+                            v-model="pageSettingsForm.offset"
+                            type="text"
+                            class="mt-1 block w-full"
+                            placecholder="Offset"
+                            required
+                        />
                     </div>
                 </form>
             </template>
@@ -288,21 +490,35 @@
                     Nevermind
                 </x-secondary-button>
 
-                <x-button class="ml-2" @click.native="setPageSettings" :class="{ 'opacity-25': loadingEntries }" :disabled="loadingEntries">
+                <x-button
+                    class="ml-2"
+                    :class="{ 'opacity-25': loadingEntries }"
+                    :disabled="loadingEntries"
+                    @click.native="setPageSettings"
+                >
                     Go
                 </x-button>
             </template>
         </x-dialog-modal>
 
-        <x-dialog-modal :show="showEntryDetail" max-width="7xl">
+        <x-dialog-modal
+            :show="showEntryDetail"
+            max-width="7xl"
+        >
             <template #title>
                 Entry detail
             </template>
             <template #content>
                 <div class="flex flex-col divide-y">
-                    <div v-for="(data, key) in detailEntry" :key="`entry-data-${key}`" class="flex">
+                    <div
+                        v-for="(data, key) in detailEntry"
+                        :key="`entry-data-${key}`"
+                        class="flex"
+                    >
                         <div class="w-1/4 py-4 px-2">
-                            <h4 class="font-bold">{{ key }}</h4>
+                            <h4 class="font-bold">
+                                {{ key }}
+                            </h4>
                         </div>
                         <div class="w-3/4 py-4 px-2 break-words">
                             {{ data }}
@@ -321,7 +537,12 @@
 
 <script>
 export default {
-    props: ['tableName'],
+    props: {
+        tableName: {
+            type: String,
+            default: null,
+        },
+    },
 
     data() {
         return {
@@ -461,7 +682,7 @@ export default {
             try {
                 const response = await axios.post(
                     `${Dibi.path}/api/tables/${this.tableName}/rows/filter?offset=${this.offset}&limit=${this.limit}&sort_key=${this.sortKey ? this.sortKey : ''}&sort_dir=${this.sortDir}`,
-                    data
+                    data,
                 );
 
                 this.entries = response.data.data;
@@ -539,7 +760,7 @@ export default {
 
         closeDetailEntry() {
             this.showEntryDetail = false;
-        }
+        },
     },
 };
 </script>

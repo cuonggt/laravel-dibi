@@ -1,6 +1,14 @@
 <template>
-    <svg viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" :class="sizeClass">
-        <circle cx="15" cy="15" r="15">
+    <svg
+        viewBox="0 0 120 30"
+        xmlns="http://www.w3.org/2000/svg"
+        :class="sizeClass"
+    >
+        <circle
+            cx="15"
+            cy="15"
+            r="15"
+        >
             <animate
                 attributeName="r"
                 from="15"
@@ -22,7 +30,12 @@
                 repeatCount="indefinite"
             />
         </circle>
-        <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+        <circle
+            cx="60"
+            cy="15"
+            r="9"
+            fill-opacity="0.3"
+        >
             <animate
                 attributeName="r"
                 from="9"
@@ -44,7 +57,11 @@
                 repeatCount="indefinite"
             />
         </circle>
-        <circle cx="105" cy="15" r="15">
+        <circle
+            cx="105"
+            cy="15"
+            r="15"
+        >
             <animate
                 attributeName="r"
                 from="15"

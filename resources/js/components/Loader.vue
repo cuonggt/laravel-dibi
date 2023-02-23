@@ -1,24 +1,29 @@
 <template>
     <div>
-        <div class="flex items-center mt-4" style="height: 150px">
-            <icon-loader
+        <div
+            class="flex items-center mt-4"
+            style="height: 150px"
+        >
+            <IconLoader
                 :class="`mx-auto block text-${color}-500`"
                 :style="{ width: `${width}px` }"
                 viewBox="0 0 120 30"
-                xmlns="http://www.w3.org/2000/svg"
                 :fill="fillColor"
             />
         </div>
 
         <div class="mt-4 text-center max-w-xl mx-auto">
-            <slot></slot>
+            <slot />
         </div>
     </div>
 </template>
 
 <script>
+import IconLoader from './icons/Loader.vue';
+
 export default {
     name: 'Loader',
+    components: {IconLoader},
     props: {
         color: {
             type: [String],

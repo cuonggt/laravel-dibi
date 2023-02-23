@@ -7,13 +7,17 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "lint": "eslint --cache --ext=js,ts,vue ./resources/js",
+        "lint:fix": "eslint --cache --ext=js,ts,vue ./resources/js --fix"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.3",
         "autoprefixer": "^10.4.13",
         "axios": "^0.21.1",
         "cross-env": "^7.0.3",
+        "eslint": "^8.34.0",
+        "eslint-plugin-vue": "^9.9.0",
         "laravel-mix": "^6.0.0",
         "lodash": "^4.17.21",
         "moment": "^2.29.2",
@@ -27,5 +31,8 @@
         "vue-router": "^3.5.1",
         "vue-template-compiler": "^2.6.12",
         "vue-toasted": "^1.1.28"
+    },
+    "dependencies": {
+        "@volar-plugins/vetur": "^0.1.0"
     }
 }

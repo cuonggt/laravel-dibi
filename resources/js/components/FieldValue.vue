@@ -1,8 +1,14 @@
 <template>
     <div>
-        <span class="text-gray-400" v-if="value === null">NULL</span>
+        <span
+            v-if="value === null"
+            class="text-gray-400"
+        >NULL</span>
         <template v-else>
-            <span class="text-gray-400" v-if="value === ''">EMPTY</span>
+            <span
+                v-if="value === ''"
+                class="text-gray-400"
+            >EMPTY</span>
             <span>{{ value }}</span>
         </template>
     </div>
@@ -10,6 +16,11 @@
 
 <script>
 export default {
-    props: ['value'],
+    props: {
+        value: {
+            type: String,
+            default: null,
+        },
+    },
 };
 </script>

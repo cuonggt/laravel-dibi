@@ -43,25 +43,25 @@ window.axios.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    }
+    },
 );
 
 // Components
-Vue.component('x-button', require('./components/Button.vue').default);
-Vue.component('x-dialog-modal', require('./components/DialogModal.vue').default);
-Vue.component('x-field-value', require('./components/FieldValue.vue').default);
-Vue.component('x-input', require('./components/Input.vue').default);
-Vue.component('x-label', require('./components/Label.vue').default);
-Vue.component('x-loader', require('./components/Loader.vue').default);
-Vue.component('x-secondary-button', require('./components/SecondaryButton.vue').default);
+Vue.component('XButton', require('./components/Button.vue').default);
+Vue.component('XDialogModal', require('./components/DialogModal.vue').default);
+Vue.component('XFieldValue', require('./components/FieldValue.vue').default);
+Vue.component('XInput', require('./components/Input.vue').default);
+Vue.component('XLabel', require('./components/Label.vue').default);
+Vue.component('XLoader', require('./components/Loader.vue').default);
+Vue.component('XSecondaryButton', require('./components/SecondaryButton.vue').default);
 
 // Icons
-Vue.component('icon-chevron-left', require('./components/icons/ChevronLeft.vue').default);
-Vue.component('icon-chevron-right', require('./components/icons/ChevronRight.vue').default);
-Vue.component('icon-cog', require('./components/icons/Cog.vue').default);
-Vue.component('icon-database', require('./components/icons/Database.vue').default);
-Vue.component('icon-loader', require('./components/icons/Loader.vue').default);
-Vue.component('icon-table', require('./components/icons/Table.vue').default);
+Vue.component('IconChevronLeft', require('./components/icons/ChevronLeft.vue').default);
+Vue.component('IconChevronRight', require('./components/icons/ChevronRight.vue').default);
+Vue.component('IconCog', require('./components/icons/Cog.vue').default);
+Vue.component('IconDatabase', require('./components/icons/Database.vue').default);
+Vue.component('IconLoader', require('./components/icons/Loader.vue').default);
+Vue.component('IconTable', require('./components/icons/Table.vue').default);
 
 new Vue({
     el: '#dibi',
