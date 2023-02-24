@@ -17,7 +17,7 @@ Vue.use(Toasted, {
 
 Vue.mixin(Base);
 
-window.Bus = new Vue({name: 'Bus'});
+window.Bus = new Vue({ name: 'Bus' });
 
 window.axios = axios.create();
 window._ = _;
