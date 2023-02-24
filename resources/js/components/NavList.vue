@@ -5,7 +5,7 @@
                 v-model="keyword"
                 type="text"
                 placeholder="Search for item..."
-                class="w-full"
+                class="w-full text-sm"
             />
         </div>
 
@@ -26,7 +26,7 @@
             >
                 <icon-table
                     size="6"
-                    class="mr-3 text-gray-400 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150"
+                    class="mr-2 text-gray-400 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150"
                 />
                 {{ table }}
             </router-link>

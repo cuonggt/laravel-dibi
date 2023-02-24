@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from '@/views/Dashboard';
-import TableDetails from '@/views/TableDetails';
+import Dashboard from './views/Dashboard';
+import TableDetails from './views/TableDetails';
 
 Vue.use(Router);
 
