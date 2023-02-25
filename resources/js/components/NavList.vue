@@ -5,7 +5,7 @@
                 v-model="keyword"
                 type="text"
                 placeholder="Search for item..."
-                class="w-full"
+                class="w-full text-sm"
             />
         </div>
 
@@ -16,17 +16,16 @@
             Tables
         </h3>
 
-        <nav class="px-2 py-4 bg-gray-800">
+        <nav class="text-sm text-white">
             <router-link
                 v-for="table in filteredTables"
                 :key="`table-${table}`"
                 :to="`/tables/${table}`"
-                active-class="text-white bg-gray-900 focus:outline-none focus:bg-gray-900 transition ease-in-out duration-150"
-                class="group flex items-center px-2 py-2 text-sm leading-5 font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
+                active-class="bg-gray-700 rounded-l-full border-r-4 border-blue-500 group mt-1"
+                class="flex w-full pr-6 pl-4 py-2 items-center gap-x-4 hover:bg-gray-700 hover:rounded-l-full"
             >
                 <icon-table
                     size="6"
-                    class="mr-3 text-gray-400 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150"
                 />
                 {{ table }}
             </router-link>

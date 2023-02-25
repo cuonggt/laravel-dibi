@@ -3,9 +3,8 @@ import axios from 'axios';
 import _ from 'lodash';
 import PortalVue from 'portal-vue';
 import Toasted from 'vue-toasted';
-import router from '@/router';
+import router from './router';
 import Base from './base';
-import NavList from './components/NavList.vue';
 
 Vue.config.productionTip = false;
 
@@ -15,12 +14,10 @@ Vue.use(Toasted, {
     duration: 6000,
 });
 
-Vue.mixin(Base);
-
+window._ = _;
 window.Bus = new Vue({ name: 'Bus' });
 
 window.axios = axios.create();
-window._ = _;
 
 const token = document.head.querySelector('meta[name="csrf-token"]');
 
@@ -54,6 +51,7 @@ Vue.component('XInput', require('./components/Input.vue').default);
 Vue.component('XLabel', require('./components/Label.vue').default);
 Vue.component('XLoader', require('./components/Loader.vue').default);
 Vue.component('XSecondaryButton', require('./components/SecondaryButton.vue').default);
+Vue.component('NavList', require('./components/NavList.vue').default);
 
 // Icons
 Vue.component('IconChevronLeft', require('./components/icons/ChevronLeft.vue').default);
@@ -63,12 +61,11 @@ Vue.component('IconDatabase', require('./components/icons/Database.vue').default
 Vue.component('IconLoader', require('./components/icons/Loader.vue').default);
 Vue.component('IconTable', require('./components/icons/Table.vue').default);
 
+Vue.mixin(Base);
+
 new Vue({
     el: '#dibi',
     router,
-    components: {
-        NavList,
-    },
     mounted() {
         Bus.$on('error', message => {
             this.$toasted.show(message, { type: 'error' });
