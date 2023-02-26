@@ -113,197 +113,198 @@
                 </div>
             </template>
 
-            <div
-                v-else
-                class="flex-1 flex flex-col bg-gray-200 overflow-y-auto"
-            >
-                <template v-if="tab == 'data'">
-                    <div class="flex grow min-w-full overflow-x-auto">
-                        <datatable
-                            :columns="tableColumns"
-                            :records="entries"
-                            :sort-key="sortKey"
-                            :sort-dir="sortDir"
-                            :update-sorting="updateSorting"
-                        />
-                    </div>
-                </template>
-
-                <template v-if="tab == 'structure'">
-                    <div class="flex flex-col grow">
-                        <div class="min-w-full overflow-x-auto">
-                            <table class="divide-y divide-gray-200 text-gray-800">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            #
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Column Name
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Data Type
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Collation
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Is Nullable
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Key
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Column Default
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Extra
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Comment
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr
-                                        v-for="(column, index) in tableColumns"
-                                        :key="index"
-                                    >
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="index + 1" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.column_name" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.data_type" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.collation" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ column.is_nullable ? 'YES' : 'NO' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.key" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.column_default" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.extra" />
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <x-field-value :value="column.comment" />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <template v-else>
+                <div
+                    class="flex-1 flex flex-col bg-gray-200 overflow-y-auto"
+                >
+                    <template v-if="tab == 'data'">
+                        <div class="flex min-w-full overflow-x-auto">
+                            <datatable
+                                :columns="tableColumns"
+                                :records="entries"
+                                :sort-key="sortKey"
+                                :sort-dir="sortDir"
+                                :update-sorting="updateSorting"
+                            />
                         </div>
+                    </template>
 
-                        <div class="min-w-full overflow-x-auto mt-4">
-                            <table class="divide-y divide-gray-200 text-gray-800">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Index Name
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Index Algorithm
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Is Unique
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                        >
-                                            Column Name
-                                        </th>
-                                    </tr>
-                                </thead>
+                    <template v-if="tab == 'structure'">
+                        <div class="flex flex-col">
+                            <div class="min-w-full overflow-x-auto">
+                                <table class="divide-y divide-gray-200 text-gray-800">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                #
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Column Name
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Data Type
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Collation
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Is Nullable
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Key
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Column Default
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Extra
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Comment
+                                            </th>
+                                        </tr>
+                                    </thead>
 
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr
-                                        v-for="index in tableIndexes"
-                                        :key="index.index_name"
-                                    >
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ index.index_name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ index.index_algorithm }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ index.is_unique }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ index.column_name }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr
+                                            v-for="(column, index) in tableColumns"
+                                            :key="index"
+                                        >
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="index + 1" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.column_name" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.data_type" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.collation" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                {{ column.is_nullable ? 'YES' : 'NO' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.key" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.column_default" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.extra" />
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <x-field-value :value="column.comment" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="min-w-full overflow-x-auto mt-4">
+                                <table class="divide-y divide-gray-200 text-gray-800">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Index Name
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Index Algorithm
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Is Unique
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                            >
+                                                Column Name
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr
+                                            v-for="index in tableIndexes"
+                                            :key="index.index_name"
+                                        >
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                {{ index.index_name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                {{ index.index_algorithm }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                {{ index.is_unique }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                {{ index.column_name }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
 
-                <template v-if="tab == 'info'">
-                    <table class="grow min-w-full divide-y divide-gray-200 text-gray-800">
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr
-                                v-for="row in tableInfo"
-                                :key="row.field"
-                            >
-                                <th
-                                    scope="row"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4"
+                    <template v-if="tab == 'info'">
+                        <table class="min-w-full divide-y divide-gray-200 text-gray-800">
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr
+                                    v-for="row in tableInfo"
+                                    :key="row.field"
                                 >
-                                    {{ row.field }}
-                                </th>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <x-field-value :value="row.value" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </template>
+                                    <th
+                                        scope="row"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4"
+                                    >
+                                        {{ row.field }}
+                                    </th>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <x-field-value :value="row.value" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </template>
+                </div>
 
                 <div class="bg-gray-100 border-t-2 sticky bottom-0">
                     <div class="px-12">
@@ -393,7 +394,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <x-dialog-modal
