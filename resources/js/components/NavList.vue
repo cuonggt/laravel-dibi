@@ -23,9 +23,11 @@
                 :to="`/tables/${table}`"
                 active-class="bg-gray-700 rounded-l-full border-r-4 border-blue-500 group mt-1"
                 class="flex w-full pr-6 pl-4 py-2 items-center gap-x-4 hover:bg-gray-700 hover:rounded-l-full"
+                :title="table"
             >
                 <icon-table
                     size="6"
+                    class="shrink-0"
                 />
                 {{ table }}
             </router-link>

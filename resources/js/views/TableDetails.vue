@@ -1,37 +1,11 @@
 <template>
-    <div class="grow flex flex-col overflow-x-auto soft-scroll">
+    <div class="grow flex flex-col overflow-x-auto">
         <div class="flex flex-col h-0 flex-1">
-            <div class="bg-white w-full">
+            <div class="bg-white w-full sticky top-0">
                 <div class="px-12">
                     <div class="py-6">
                         <div class="flex items-center justify-between text-sm text-gray-700 uppercase font-bold tracking-widest">
                             <div>Table {{ tableName }}</div>
-                            <div class="flex">
-                                <button
-                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-r-none"
-                                    :class="tab == 'data' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
-                                    :disabled="tab == 'data'"
-                                    @click="tab = 'data'"
-                                >
-                                    Data
-                                </button>
-                                <button
-                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-l-none rounded-r-none"
-                                    :class="tab == 'structure' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
-                                    :disabled="tab == 'structure'"
-                                    @click="tab = 'structure'"
-                                >
-                                    Structure
-                                </button>
-                                <button
-                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-l-none"
-                                    :class="tab == 'info' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
-                                    :disabled="tab == 'info'"
-                                    @click="tab = 'info'"
-                                >
-                                    Info
-                                </button>
-                            </div>
                         </div>
 
                         <div
@@ -139,85 +113,247 @@
                 </div>
             </template>
 
-            <template v-else>
+            <div
+                v-else
+                class="flex-1 flex flex-col bg-gray-200 overflow-y-auto"
+            >
                 <template v-if="tab == 'data'">
-                    <div class="flex-1 flex flex-col overflow-y-auto bg-gray-200">
-                        <div class="block min-w-full overflow-x-auto soft-scroll">
+                    <div class="flex grow min-w-full overflow-x-auto">
+                        <datatable
+                            :columns="tableColumns"
+                            :records="entries"
+                            :sort-key="sortKey"
+                            :sort-dir="sortDir"
+                            :update-sorting="updateSorting"
+                        />
+                    </div>
+                </template>
+
+                <template v-if="tab == 'structure'">
+                    <div class="flex flex-col grow">
+                        <div class="min-w-full overflow-x-auto">
                             <table class="divide-y divide-gray-200 text-gray-800">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th
-                                            v-for="column in tableColumns"
-                                            :key="column.column_name"
-                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer"
-                                            @click.prevent="updateSorting(column.column_name)"
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
                                         >
-                                            <div class="flex justify-between items-center">
-                                                <span />
-                                                <span>{{ column.column_name }}</span>
-                                                <span>
-                                                    <span v-if="column.column_name == sortKey">
-                                                        <svg
-                                                            v-if="sortDir == 'asc'"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            class="h-3 w-3"
-                                                            fill="none"
-                                                            viewBox="0 0 24 24"
-                                                            stroke="currentColor"
-                                                        >
-                                                            <path
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M5 10l7-7m0 0l7 7m-7-7v18"
-                                                            />
-                                                        </svg>
-                                                        <svg
-                                                            v-else
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            class="h-3 w-3"
-                                                            fill="none"
-                                                            viewBox="0 0 24 24"
-                                                            stroke="currentColor"
-                                                        >
-                                                            <path
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                                                            />
-                                                        </svg>
-                                                    </span>
-                                                </span>
-                                            </div>
+                                            #
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Column Name
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Data Type
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Collation
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Is Nullable
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Key
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Column Default
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Extra
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Comment
                                         </th>
                                     </tr>
                                 </thead>
 
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr
-                                        v-for="(entry, index) in entries"
+                                        v-for="(column, index) in tableColumns"
                                         :key="index"
                                     >
-                                        <td
-                                            v-for="column in tableColumns"
-                                            :key="column.column_name"
-                                            class="px-6 py-4 whitespace-nowrap text-sm"
-                                            @click.prevent="openDetailEntry(entry)"
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="index + 1" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.column_name" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.data_type" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.collation" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            {{ column.is_nullable ? 'YES' : 'NO' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.key" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.column_default" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.extra" />
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <x-field-value :value="column.comment" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="min-w-full overflow-x-auto mt-4">
+                            <table class="divide-y divide-gray-200 text-gray-800">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
                                         >
-                                            <x-field-value :value="entry[column.column_name] == null ? entry[column.column_name] : strLimit(String(entry[column.column_name]))" />
+                                            Index Name
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Index Algorithm
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Is Unique
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                                        >
+                                            Column Name
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr
+                                        v-for="index in tableIndexes"
+                                        :key="index.index_name"
+                                    >
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            {{ index.index_name }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            {{ index.index_algorithm }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            {{ index.is_unique }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            {{ index.column_name }}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                </template>
 
-                    <div class="bg-gray-100 border-t-2">
-                        <div class="px-12">
-                            <div class="py-4">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex">
+                <template v-if="tab == 'info'">
+                    <table class="grow min-w-full divide-y divide-gray-200 text-gray-800">
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr
+                                v-for="row in tableInfo"
+                                :key="row.field"
+                            >
+                                <th
+                                    scope="row"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4"
+                                >
+                                    {{ row.field }}
+                                </th>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <x-field-value :value="row.value" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </template>
+
+                <div class="bg-gray-100 border-t-2 sticky bottom-0">
+                    <div class="px-12">
+                        <div class="py-4">
+                            <div class="flex justify-between items-center">
+                                <div class="flex">
+                                    <button
+                                        class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-r-none"
+                                        :class="tab == 'data' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                        :disabled="tab == 'data'"
+                                        @click="tab = 'data'"
+                                    >
+                                        Data
+                                    </button>
+                                    <button
+                                        class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-l-none rounded-r-none"
+                                        :class="tab == 'structure' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                        :disabled="tab == 'structure'"
+                                        @click="tab = 'structure'"
+                                    >
+                                        Structure
+                                    </button>
+                                    <button
+                                        class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-l-none"
+                                        :class="tab == 'info' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                        :disabled="tab == 'info'"
+                                        @click="tab = 'info'"
+                                    >
+                                        Info
+                                    </button>
+                                </div>
+                                <div
+                                    v-if="tab == 'data'"
+                                    class="text-sm text-gray-700"
+                                >
+                                    <span v-if="loadingEntries">Loading rows...</span>
+                                    <span v-else>
+                                        <span v-if="total > 0">
+                                            {{ formatNumber(from) }}-{{ formatNumber(to) }} of {{ formatNumber(total) }} rows
+                                        </span>
+                                        <span v-else>
+                                            0 rows
+                                        </span>
+                                    </span>
+                                </div>
+                                <div
+                                    v-if="tab == 'data'"
+                                    class="flex gap-x-4"
+                                >
+                                    <div>
                                         <button
                                             class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150"
                                             :class="filterEnabled ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
@@ -225,17 +361,6 @@
                                         >
                                             Filters
                                         </button>
-                                    </div>
-                                    <div class="text-sm text-gray-700">
-                                        <span v-if="loadingEntries">Loading rows...</span>
-                                        <span v-else>
-                                            <span v-if="total > 0">
-                                                {{ formatNumber(from) }}-{{ formatNumber(to) }} of {{ formatNumber(total) }} rows
-                                            </span>
-                                            <span v-else>
-                                                0 rows
-                                            </span>
-                                        </span>
                                     </div>
                                     <div class="flex">
                                         <button
@@ -267,182 +392,8 @@
                             </div>
                         </div>
                     </div>
-                </template>
-
-                <template v-if="tab == 'structure'">
-                    <div class="block min-w-full overflow-x-auto soft-scroll">
-                        <table class="divide-y divide-gray-200 text-gray-800">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        #
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Column Name
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Data Type
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Collation
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Is Nullable
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Key
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Column Default
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Extra
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Comment
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr
-                                    v-for="(column, index) in tableColumns"
-                                    :key="index"
-                                >
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="index + 1" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.column_name" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.data_type" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.collation" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        {{ column.is_nullable ? 'YES' : 'NO' }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.key" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.column_default" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.extra" />
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <x-field-value :value="column.comment" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="block min-w-full overflow-x-auto soft-scroll mt-4">
-                        <table class="divide-y divide-gray-200 text-gray-800">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Index Name
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Index Algorithm
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Is Unique
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                        Column Name
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr
-                                    v-for="index in tableIndexes"
-                                    :key="index.index_name"
-                                >
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        {{ index.index_name }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        {{ index.index_algorithm }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        {{ index.is_unique }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        {{ index.column_name }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </template>
-
-                <template v-if="tab == 'info'">
-                    <table class="min-w-full divide-y divide-gray-200 text-gray-800">
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr
-                                v-for="row in tableInfo"
-                                :key="row.field"
-                            >
-                                <th
-                                    scope="row"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider bg-gray-50 w-1/4"
-                                >
-                                    {{ row.field }}
-                                </th>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <x-field-value :value="row.value" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </template>
-            </template>
+                </div>
+            </div>
         </div>
 
         <x-dialog-modal
@@ -536,7 +487,9 @@
 </template>
 
 <script>
+import Datatable from '../components/Datatable.vue';
 export default {
+    components: { Datatable },
     props: {
         tableName: {
             type: String,
