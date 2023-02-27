@@ -60,7 +60,10 @@
                     :key="column.column_name"
                     class="px-6 py-4 whitespace-nowrap text-sm"
                 >
-                    <x-field-value :value="record[column.column_name] == null ? record[column.column_name] : strLimit(String(record[column.column_name]))" />
+                    <x-field-value
+                        :value="record[column.column_name]"
+                        :column="column"
+                    />
                 </td>
             </tr>
         </tbody>

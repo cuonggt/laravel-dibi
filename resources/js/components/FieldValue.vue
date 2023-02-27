@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- <x-field-value :value="record[column.column_name] == null ? record[column.column_name] : strLimit(String(record[column.column_name]))" /> -->
         <span
             v-if="value === null"
             class="text-gray-400"
@@ -21,6 +22,7 @@ export default {
             type: String,
             default: null,
         },
+        column: Object,
     },
 };
 </script>

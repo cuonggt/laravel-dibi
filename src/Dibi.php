@@ -48,7 +48,7 @@ class Dibi
     }
 
     /**
-     * Specify the database connection name that should be used by Dib.
+     * Specify the database connection name that should be used by Dibi.
      *
      * @param  string  $databaseConnectionName
      * @return static

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 flex flex-col overflow-y-auto bg-gray-800 soft-scroll">
+    <div class="flex-1 flex flex-col overflow-y-auto bg-gray-800">
         <div class="px-2 py-2">
             <x-input
                 v-model="keyword"
