@@ -5,7 +5,8 @@ on:
     branches:
       - master
   pull_request:
-    - cron: '0 0 * * *'
+    branches:
+      - master
 
 jobs:
   tests:
