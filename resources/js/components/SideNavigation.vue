@@ -19,17 +19,17 @@
         <nav class="text-sm text-white">
             <router-link
                 v-for="table in filteredTables"
-                :key="`table-${table}`"
-                :to="`/tables/${table}`"
+                :key="`table-${table.tableName}`"
+                :to="`/tables/${table.tableName}`"
                 active-class="bg-gray-700 rounded-l-full border-r-4 border-blue-500 group mt-1"
                 class="flex w-full pr-6 pl-4 py-2 items-center gap-x-4 hover:bg-gray-700 hover:rounded-l-full"
-                :title="table"
+                :title="table.tableName"
             >
                 <icon-table
                     size="6"
                     class="shrink-0"
                 />
-                {{ table }}
+                {{ table.tableName }}
             </router-link>
         </nav>
     </div>
@@ -37,12 +37,6 @@
 
 <script>
 export default {
-    props: {
-        tables: {
-            type: Array,
-            default: null,
-        },
-    },
     data() {
         return {
             keyword: '',
@@ -51,9 +45,9 @@ export default {
     computed: {
         filteredTables() {
             if (!this.keyword) {
-                return this.tables;
+                return Dibi.informationSchema.tables;
             }
-            return this.tables.filter((table) => table.includes(this.keyword));
+            return Dibi.informationSchema.tables.filter((table) => table.tableName.includes(this.keyword));
         },
     },
 };

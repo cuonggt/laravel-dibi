@@ -14,6 +14,13 @@ interface DatabaseRepository
     public function getName();
 
     /**
+     * Get the Dibi InformationSchema instance.
+     *
+     * @return \Cuonggt\Dibi\InformationSchema
+     */
+    public function informationSchema();
+
+    /**
      * Get list of Dibi Table instances.
      *
      * @return \Illuminate\Support\Collection

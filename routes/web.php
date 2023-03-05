@@ -1,9 +1,10 @@
 <?php
 
+use Cuonggt\Dibi\Dibi;
 use Illuminate\Support\Facades\Route;
 
 Route::namespace('Cuonggt\Dibi\Http\Controllers')
-    ->prefix(config('dibi.path', 'dibi'))
+    ->prefix(Dibi::path())
     ->middleware(config('dibi.middleware', []))
     ->group(function () {
         Route::get('/api/tables', 'TablesController@index');

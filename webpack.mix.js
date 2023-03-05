@@ -14,7 +14,7 @@ const path = require('path');
 
 mix
     .js('resources/js/app.js', 'public')
-    .vue({version: 2})
+    .vue({ version: 2 })
     .setPublicPath('public')
     .postCss('resources/css/app.css', 'public', [
         require('tailwindcss'),

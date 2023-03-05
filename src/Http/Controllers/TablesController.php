@@ -2,6 +2,9 @@
 
 namespace Cuonggt\Dibi\Http\Controllers;
 
+use Cuonggt\Dibi\Dibi;
+use Illuminate\Routing\Controller;
+
 class TablesController extends Controller
 {
     /**
@@ -11,7 +14,7 @@ class TablesController extends Controller
      */
     public function index()
     {
-        return response()->json($this->database->tables());
+        return response()->json(Dibi::databaseRepository()->tables());
     }
 
     /**
@@ -23,9 +26,9 @@ class TablesController extends Controller
     public function show($name)
     {
         return response()->json([
-            'info' => $this->database->table($name),
-            'columns' => $this->database->columns($name),
-            'indexes' => $this->database->indexes($name),
+            'info' => Dibi::databaseRepository()->table($name),
+            'columns' => Dibi::databaseRepository()->columns($name),
+            'indexes' => Dibi::databaseRepository()->indexes($name),
         ]);
     }
 }

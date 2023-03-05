@@ -2,6 +2,7 @@
 
 namespace Cuonggt\Dibi\Repositories;
 
+use Cuonggt\Dibi\InformationSchema;
 use Cuonggt\Dibi\Table;
 use Cuonggt\Dibi\TableColumn;
 use Cuonggt\Dibi\TableIndex;
@@ -9,6 +10,67 @@ use Illuminate\Support\Arr;
 
 class MysqlDatabaseRepository extends AbstractDatabaseRepository
 {
+    /**
+     * @return array
+     */
+    protected function stringDataTypes()
+    {
+        return [
+            'char',
+            'varchar',
+            'binary',
+            'varbinary',
+            'tinyblob',
+            'tinytext',
+            'text',
+            'blob',
+            'mediumtext',
+            'mediumblob',
+            'longtext',
+            'longblob',
+            'enum',
+            'set',
+        ];
+    }
+
+    /**
+     * @return \Cuonggt\Dibi\InformationSchema
+     */
+    public function informationSchema()
+    {
+        $rawTables = $this->db->select('SELECT * FROM information_schema.tables WHERE table_schema = ? ORDER BY table_name ASC', [$this->getName()]);
+
+        $rawColumns = collect($this->db->select('SELECT * FROM information_schema.columns WHERE table_schema = ? ORDER BY table_name ASC, ordinal_position ASC', [$this->getName()]))->groupBy('TABLE_NAME');
+
+        return new InformationSchema(collect($rawTables)->map(function ($rawTable) use ($rawColumns) {
+            return (new Table)->setRaw((array) $rawTable)->map([
+                'tableCatalog' => $rawTable->TABLE_CATALOG,
+                'tableSchema' => $rawTable->TABLE_SCHEMA,
+                'tableName' => $rawTable->TABLE_NAME,
+                'tableType' => $rawTable->TABLE_TYPE,
+            ])->columns($rawColumns[$rawTable->TABLE_NAME]->map(function ($rawColumn) {
+                return (new TableColumn)->setRaw((array) $rawColumn)->map([
+                    'tableCatalog' => $rawColumn->TABLE_CATALOG,
+                    'tableSchema' => $rawColumn->TABLE_SCHEMA,
+                    'tableName' => $rawColumn->TABLE_NAME,
+                    'columnName' => $rawColumn->COLUMN_NAME,
+                    'ordinalPosition' => $rawColumn->ORDINAL_POSITION,
+                    'columnDefault' => $rawColumn->COLUMN_DEFAULT,
+                    'isNullable' => $rawColumn->IS_NULLABLE == 'YES',
+                    'dataType' => $rawColumn->DATA_TYPE,
+                    'characterMaximumLength' => $rawColumn->CHARACTER_MAXIMUM_LENGTH,
+                    'characterOctetLength' => $rawColumn->CHARACTER_OCTET_LENGTH,
+                    'numericPrecision' => $rawColumn->NUMERIC_PRECISION,
+                    'numericScale' => $rawColumn->NUMERIC_SCALE,
+                    'datetimePrecision' => $rawColumn->DATETIME_PRECISION,
+                    'characterSetName' => $rawColumn->CHARACTER_SET_NAME,
+                    'collationName' => $rawColumn->COLLATION_NAME,
+                    'isStringDataType' => in_array($rawColumn->DATA_TYPE, $this->stringDataTypes()),
+                ]);
+            })->toArray());
+        })->toArray());
+    }
+
     /**
      * @inheritdoc
      */
@@ -57,6 +119,14 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
                 [$this->getName(), $tableName]
             )
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function rawTableColumns()
+    {
+        return $this->db->select('SELECT * FROM information_schema.columns WHERE table_schema = ? ORDER BY table_name ASC, ordinal_position ASC', [$this->getName()]);
     }
 
     /**
