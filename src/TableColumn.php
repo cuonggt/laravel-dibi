@@ -89,7 +89,7 @@ class TableColumn extends DBObject implements JsonSerializable
     /**
      * @var bool
      */
-    public $shouldHideValue;
+    public $shouldHideValue = false;
 
     /**
      * Get the JSON serializable fields for the object.

@@ -15,6 +15,7 @@ import XLoader from './components/Loader.vue';
 import XSecondaryButton from './components/SecondaryButton.vue';
 
 import SideNavigation from './components/SideNavigation.vue';
+import TableStructure from './components/TableStructure.vue';
 import DataTable from './components/DataTable.vue';
 import DataCell from './components/DataCell.vue';
 
@@ -35,5 +36,6 @@ Vue.component('XLoader', XLoader);
 Vue.component('XSecondaryButton', XSecondaryButton);
 
 Vue.component('SideNavigation', SideNavigation);
+Vue.component('TableStructure', TableStructure);
 Vue.component('DataTable', DataTable);
 Vue.component('DataCell', DataCell);

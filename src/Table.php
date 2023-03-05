@@ -2,7 +2,6 @@
 
 namespace Cuonggt\Dibi;
 
-use Exception;
 use JsonSerializable;
 
 class Table extends DBObject implements JsonSerializable
@@ -33,6 +32,11 @@ class Table extends DBObject implements JsonSerializable
     public $columns;
 
     /**
+     * @var array
+     */
+    public $indexes;
+
+    /**
      * Set the columns of the table.
      *
      * @param  array|null  $columns
@@ -50,6 +54,23 @@ class Table extends DBObject implements JsonSerializable
     }
 
     /**
+     * Set the indexes of the table.
+     *
+     * @param  array|null  $indexes
+     * @return $this|array
+     */
+    public function indexes(array $indexes = null)
+    {
+        if (is_null($indexes)) {
+            return $this->indexes;
+        }
+
+        $this->indexes = $indexes;
+
+        return $this;
+    }
+
+    /**
      * Get the JSON serializable fields for the object.
      *
      * @return array
@@ -62,21 +83,7 @@ class Table extends DBObject implements JsonSerializable
             'tableName' => $this->tableName,
             'tableType' => $this->tableType,
             'columns' => $this->columns,
+            'indexes' => $this->indexes,
         ];
-    }
-
-    /**
-     * Provide dynamic access to the object's methods as properties.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        if (method_exists($this, $key)) {
-            return $this->{$key}();
-        }
-
-        throw new Exception("No property or method [{$key}] exists on this object.");
     }
 }

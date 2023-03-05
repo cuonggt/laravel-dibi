@@ -14,12 +14,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $informationSchema = Dibi::databaseRepository()->informationSchema();
-        // dd($informationSchema->tables[0]->columns);
         return view('dibi::app', [
             'dibiScriptVariables' => Dibi::scriptVariables([
                 'database' => Dibi::databaseRepository()->getName(),
-                'informationSchema' => $informationSchema,
+                'informationSchema' => Dibi::databaseRepository()->informationSchema(),
             ]),
         ]);
     }
