@@ -78,4 +78,4 @@ jobs:
           command: composer update --prefer-stable --no-interaction
 
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --verbose
