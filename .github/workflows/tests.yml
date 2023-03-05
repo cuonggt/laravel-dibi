@@ -2,8 +2,9 @@ name: tests
 
 on:
   push:
+    branches:
+      - master
   pull_request:
-  schedule:
     - cron: '0 0 * * *'
 
 jobs:
@@ -17,7 +18,7 @@ jobs:
             MYSQL_ALLOW_EMPTY_PASSWORD: yes
             MYSQL_DATABASE: testdibi
         ports:
-            - 3306
+            - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     strategy:
@@ -76,6 +77,4 @@ jobs:
           command: composer update --prefer-stable --no-interaction
 
       - name: Execute tests
-        env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
         run: vendor/bin/phpunit --verbose
