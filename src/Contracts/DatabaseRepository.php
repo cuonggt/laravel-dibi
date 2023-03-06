@@ -14,35 +14,32 @@ interface DatabaseRepository
     public function getName();
 
     /**
+     * Get the Dibi InformationSchema instance.
+     *
+     * @return \Cuonggt\Dibi\InformationSchema
+     */
+    public function informationSchema();
+
+    /**
      * Get list of Dibi Table instances.
      *
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function tables();
 
     /**
-     * Get the Dibi Table instance for the given table.
+     * Get list of Dibi TableColumn instances.
      *
-     * @param  string  $table
-     * @return \Cuonggt\Dibi\Table
-     */
-    public function table($table);
-
-    /**
-     * Get list of Dibi TableColumn instances for the given table.
-     *
-     * @param  string  $table
      * @return \Illuminate\Support\Collection
      */
-    public function columns($table);
+    public function columns();
 
     /**
-     * Get list of Dibi TableIndex instances for the given table.
+     * Get list of Dibi TableIndex instances.
      *
-     * @param  string  $table
      * @return \Illuminate\Support\Collection
      */
-    public function indexes($table);
+    public function indexes();
 
     /**
      * Get list of records for the given table.

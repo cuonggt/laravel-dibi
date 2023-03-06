@@ -24,7 +24,10 @@ const router = new Router({
             path: '/tables/:tableName',
             component: TableDetails,
             name: 'tables-show',
-            props: true,
+            props: route => ({
+                tableName: route.params.tableName,
+                currentTable: Dibi.informationSchema.tables.find(table => table.tableName == route.params.tableName),
+            }),
         },
         {
             name: 'catch-all',

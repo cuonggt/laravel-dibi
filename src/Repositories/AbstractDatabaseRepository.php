@@ -3,6 +3,7 @@
 namespace Cuonggt\Dibi\Repositories;
 
 use Cuonggt\Dibi\Contracts\DatabaseRepository;
+use Cuonggt\Dibi\InformationSchema;
 use Illuminate\Http\Request;
 
 abstract class AbstractDatabaseRepository implements DatabaseRepository
@@ -36,27 +37,39 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     /**
      * @inheritdoc
      */
+    public function informationSchema()
+    {
+        return new InformationSchema($this->tables());
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function tables()
     {
-        return collect($this->rawTables())->map(function ($rawTable) {
-            return $this->mapRawTableToObject($rawTable);
-        });
+        $columns = $this->columns()->groupBy('tableName');
+        $indexes = $this->indexes()->groupBy('tableName');
+
+        return collect($this->rawTables())
+            ->map(function ($rawTable) use ($columns, $indexes) {
+                $table = $this->mapRawTableToObject($rawTable);
+
+                if ($indexes[$table->tableName] ?? false) {
+                    $table->indexes($indexes[$table->tableName]->toArray());
+                }
+
+                return $table
+                    ->columns($columns[$table->tableName]->toArray());
+            })
+            ->toArray();
     }
 
     /**
      * @inheritdoc
      */
-    public function table($tableName)
+    public function columns()
     {
-        return $this->mapRawTableToObject($this->rawTableByName($tableName));
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function columns($table)
-    {
-        return collect($this->rawColumns($table))->map(function ($rawColumn) {
+        return collect($this->rawColumns())->map(function ($rawColumn) {
             return $this->mapRawColumnToObject($rawColumn);
         });
     }
@@ -64,9 +77,9 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     /**
      * @inheritdoc
      */
-    public function indexes($table)
+    public function indexes()
     {
-        return collect($this->rawIndexes($table))->map(function ($rawIndex) {
+        return collect($this->rawIndexes())->map(function ($rawIndex) {
             return $this->mapRawIndexToObject($rawIndex);
         });
     }
@@ -105,8 +118,10 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
         $query = $this->db->table($table);
 
         foreach ($request->input('filters', []) as $filter) {
-            if ($filter['field'] == '__raw__' && ! empty($filter['value'])) {
-                $query->whereRaw($filter['value']);
+            if ($filter['field'] == '__raw__') {
+                if (! empty($filter['value'])) {
+                    $query->whereRaw($filter['value']);
+                }
             } elseif ($filter['field'] == '__any__') {
                 foreach ($this->columns($table)->pluck('column_name')->all() as $column) {
                     $query->tap(function ($query) use ($column, $filter) {
@@ -160,14 +175,6 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     abstract protected function rawTables();
 
     /**
-     * Get the raw table for the given name.
-     *
-     * @param  string  $table
-     * @return object
-     */
-    abstract protected function rawTableByName($table);
-
-    /**
      * Map the raw table object to a Dibi Table instance.
      *
      * @param  object  $rawTable
@@ -176,12 +183,11 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     abstract protected function mapRawTableToObject($rawTable);
 
     /**
-     * Get list of raw columns for the given table.
+     * Get list of raw columns.
      *
-     * @param  string  $table
      * @return array
      */
-    abstract protected function rawColumns($table);
+    abstract protected function rawColumns();
 
     /**
      * Map the raw column object to a Dibi TableColumn instance.
@@ -192,18 +198,17 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     abstract protected function mapRawColumnToObject($rawColumn);
 
     /**
-     * Get list of raw indexes for the given table.
+     * Get list of raw indexes.
      *
-     * @param  string  $table
      * @return array
      */
-    abstract protected function rawIndexes($table);
+    abstract protected function rawIndexes();
 
     /**
      * Map the raw index object to a Dibi TableIndex instance.
      *
-     * @param  object  $index
+     * @param  object  $rawIndex
      * @return \Cuonggt\Dibi\TableIndex
      */
-    abstract protected function mapRawIndexToObject($index);
+    abstract protected function mapRawIndexToObject($rawIndex);
 }

@@ -11,7 +11,7 @@
             </div>
 
             <div
-                class="mt-4 overflow-y-auto soft-scroll"
+                class="mt-4 overflow-y-auto"
                 style="max-height: 80vh"
             >
                 <slot name="content" />

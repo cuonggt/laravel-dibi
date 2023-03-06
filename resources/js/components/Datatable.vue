@@ -4,15 +4,15 @@
             <tr>
                 <th
                     v-for="column in columns"
-                    :key="column.column_name"
+                    :key="column.columnName"
                     class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer"
-                    @click.prevent="updateSorting(column.column_name)"
+                    @click.prevent="updateSorting(column.columnName)"
                 >
                     <div class="flex justify-between items-center">
                         <span />
-                        <span>{{ column.column_name }}</span>
+                        <span>{{ column.columnName }}</span>
                         <span>
-                            <span v-if="column.column_name == sortKey">
+                            <span v-if="column.columnName == sortKey">
                                 <svg
                                     v-if="sortDir == 'asc'"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -52,15 +52,18 @@
 
         <tbody class="bg-white divide-y divide-gray-200 overflow-y-auto">
             <tr
-                v-for="(record, index) in records"
+                v-for="(row, index) in rows"
                 :key="index"
             >
                 <td
                     v-for="column in columns"
-                    :key="column.column_name"
+                    :key="column.columnName"
                     class="px-6 py-4 whitespace-nowrap text-sm"
                 >
-                    <x-field-value :value="record[column.column_name] == null ? record[column.column_name] : strLimit(String(record[column.column_name]))" />
+                    <data-cell
+                        :value="row[column.columnName]"
+                        :column="column"
+                    />
                 </td>
             </tr>
         </tbody>
@@ -71,7 +74,7 @@
 export default {
     props: {
         columns: Array,
-        records: Array,
+        rows: Array,
         sortKey: String,
         sortDir: {
             type: String,

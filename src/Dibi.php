@@ -22,6 +22,23 @@ class Dibi
     public static $databaseConnectionName = 'mysql';
 
     /**
+     * Database Repository.
+     *
+     * @var \Cuonggt\Dibi\Contracts\DatabaseRepository
+     */
+    public static $databaseRepository;
+
+    /**
+     * Get the URI path prefix utilized by Dibi.
+     *
+     * @return string
+     */
+    public static function path()
+    {
+        return config('dibi.path', '/dibi');
+    }
+
+    /**
      * Determine if the given request can access the Horizon dashboard.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -48,7 +65,7 @@ class Dibi
     }
 
     /**
-     * Specify the database connection name that should be used by Dib.
+     * Specify the database connection name that should be used by Dibi.
      *
      * @param  string  $databaseConnectionName
      * @return static
@@ -61,13 +78,21 @@ class Dibi
     }
 
     /**
-     * Get the databae connection.
+     * Get the database connection.
      *
      * @return \Illuminate\Database\Connection
      */
     public static function databaseConnection()
     {
         return DB::connection(static::$databaseConnectionName);
+    }
+
+    /**
+     * Get the database repository.
+     */
+    public static function databaseRepository()
+    {
+        return static::$databaseRepository ?: static::$databaseRepository = DatabaseRepositoryFactory::make(static::databaseConnection());
     }
 
     /**
@@ -79,7 +104,7 @@ class Dibi
     public static function scriptVariables($options = [])
     {
         return array_merge([
-            'path' => config('dibi.path'),
+            'path' => static::path(),
         ], $options);
     }
 }

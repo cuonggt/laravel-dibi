@@ -43,23 +43,7 @@ window.axios.interceptors.response.use(
     },
 );
 
-// Components
-Vue.component('XButton', require('./components/Button.vue').default);
-Vue.component('XDialogModal', require('./components/DialogModal.vue').default);
-Vue.component('XFieldValue', require('./components/FieldValue.vue').default);
-Vue.component('XInput', require('./components/Input.vue').default);
-Vue.component('XLabel', require('./components/Label.vue').default);
-Vue.component('XLoader', require('./components/Loader.vue').default);
-Vue.component('XSecondaryButton', require('./components/SecondaryButton.vue').default);
-Vue.component('NavList', require('./components/NavList.vue').default);
-
-// Icons
-Vue.component('IconChevronLeft', require('./components/icons/ChevronLeft.vue').default);
-Vue.component('IconChevronRight', require('./components/icons/ChevronRight.vue').default);
-Vue.component('IconCog', require('./components/icons/Cog.vue').default);
-Vue.component('IconDatabase', require('./components/icons/Database.vue').default);
-Vue.component('IconLoader', require('./components/icons/Loader.vue').default);
-Vue.component('IconTable', require('./components/icons/Table.vue').default);
+import './components';
 
 Vue.mixin(Base);
 
