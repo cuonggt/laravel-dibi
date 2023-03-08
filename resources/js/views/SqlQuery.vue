@@ -52,9 +52,13 @@ export default {
         },
         async runQuery() {
             this.runningQuery = true;
-            const response = await axios.post(`${Dibi.path}/api/sql-query`,{ sql_query: this.query });
-            this.result = response.data;
-            console.log(this.result);
+            try {
+                const response = await axios.post(`${Dibi.path}/api/sql-query`,{ sql_query: this.query });
+                this.result = response.data;
+                console.log(this.result);
+            } catch (e) {
+                //
+            }
             this.runningQuery = false;
         },
     },
