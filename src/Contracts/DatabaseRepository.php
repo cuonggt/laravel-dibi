@@ -14,6 +14,13 @@ interface DatabaseRepository
     public function getName();
 
     /**
+     * Run given raw SQL query.
+     *
+     * @return mixed
+     */
+    public function runSqlQuery($sqlQuery);
+
+    /**
      * Get the Dibi InformationSchema instance.
      *
      * @return \Cuonggt\Dibi\InformationSchema

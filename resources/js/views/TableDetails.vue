@@ -6,6 +6,11 @@
                     <div class="py-6">
                         <div class="flex items-center justify-between text-sm text-gray-700 uppercase font-bold tracking-widest">
                             <div>Table {{ currentTable.tableName }}</div>
+                            <div>
+                                <router-link to="/sql-query">
+                                    <x-button>SQL</x-button>
+                                </router-link>
+                            </div>
                         </div>
 
                         <div

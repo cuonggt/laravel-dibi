@@ -37,6 +37,14 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     /**
      * @inheritdoc
      */
+    public function runSqlQuery($sqlQuery)
+    {
+        return $this->db->unprepared($sqlQuery);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function informationSchema()
     {
         return new InformationSchema($this->tables());
