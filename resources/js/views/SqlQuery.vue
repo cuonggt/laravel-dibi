@@ -6,7 +6,7 @@
             </div>
             <div class="flex justify-end px-4 py-2">
                 <x-button
-                    :disabled="runningQuery"
+                    :disabled="!query || runningQuery"
                     @click.native="runQuery"
                 >
                     Run
@@ -55,7 +55,6 @@ export default {
             try {
                 const response = await axios.post(`${Dibi.path}/api/sql-query`,{ sql_query: this.query });
                 this.result = response.data;
-                console.log(this.result);
             } catch (e) {
                 //
             }

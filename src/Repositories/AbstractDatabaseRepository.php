@@ -39,7 +39,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      */
     public function runSqlQuery($sqlQuery)
     {
-        return $this->db->unprepared($sqlQuery);
+        return $this->db->select($sqlQuery);
     }
 
     /**

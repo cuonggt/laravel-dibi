@@ -16,6 +16,7 @@ interface DatabaseRepository
     /**
      * Run given raw SQL query.
      *
+     * @param  string  $sqlQuery
      * @return mixed
      */
     public function runSqlQuery($sqlQuery);
