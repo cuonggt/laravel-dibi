@@ -27,6 +27,12 @@
                     :title="table.tableName"
                 >
                     <icon-table
+                        v-if="table.tableType == 'BASE TABLE'"
+                        size="6"
+                        class="shrink-0"
+                    />
+                    <icon-eye
+                        v-else-if="table.tableType == 'VIEW'"
                         size="6"
                         class="shrink-0"
                     />

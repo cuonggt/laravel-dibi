@@ -4,6 +4,7 @@ import IconChevronLeft from './components/icons/ChevronLeft.vue';
 import IconChevronRight from './components/icons/ChevronRight.vue';
 import IconCog from './components/icons/Cog.vue';
 import IconDatabase from './components/icons/Database.vue';
+import IconEye from './components/icons/Eye.vue';
 import IconLoader from './components/icons/Loader.vue';
 import IconTable from './components/icons/Table.vue';
 
@@ -24,6 +25,7 @@ Vue.component('IconChevronLeft', IconChevronLeft);
 Vue.component('IconChevronRight', IconChevronRight);
 Vue.component('IconCog', IconCog);
 Vue.component('IconDatabase', IconDatabase);
+Vue.component('IconEye', IconEye);
 Vue.component('IconLoader', IconLoader);
 Vue.component('IconTable', IconTable);
 
