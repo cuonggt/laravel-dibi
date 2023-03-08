@@ -8,12 +8,14 @@ use Illuminate\Routing\Controller;
 
 class SqlQueryController extends Controller
 {
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function run(Request $request)
     {
-        return Dibi::databaseRepository()->runSqlQuery($request->sql_query);
+        $queries = explode(';', $request->sql_query);
+
+        return [
+            'results' => collect($queries)->filter()->map(function ($query) {
+                return Dibi::databaseRepository()->runSqlQuery($query);
+            }),
+        ];
     }
 }

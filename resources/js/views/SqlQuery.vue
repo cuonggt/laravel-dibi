@@ -4,7 +4,7 @@
             <div class="flex grow">
                 <MonacoEditor @change="onChange" />
             </div>
-            <div class="flex justify-end px-4 py-2">
+            <div class="flex px-4 py-2">
                 <x-button
                     :disabled="!query || runningQuery"
                     @click.native="runQuery"
@@ -54,7 +54,7 @@ export default {
             this.runningQuery = true;
             try {
                 const response = await axios.post(`${Dibi.path}/api/sql-query`,{ sql_query: this.query });
-                this.result = response.data;
+                this.result = response.data.results.pop();
             } catch (e) {
                 //
             }

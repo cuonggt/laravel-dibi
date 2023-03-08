@@ -5,6 +5,7 @@ namespace Cuonggt\Dibi\Repositories;
 use Cuonggt\Dibi\Contracts\DatabaseRepository;
 use Cuonggt\Dibi\InformationSchema;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 abstract class AbstractDatabaseRepository implements DatabaseRepository
 {
@@ -39,7 +40,13 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      */
     public function runSqlQuery($sqlQuery)
     {
-        return $this->db->select($sqlQuery);
+        $statement = strtolower(Arr::first(explode(' ', $sqlQuery)));
+
+        if (in_array($statement, ['select', 'insert', 'update', 'delete'])) {
+            return $this->db->{$statement}($sqlQuery);
+        }
+
+        return $this->db->statement($sqlQuery);
     }
 
     /**
