@@ -21,8 +21,6 @@
         "laravel-mix": "^6.0.0",
         "lint-staged": "^13.1.2",
         "lodash": "^4.17.21",
-        "moment": "^2.29.2",
-        "moment-timezone": "^0.5.33",
         "numeral": "^2.0.6",
         "portal-vue": "^2.1.7",
         "postcss": "^8.4.21",
