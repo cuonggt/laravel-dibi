@@ -5,7 +5,12 @@
                 <div class="px-12">
                     <div class="py-6">
                         <div class="flex items-center justify-between text-sm text-gray-700 uppercase font-bold tracking-widest">
-                            Database {{ database }}
+                            <div>Database {{ database }}</div>
+                            <div>
+                                <router-link to="/sql-query">
+                                    <x-button>SQL</x-button>
+                                </router-link>
+                            </div>
                         </div>
                     </div>
                 </div>
