@@ -12,7 +12,7 @@
 
     <!-- Style sheets -->
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <link href="{{ asset(mix('app.css', 'vendor/dibi')) }}" rel="stylesheet" type="text/css">
+    <link href="{{ mix('app.css', 'vendor/dibi') }}" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -45,6 +45,6 @@
     </script>
 
     <!-- Scripts -->
-    <script src="{{ asset(mix('app.js', 'vendor/dibi')) }}"></script>
+    <script src="{{ mix('app.js', 'vendor/dibi') }}"></script>
 </body>
 </html>

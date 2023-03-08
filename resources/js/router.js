@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from './views/Dashboard';
 import TableDetails from './views/TableDetails';
+import SqlQuery from './views/SqlQuery';
 
 Vue.use(Router);
 
@@ -18,6 +19,12 @@ const router = new Router({
             name: 'dashboard',
             path: '/dashboard',
             component: Dashboard,
+            props: true,
+        },
+        {
+            name: 'sql-query',
+            path: '/sql-query',
+            component: SqlQuery,
             props: true,
         },
         {
