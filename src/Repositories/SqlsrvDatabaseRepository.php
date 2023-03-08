@@ -32,7 +32,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     protected function rawTables()
     {
         return $this->db->select(
-            'SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = ? ORDER BY TABLE_SCHEMA ASC',
+            'SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = ? ORDER BY TABLE_SCHEMA ASC, TABLE_TYPE ASC, TABLE_NAME ASC',
             [$this->getName()]
         );
     }
