@@ -98,6 +98,8 @@ class Dibi
 
     /**
      * Get the current database connection name.
+     *
+     * @return string
      */
     public static function currentDatabaseConnection()
     {
@@ -129,6 +131,8 @@ class Dibi
 
     /**
      * Get the database repository.
+     *
+     * @return \Cuonggt\Dibi\Contracts\DatabaseRepository
      */
     public static function databaseRepository()
     {
