@@ -3,6 +3,8 @@
 namespace Cuonggt\Dibi;
 
 use Closure;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Dibi
@@ -13,6 +15,13 @@ class Dibi
      * @var \Closure
      */
     public static $authUsing;
+
+    /**
+     * Database Connections.
+     *
+     * @var array<string>
+     */
+    public static $databaseConnections = [];
 
     /**
      * Database Connection Name.
@@ -65,6 +74,37 @@ class Dibi
     }
 
     /**
+     * Register available database connections.
+     *
+     * @param  array  $databaseConnections
+     * @return static
+     */
+    public static function registerDatabaseConnections(array $databaseConnections)
+    {
+        static::$databaseConnections = $databaseConnections;
+
+        return new static;
+    }
+
+    /**
+     * Get the list of available database connections.
+     *
+     * @return array
+     */
+    public static function databaseConnections()
+    {
+        return empty(static::$databaseConnections) ? [static::$databaseConnectionName] : static::$databaseConnections;
+    }
+
+    /**
+     * Get the current database connection name.
+     */
+    public static function currentDatabaseConnection()
+    {
+        return Cache::get('dibiConnection') ?? Arr::first(static::databaseConnections());
+    }
+
+    /**
      * Specify the database connection name that should be used by Dibi.
      *
      * @param  string  $databaseConnectionName
@@ -84,7 +124,7 @@ class Dibi
      */
     public static function databaseConnection()
     {
-        return DB::connection(static::$databaseConnectionName);
+        return DB::connection(static::currentDatabaseConnection());
     }
 
     /**

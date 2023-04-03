@@ -16,6 +16,8 @@ class HomeController extends Controller
     {
         return view('dibi::app', [
             'dibiScriptVariables' => Dibi::scriptVariables([
+                'databaseConnections' => Dibi::databaseConnections(),
+                'currentDatabaseConnection' => Dibi::currentDatabaseConnection(),
                 'database' => Dibi::databaseRepository()->getName(),
                 'informationSchema' => Dibi::databaseRepository()->informationSchema(),
             ]),
