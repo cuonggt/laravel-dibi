@@ -5,6 +5,26 @@
                 <div class="px-12">
                     <div class="py-6">
                         <div class="flex items-center justify-between text-sm text-gray-700 uppercase font-bold tracking-widest">
+                            <div>
+                                <div v-if="connections.length > 1">
+                                    <select
+                                        class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8"
+                                        @change="selectConnection($event.target.value)"
+                                    >
+                                        <option
+                                            v-for="connection in connections"
+                                            :key="connection"
+                                            :value="connection"
+                                            :selected="connection == currentDatabaseConnection"
+                                        >
+                                            {{ connection }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div v-else>
+                                    {{ connections[0] }}
+                                </div>
+                            </div>
                             <div>Database {{ database }}</div>
                             <div>
                                 <router-link to="/sql-query">
@@ -57,12 +77,29 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
+            connections: Dibi.databaseConnections,
+            currentDatabaseConnection: Dibi.currentDatabaseConnection,
             database: Dibi.database,
             tables: Dibi.informationSchema.tables,
         };
+    },
+    methods: {
+        async selectConnection(connection) {
+            if (connection == this.currentDatabaseConnection) {
+                return;
+            }
+
+            await axios.post(`${Dibi.path}/api/select-connection`, {
+                connection,
+            });
+
+            window.location.href = Dibi.path;
+        },
     },
 };
 </script>

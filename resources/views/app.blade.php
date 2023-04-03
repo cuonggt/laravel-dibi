@@ -22,10 +22,12 @@
                 <div class="flex flex-col w-64">
                     <div class="flex flex-col h-0 flex-1">
                         <!-- Logo -->
-                        <div class="flex items-center h-16 px-4 bg-gray-900 text-xl text-white font-medium">
-                            @include('dibi::partials.logo')
-                            <div class="ml-2" style="padding-top: 2px;">Dibi</div>
-                        </div>
+                        <a href="{{ \Cuonggt\Dibi\Dibi::path() }}">
+                            <div class="flex items-center h-16 px-4 bg-gray-900 text-xl text-white font-medium">
+                                @include('dibi::partials.logo')
+                                <div class="ml-2" style="padding-top: 2px;">Dibi</div>
+                            </div>
+                        </a>
 
                         <side-navigation />
                     </div>
