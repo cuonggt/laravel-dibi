@@ -53,7 +53,7 @@ export default {
         async runQuery() {
             this.runningQuery = true;
             try {
-                const response = await axios.post(`${Dibi.path}/api/sql-query`,{ sql_query: this.query });
+                const response = await axios.post(`${Dibi.path}/api/sql-query`, { sql_query: this.query });
                 this.result = response.data.results.pop();
             } catch (e) {
                 //
