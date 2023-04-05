@@ -1,6 +1,9 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.1.0...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.1.1...master)
+
+## [v0.1.1 (2023-04-05)](https://github.com/twentyci/pr-api/compare/v0.1.0...v0.1.1)
+* show row details by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/51
 
 ## [v0.1.0 (2023-04-03)](https://github.com/twentyci/pr-api/compare/v0.0.6...v0.1.0)
 * Upgrade tailwindcss3 by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/43
