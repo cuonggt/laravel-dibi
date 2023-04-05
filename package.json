@@ -13,6 +13,7 @@
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.3",
+        "@volar-plugins/vetur": "^0.1.0",
         "autoprefixer": "^10.4.13",
         "axios": "^0.21.1",
         "cross-env": "^7.0.3",
@@ -28,13 +29,11 @@
         "simple-git-hooks": "^2.8.1",
         "tailwindcss": "^3.2.7",
         "vue": "^2.6.12",
+        "vue-json-pretty": "^1.9.4",
         "vue-loader": "^15.9.8",
         "vue-router": "^3.5.1",
         "vue-template-compiler": "^2.7.14",
         "vue-toasted": "^1.1.28"
-    },
-    "dependencies": {
-        "@volar-plugins/vetur": "^0.1.0"
     },
     "simple-git-hooks": {
         "pre-commit": "npx lint-staged"
