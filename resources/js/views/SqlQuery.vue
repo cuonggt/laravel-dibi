@@ -2,7 +2,7 @@
     <div class="flex flex-col w-full">
         <div class="flex flex-col h-1/2">
             <div class="flex grow">
-                <MonacoEditor @change="onChange" />
+                <editor />
             </div>
             <div class="flex px-4 py-2">
                 <x-button
@@ -33,12 +33,7 @@
 </template>
 
 <script>
-import MonacoEditor from 'monaco-editor-vue';
-
 export default {
-    components: {
-        MonacoEditor,
-    },
     data() {
         return {
             query: null,

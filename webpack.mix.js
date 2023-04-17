@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
 const path = require('path');
 
 /*
@@ -13,6 +14,14 @@ const path = require('path');
  */
 
 mix
+    .webpackConfig({
+        plugins: [
+            new MonacoEditorWebpackPlugin({
+                // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+                languages: ['sql'],
+            }),
+        ],
+    })
     .js('resources/js/app.js', 'public')
     .vue({ version: 2 })
     .setPublicPath('public')

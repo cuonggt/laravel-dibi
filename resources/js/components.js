@@ -19,6 +19,7 @@ import SideNavigation from './components/SideNavigation.vue';
 import TableStructure from './components/TableStructure.vue';
 import DataTable from './components/DataTable.vue';
 import DataCell from './components/DataCell.vue';
+import Editor from './components/Editor.vue';
 
 // Icons
 Vue.component('IconChevronLeft', IconChevronLeft);
@@ -41,3 +42,4 @@ Vue.component('SideNavigation', SideNavigation);
 Vue.component('TableStructure', TableStructure);
 Vue.component('DataTable', DataTable);
 Vue.component('DataCell', DataCell);
+Vue.component('Editor', Editor);
