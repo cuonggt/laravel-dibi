@@ -14,7 +14,7 @@
     "authors": [
         {
             "name": "Cuong Giang",
-            "email": "cuong@gtk.vn"
+            "email": "thaicuong.giang@gmail.com"
         }
     ],
     "require": {
@@ -24,6 +24,7 @@
         "ramsey/uuid": "^3.8|^4.0"
     },
     "require-dev": {
+        "cuonggt/hooky": "dev-master",
         "friendsofphp/php-cs-fixer": "^3.4",
         "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0"
     },
@@ -48,5 +49,10 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "post-install-cmd": [
+            "@php vendor/bin/hooky install"
+        ]
+    }
 }
