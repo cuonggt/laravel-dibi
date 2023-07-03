@@ -1,6 +1,9 @@
 <template>
-    <div class="flex flex-col">
-        <div class="min-w-full overflow-x-auto">
+    <splitpanes
+        horizontal
+        class="default-theme"
+    >
+        <pane style="overflow: scroll;">
             <table class="divide-y divide-gray-200 text-gray-800">
                 <thead class="bg-gray-50">
                     <tr>
@@ -96,9 +99,9 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </pane>
 
-        <div class="min-w-full overflow-x-auto mt-4">
+        <pane style="overflow: scroll;">
             <table class="divide-y divide-gray-200 text-gray-800">
                 <thead class="bg-gray-50">
                     <tr>
@@ -149,12 +152,17 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+        </pane>
+    </splitpanes>
 </template>
 
 <script>
+import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css';
+
 export default {
+    components: { Splitpanes, Pane },
+
     props: {
         columns: Array,
         indexes: Array,
