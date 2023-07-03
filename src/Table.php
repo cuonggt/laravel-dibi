@@ -39,7 +39,6 @@ class Table extends DBObject implements JsonSerializable
     /**
      * Set the columns of the table.
      *
-     * @param  array|null  $columns
      * @return $this|array
      */
     public function columns(array $columns = null)
@@ -56,7 +55,6 @@ class Table extends DBObject implements JsonSerializable
     /**
      * Set the indexes of the table.
      *
-     * @param  array|null  $indexes
      * @return $this|array
      */
     public function indexes(array $indexes = null)

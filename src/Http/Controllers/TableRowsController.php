@@ -9,7 +9,6 @@ use Illuminate\Routing\Controller;
 class TableRowsController extends Controller
 {
     /**
-     * @param  \Illuminate\Http\Request  $request
      * @param  string  $table
      * @return \Illuminate\Http\JsonResponse
      */

@@ -53,7 +53,6 @@ interface DatabaseRepository
      * Get list of records for the given table.
      *
      * @param  string  $table
-     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function rows($table, Request $request);

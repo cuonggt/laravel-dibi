@@ -27,7 +27,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function rawTables()
     {
@@ -38,7 +38,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function mapRawTableToObject($rawTable)
     {
@@ -51,7 +51,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function rawColumns()
     {
@@ -62,7 +62,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function mapRawColumnToObject($rawColumn)
     {
@@ -87,7 +87,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function rawIndexes()
     {
@@ -95,7 +95,7 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function mapRawIndexToObject($rawIndex)
     {

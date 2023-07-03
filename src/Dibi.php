@@ -63,7 +63,6 @@ class Dibi
     /**
      * Set the callback that should be used to authenticate Horizon users.
      *
-     * @param  \Closure  $callback
      * @return static
      */
     public static function auth(Closure $callback)
@@ -76,7 +75,6 @@ class Dibi
     /**
      * Register available database connections.
      *
-     * @param  array  $databaseConnections
      * @return static
      */
     public static function registerDatabaseConnections(array $databaseConnections)

@@ -28,7 +28,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -36,7 +36,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function runSqlQuery($sqlQuery)
     {
@@ -50,7 +50,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function informationSchema()
     {
@@ -58,7 +58,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function tables()
     {
@@ -80,7 +80,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function columns()
     {
@@ -90,7 +90,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function indexes()
     {
@@ -100,7 +100,7 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rows($table, Request $request)
     {
@@ -125,7 +125,6 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      * Build select query.
      *
      * @param  string  $table
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Database\Query\Builder
      */
     protected function buildSelectQuery($table, Request $request)

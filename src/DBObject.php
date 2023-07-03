@@ -24,7 +24,6 @@ abstract class DBObject
     /**
      * Set the raw DB object array from the provider.
      *
-     * @param  array  $raw
      * @return $this
      */
     public function setRaw(array $raw)
@@ -37,7 +36,6 @@ abstract class DBObject
     /**
      * Map the given array onto the DB object's properties.
      *
-     * @param  array  $attributes
      * @return $this
      */
     public function map(array $attributes)

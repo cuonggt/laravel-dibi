@@ -13,7 +13,6 @@ class EnsureUpToDateAssets
      * Ensures assets are up to date.
      *
      * @param  Request  $request
-     * @param  Closure  $next
      * @param  string|null  $guard
      * @return mixed
      */

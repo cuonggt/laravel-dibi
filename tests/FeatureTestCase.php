@@ -13,8 +13,6 @@ class FeatureTestCase extends TestCase
 
     /**
      * Setup the test case.
-     *
-     * @return void
      */
     protected function setUp(): void
     {

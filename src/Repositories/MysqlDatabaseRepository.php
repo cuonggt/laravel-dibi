@@ -32,7 +32,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function rawTables()
     {
@@ -43,7 +43,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function mapRawTableToObject($rawTable)
     {
@@ -56,7 +56,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function rawColumns()
     {
@@ -67,7 +67,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function mapRawColumnToObject($rawColumn)
     {
@@ -92,7 +92,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function rawIndexes()
     {
@@ -103,7 +103,7 @@ class MysqlDatabaseRepository extends AbstractDatabaseRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function mapRawIndexToObject($rawIndex)
     {
