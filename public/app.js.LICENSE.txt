@@ -4,11 +4,6 @@
  * Released under the MIT License.
  */
 
-/*!
-Copyright (c) 2014 Taylor Hakes
-Copyright (c) 2014 Forbes Lindesay
- */
-
 /*! @preserve
  * numeral.js
  * version : 2.0.6
