@@ -1,19 +1,24 @@
 <template>
-    <div class="flex flex-col w-full">
-        <div class="flex flex-col h-1/2">
-            <div class="flex grow">
-                <MonacoEditor @change="onChange" />
+    <splitpanes
+        horizontal
+        class="default-theme"
+    >
+        <pane>
+            <div class="flex flex-col h-full">
+                <div class="grow">
+                    <sql-editor v-model="query" />
+                </div>
+                <div class="sticky bottom-0 px-4 py-2">
+                    <x-button
+                        :disabled="!query || runningQuery"
+                        @click.native="runQuery"
+                    >
+                        Run
+                    </x-button>
+                </div>
             </div>
-            <div class="flex px-4 py-2">
-                <x-button
-                    :disabled="!query || runningQuery"
-                    @click.native="runQuery"
-                >
-                    Run
-                </x-button>
-            </div>
-        </div>
-        <div class="flex h-1/2 bg-white">
+        </pane>
+        <pane style="overflow: scroll;">
             <div
                 v-if="runningQuery"
                 class="flex grow items-center justify-center"
@@ -28,28 +33,25 @@
                     {{ result }}
                 </div>
             </div>
-        </div>
-    </div>
+        </pane>
+    </splitpanes>
 </template>
 
 <script>
-import MonacoEditor from 'monaco-editor-vue';
+import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css';
 
 export default {
-    components: {
-        MonacoEditor,
-    },
+    components: { Splitpanes, Pane },
+
     data() {
         return {
-            query: null,
+            query: '',
             runningQuery: false,
             result: null,
         };
     },
     methods: {
-        onChange(value) {
-            this.query = value;
-        },
         async runQuery() {
             this.runningQuery = true;
             try {
