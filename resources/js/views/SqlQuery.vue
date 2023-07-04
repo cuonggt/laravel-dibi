@@ -30,7 +30,7 @@
                 class="px-4"
             >
                 <div v-if="result">
-                    {{ result }}
+                    <vue-json-pretty :data="result" />
                 </div>
             </div>
         </pane>
@@ -40,9 +40,11 @@
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 export default {
-    components: { Splitpanes, Pane },
+    components: { Splitpanes, Pane, VueJsonPretty },
 
     data() {
         return {
