@@ -29,7 +29,7 @@
         "monaco-editor-webpack-plugin": "^7.0.1",
         "numeral": "^2.0.6",
         "portal-vue": "^2.1.7",
-        "postcss": "^8.4.21",
+        "postcss": "^8.4.31",
         "splitpanes": "^2.4.1",
         "tailwindcss": "^3.2.7",
         "vue": "^2.6.12",
