@@ -72,7 +72,7 @@
         </table>
 
         <x-dialog-modal
-            :show="selectedRow"
+            :show="selectedRow != null"
             max-width="7xl"
         >
             <template #title>
