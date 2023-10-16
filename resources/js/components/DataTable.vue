@@ -7,7 +7,7 @@
                         v-for="column in columns"
                         :key="column.columnName"
                         class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer"
-                        @click.prevent="updateSorting(column.columnName)"
+                        @click.prevent="handleSorting(column.columnName)"
                     >
                         <div class="flex justify-between items-center">
                             <span />
@@ -72,7 +72,7 @@
         </table>
 
         <x-dialog-modal
-            :show="selectedRow != null"
+            :show="selectedRow !== null"
             max-width="7xl"
         >
             <template #title>
@@ -116,6 +116,12 @@ export default {
     methods: {
         selectRow(row) {
             this.selectedRow = row;
+        },
+
+        handleSorting(columnName) {
+            if (this.updateSorting) {
+                this.updateSorting(columnName);
+            }
         },
     },
 };

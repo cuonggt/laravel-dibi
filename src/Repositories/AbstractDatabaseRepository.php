@@ -42,11 +42,15 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     {
         $statement = strtolower(Arr::first(explode(' ', $sqlQuery)));
 
-        if (in_array($statement, ['select', 'insert', 'update', 'delete'])) {
-            return $this->db->{$statement}($sqlQuery);
+        if (! in_array($statement, ['select', 'insert', 'update', 'delete'])) {
+            $statement = 'statement';
         }
 
-        return $this->db->statement($sqlQuery);
+        return [
+            'query' => $sqlQuery,
+            'statement' => $statement,
+            'result' => $this->db->{$statement}($sqlQuery),
+        ];
     }
 
     /**

@@ -17,7 +17,7 @@ $rules = [
             'return',
         ],
     ],
-    'blank_lines_before_namespace' => true,
+    'no_blank_lines_before_namespace' => false,
     'control_structure_braces' => true,
     'control_structure_continuation_position' => [
         'position' => 'same_line',

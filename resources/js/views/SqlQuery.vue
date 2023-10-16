@@ -29,8 +29,23 @@
                 v-else
                 class="px-4"
             >
-                <div v-if="result">
-                    <vue-json-pretty :data="result" />
+                <div
+                    v-if="result"
+                    class="flex min-w-full overflow-x-auto"
+                >
+                    <template
+                        v-if="result.statement === 'select'"
+                    >
+                        <data-table
+                            v-if="result.result.length > 0"
+                            :columns="columns"
+                            :rows="result.result"
+                        />
+                        <span v-else>No data</span>
+                    </template>
+                    <template v-else>
+                        <span>Query OK<span v-if="result.statement !== 'statement'">: {{ result.result }} row affected</span></span>
+                    </template>
                 </div>
             </div>
         </pane>
@@ -40,17 +55,17 @@
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
-import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 
 export default {
-    components: { Splitpanes, Pane, VueJsonPretty },
+    components: { Splitpanes, Pane },
 
     data() {
         return {
             query: '',
             runningQuery: false,
             result: null,
+            columns: null,
         };
     },
     methods: {
@@ -59,6 +74,13 @@ export default {
             try {
                 const response = await axios.post(`${Dibi.path}/api/sql-query`, { sql_query: this.query });
                 this.result = response.data.results.pop();
+                if (this.result.statement == 'select' && Array.isArray(this.result.result) && this.result.result.length > 0) {
+                    this.columns = _.map(Object.keys(this.result.result[0]), (key) => {
+                        return {
+                            columnName: key,
+                        };
+                    });
+                }
             } catch (e) {
                 //
             }

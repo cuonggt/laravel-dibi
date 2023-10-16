@@ -10,10 +10,8 @@ class SqlQueryController extends Controller
 {
     public function run(Request $request)
     {
-        $queries = explode(';', $request->sql_query);
-
         return [
-            'results' => collect($queries)->filter()->map(function ($query) {
+            'results' => collect(explode(';', $request->sql_query))->filter()->map(function ($query) {
                 return Dibi::databaseRepository()->runSqlQuery($query);
             }),
         ];
