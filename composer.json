@@ -1,0 +1,52 @@
+{
+    "name": "cuonggt/laravel-dibi",
+    "description": "An elegant GUI database management tool for your Laravel applications.",
+    "keywords": [
+        "laravel",
+        "dibi"
+    ],
+    "homepage": "https://github.com/cuonggt/laravel-dibi",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/cuonggt/laravel-dibi/issues",
+        "source": "https://github.com/cuonggt/laravel-dibi"
+    },
+    "authors": [
+        {
+            "name": "Cuong Giang",
+            "email": "thaicuong.giang@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0.2",
+        "ext-json": "*",
+        "laravel/framework": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+        "ramsey/uuid": "^3.8|^4.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.4",
+        "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cuonggt\\Dibi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cuonggt\\Dibi\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cuonggt\\Dibi\\DibiServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
