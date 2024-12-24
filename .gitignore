@@ -1,0 +1,10 @@
+/node_modules
+/vendor
+composer.lock
+phpunit.xml
+.phpunit.result.cache
+.php-cs-fixer.cache
+.eslintcache
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
