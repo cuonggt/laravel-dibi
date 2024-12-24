@@ -3,6 +3,7 @@
 namespace Cuonggt\Dibi;
 
 use Cuonggt\Dibi\Repositories\MysqlDatabaseRepository;
+use Cuonggt\Dibi\Repositories\SqliteDatabaseRepository;
 use Cuonggt\Dibi\Repositories\SqlsrvDatabaseRepository;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
@@ -20,6 +21,8 @@ class DatabaseRepositoryFactory
         switch ($db->getDriverName()) {
             case 'mysql':
                 return new MysqlDatabaseRepository($db);
+            case 'sqlite':
+                return new SqliteDatabaseRepository($db);
             case 'sqlsrv':
                 return new SqlsrvDatabaseRepository($db);
             default:
