@@ -101,7 +101,7 @@ class Dibi
      */
     public static function currentDatabaseConnection()
     {
-        return Cache::get('dibiConnection') ?? Arr::first(static::databaseConnections());
+        return env('DB_CONNECTION') ?? Arr::first(static::databaseConnections());
     }
 
     /**
