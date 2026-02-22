@@ -13,13 +13,15 @@ import loader from '@monaco-editor/loader';
 export default {
     name: 'SqlEditor',
 
-    props: ['value'],
+    props: ['modelValue'],
+
+    emits: ['update:modelValue'],
 
     async mounted() {
         const monaco = await loader.init();
 
         const editor = monaco.editor.create(document.getElementById('editor'), {
-            value: this.value,
+            value: this.modelValue,
             language: 'sql',
             minimap: { enabled: false },
             automaticLayout: true,
@@ -30,7 +32,7 @@ export default {
         });
 
         editor.onDidChangeModelContent(() => {
-            this.$emit('input', editor.getValue());
+            this.$emit('update:modelValue', editor.getValue());
         });
     },
 };

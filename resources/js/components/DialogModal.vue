@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Modal from './Modal';
+import Modal from './Modal.vue';
 
 export default {
     components: {
@@ -46,6 +46,8 @@ export default {
             default: true,
         },
     },
+
+    emits: ['close'],
 
     methods: {
         close() {

@@ -1,5 +1,5 @@
 <template>
-    <portal to="modal">
+    <Teleport to="#modal-target">
         <transition leave-active-class="duration-200">
             <div
                 v-show="show"
@@ -7,10 +7,10 @@
             >
                 <transition
                     enter-active-class="ease-out duration-300"
-                    enter-class="opacity-0"
+                    enter-from-class="opacity-0"
                     enter-to-class="opacity-100"
                     leave-active-class="ease-in duration-200"
-                    leave-class="opacity-100"
+                    leave-from-class="opacity-100"
                     leave-to-class="opacity-0"
                 >
                     <div
@@ -24,10 +24,10 @@
 
                 <transition
                     enter-active-class="ease-out duration-300"
-                    enter-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     enter-to-class="opacity-100 translate-y-0 sm:scale-100"
                     leave-active-class="ease-in duration-200"
-                    leave-class="opacity-100 translate-y-0 sm:scale-100"
+                    leave-from-class="opacity-100 translate-y-0 sm:scale-100"
                     leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <div
@@ -40,7 +40,7 @@
                 </transition>
             </div>
         </transition>
-    </portal>
+    </Teleport>
 </template>
 
 <script>
@@ -59,6 +59,8 @@ export default {
             default: true,
         },
     },
+
+    emits: ['close'],
 
     computed: {
         maxWidthClass() {
@@ -91,17 +93,17 @@ export default {
     },
 
     created() {
-        const closeOnEscape = (e) => {
+        this._closeOnEscape = (e) => {
             if (e.key === 'Escape' && this.show) {
                 this.close();
             }
         };
 
-        document.addEventListener('keydown', closeOnEscape);
+        document.addEventListener('keydown', this._closeOnEscape);
+    },
 
-        this.$once('hook:destroyed', () => {
-            document.removeEventListener('keydown', closeOnEscape);
-        });
+    beforeUnmount() {
+        document.removeEventListener('keydown', this._closeOnEscape);
     },
 
     methods: {

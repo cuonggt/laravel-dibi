@@ -1,15 +1,11 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Dashboard from './views/Dashboard';
-import TableDetails from './views/TableDetails';
-import SqlQuery from './views/SqlQuery';
+import { createRouter, createWebHistory } from 'vue-router';
+import Dashboard from './views/Dashboard.vue';
+import TableDetails from './views/TableDetails.vue';
+import SqlQuery from './views/SqlQuery.vue';
 
-Vue.use(Router);
-
-const router = new Router({
+const router = createRouter({
+    history: createWebHistory(window.Dibi.path),
     scrollBehavior,
-    base: window.Dibi.path,
-    mode: 'history',
     routes: [
         {
             path: '/',
@@ -38,7 +34,7 @@ const router = new Router({
         },
         {
             name: 'catch-all',
-            path: '*',
+            path: '/:pathMatch(.*)*',
             redirect: () => {
                 window.location.href = '/404';
             },
@@ -54,15 +50,15 @@ function scrollBehavior(to, from, savedPosition) {
     }
 
     if (to.hash) {
-        return { selector: to.hash };
+        return { el: to.hash };
     }
 
-    const [component] = router.getMatchedComponents({ ...to }).slice(-1);
+    const matched = router.resolve(to).matched;
+    const component = matched.length > 0 ? matched[matched.length - 1].components.default : null;
 
     if (component && component.scrollToTop === false) {
         return {};
     }
 
-    return { x: 0, y: 0 };
+    return { left: 0, top: 0 };
 }
-

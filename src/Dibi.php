@@ -6,13 +6,14 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 class Dibi
 {
     /**
      * The callback that should be used to authenticate Horizon users.
      *
-     * @var \Closure
+     * @var Closure
      */
     public static $authUsing;
 
@@ -33,7 +34,7 @@ class Dibi
     /**
      * Database Repository.
      *
-     * @var \Cuonggt\Dibi\Contracts\DatabaseRepository
+     * @var Contracts\DatabaseRepository
      */
     public static $databaseRepository;
 
@@ -130,7 +131,7 @@ class Dibi
     /**
      * Get the database repository.
      *
-     * @return \Cuonggt\Dibi\Contracts\DatabaseRepository
+     * @return Contracts\DatabaseRepository
      */
     public static function databaseRepository()
     {
@@ -148,5 +149,45 @@ class Dibi
         return array_merge([
             'path' => static::path(),
         ], $options);
+    }
+
+    /**
+     * Generate Vite asset tags from the manifest.
+     *
+     * @return HtmlString
+     */
+    public static function viteAssets()
+    {
+        $manifestPath = __DIR__.'/../public/.vite/manifest.json';
+
+        if (! file_exists($manifestPath)) {
+            return new HtmlString('');
+        }
+
+        $manifest = json_decode(file_get_contents($manifestPath), true);
+
+        $tags = '';
+        $basePath = '/vendor/dibi/';
+
+        // CSS entry
+        if (isset($manifest['resources/css/app.css'])) {
+            $cssFile = $manifest['resources/css/app.css']['file'];
+            $tags .= '<link rel="stylesheet" href="'.$basePath.$cssFile.'" />';
+        }
+
+        // JS entry and its CSS imports
+        if (isset($manifest['resources/js/app.js'])) {
+            $entry = $manifest['resources/js/app.js'];
+
+            if (isset($entry['css'])) {
+                foreach ($entry['css'] as $cssFile) {
+                    $tags .= '<link rel="stylesheet" href="'.$basePath.$cssFile.'" />';
+                }
+            }
+
+            $tags .= '<script type="module" src="'.$basePath.$entry['file'].'"></script>';
+        }
+
+        return new HtmlString($tags);
     }
 }

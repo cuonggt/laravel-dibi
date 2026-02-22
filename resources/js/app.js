@@ -1,21 +1,16 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import axios from 'axios';
 import _ from 'lodash';
-import PortalVue from 'portal-vue';
-import Toasted from 'vue-toasted';
+import mitt from 'mitt';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 import router from './router';
 import Base from './base';
-
-Vue.config.productionTip = false;
-
-Vue.use(PortalVue);
-Vue.use(Toasted, {
-    position: 'bottom-right',
-    duration: 6000,
-});
+import App from './App.vue';
+import { registerComponents } from './components';
 
 window._ = _;
-window.Bus = new Vue({ name: 'Bus' });
+window.Bus = mitt();
 
 window.axios = axios.create();
 
@@ -36,23 +31,16 @@ window.axios.interceptors.response.use(
 
         // Show the user a 500 error
         if (status >= 500) {
-            Bus.$emit('error', error.response.data.message);
+            Bus.emit('error', error.response.data.message);
         }
 
         return Promise.reject(error);
     },
 );
 
-import './components';
-
-Vue.mixin(Base);
-
-new Vue({
-    el: '#dibi',
-    router,
-    mounted() {
-        Bus.$on('error', message => {
-            this.$toasted.show(message, { type: 'error' });
-        });
-    },
-});
+const app = createApp(App);
+app.use(router);
+app.use(Toast, { position: 'bottom-right', timeout: 6000 });
+app.mixin(Base);
+registerComponents(app);
+app.mount('#dibi');

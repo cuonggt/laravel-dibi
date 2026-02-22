@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 import IconChevronLeft from './components/icons/ChevronLeft.vue';
 import IconChevronRight from './components/icons/ChevronRight.vue';
 import IconCog from './components/icons/Cog.vue';
@@ -21,25 +19,27 @@ import DataTable from './components/DataTable.vue';
 import DataCell from './components/DataCell.vue';
 import SqlEditor from './components/SqlEditor.vue';
 
-// Icons
-Vue.component('IconChevronLeft', IconChevronLeft);
-Vue.component('IconChevronRight', IconChevronRight);
-Vue.component('IconCog', IconCog);
-Vue.component('IconDatabase', IconDatabase);
-Vue.component('IconEye', IconEye);
-Vue.component('IconLoader', IconLoader);
-Vue.component('IconTable', IconTable);
+export function registerComponents(app) {
+    // Icons
+    app.component('IconChevronLeft', IconChevronLeft);
+    app.component('IconChevronRight', IconChevronRight);
+    app.component('IconCog', IconCog);
+    app.component('IconDatabase', IconDatabase);
+    app.component('IconEye', IconEye);
+    app.component('IconLoader', IconLoader);
+    app.component('IconTable', IconTable);
 
-// Components
-Vue.component('XButton', XButton);
-Vue.component('XDialogModal', XDialogModal);
-Vue.component('XInput', XInput);
-Vue.component('XLabel', XLabel);
-Vue.component('XLoader', XLoader);
-Vue.component('XSecondaryButton', XSecondaryButton);
+    // Components
+    app.component('XButton', XButton);
+    app.component('XDialogModal', XDialogModal);
+    app.component('XInput', XInput);
+    app.component('XLabel', XLabel);
+    app.component('XLoader', XLoader);
+    app.component('XSecondaryButton', XSecondaryButton);
 
-Vue.component('SideNavigation', SideNavigation);
-Vue.component('TableStructure', TableStructure);
-Vue.component('DataTable', DataTable);
-Vue.component('DataCell', DataCell);
-Vue.component('SqlEditor', SqlEditor);
+    app.component('SideNavigation', SideNavigation);
+    app.component('TableStructure', TableStructure);
+    app.component('DataTable', DataTable);
+    app.component('DataCell', DataCell);
+    app.component('SqlEditor', SqlEditor);
+}

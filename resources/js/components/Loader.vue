@@ -23,7 +23,7 @@ import IconLoader from './icons/Loader.vue';
 
 export default {
     name: 'Loader',
-    components: {IconLoader},
+    components: { IconLoader },
     props: {
         color: {
             type: [String],

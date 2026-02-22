@@ -19,13 +19,13 @@ class EnsureUpToDateAssets
     public function handle($request, Closure $next, $guard = null)
     {
         if (! app()->runningInConsole()) {
-            $publishedPath = public_path('vendor/dibi/mix-manifest.json');
+            $publishedPath = public_path('vendor/dibi/.vite/manifest.json');
 
             if (! File::exists($publishedPath)) {
                 throw new RuntimeException('The Dibi assets are not published. Please run: `php artisan dibi:install`.');
             }
 
-            if (File::get($publishedPath) !== File::get(__DIR__.'/../../../public/mix-manifest.json')) {
+            if (File::get($publishedPath) !== File::get(__DIR__.'/../../../public/.vite/manifest.json')) {
                 throw new RuntimeException('The published Dibi assets are not up-to-date with the installed version.  Please run: `php artisan dibi:publish`.');
             }
         }

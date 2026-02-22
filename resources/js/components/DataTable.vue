@@ -82,7 +82,7 @@
                 <vue-json-pretty :data="selectedRow" />
             </template>
             <template #footer>
-                <x-secondary-button @click.native="selectedRow = null">
+                <x-secondary-button @click="selectedRow = null">
                     Close
                 </x-secondary-button>
             </template>

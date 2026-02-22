@@ -5,7 +5,7 @@ module.exports = {
         es6: true,
     },
     extends: [
-        'plugin:vue/recommended',
+        'plugin:vue/vue3-recommended',
     ],
     ignorePatterns: [
         'node_modules/',
@@ -16,6 +16,7 @@ module.exports = {
     rules: {
         'vue/multi-word-component-names': ['off'],
         'vue/require-prop-types': ['off'],
+        'vue/require-default-prop': ['off'],
         'vue/html-indent': ['error', 4],
         'indent': ['error', 4],
         'semi': ['error', 'always'],

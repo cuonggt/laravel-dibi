@@ -4,15 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Laravel Dibi is a GUI database management tool for Laravel applications, packaged as a Composer library. It provides a web-based interface at `/dibi` with a Vue 2 SPA frontend and Laravel backend API. Supports MySQL (primary) and SQL Server.
+Laravel Dibi is a GUI database management tool for Laravel applications, packaged as a Composer library. It provides a web-based interface at `/dibi` with a Vue 3 SPA frontend and Laravel backend API. Supports MySQL (primary) and SQL Server.
 
 ## Common Commands
 
 ### Build
 ```bash
-npm run dev          # Development build (Laravel Mix)
-npm run prod         # Production build (minified)
-npm run watch        # Watch mode for frontend development
+npm run dev          # Vite dev server
+npm run build        # Production build (minified)
 ```
 
 ### Test
@@ -46,9 +45,9 @@ The package is auto-discovered via `DibiServiceProvider`. The `Dibi` class (`src
 
 **Middleware:** `EnsureUserIsAuthorized` checks the authorization gate; `EnsureUpToDateAssets` verifies published assets match the package version.
 
-### Frontend (Vue 2 SPA)
+### Frontend (Vue 3 SPA)
 
-Built with Laravel Mix + Webpack. Entry point: `resources/js/app.js`. Uses Vue Router with three main views:
+Built with Vite. Entry point: `resources/js/app.js`. Root component: `resources/js/App.vue`. Uses Vue Router 4 with three main views:
 
 - **Dashboard** — table listing, connection selector
 - **TableDetails** — data browser with pagination/filtering/sorting + structure tab

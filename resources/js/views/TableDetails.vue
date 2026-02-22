@@ -100,7 +100,7 @@
                                         <x-button
                                             class="ml-2"
                                             :disabled="loadingRecords"
-                                            @click.native="loadRecords"
+                                            @click="loadRecords"
                                         >
                                             Apply
                                         </x-button>
@@ -257,7 +257,7 @@
                 </form>
             </template>
             <template #footer>
-                <x-secondary-button @click.native="closePageSettingsModal">
+                <x-secondary-button @click="closePageSettingsModal">
                     Nevermind
                 </x-secondary-button>
 
@@ -265,7 +265,7 @@
                     class="ml-2"
                     :class="{ 'opacity-25': loadingRecords }"
                     :disabled="loadingRecords"
-                    @click.native="setPageSettings"
+                    @click="setPageSettings"
                 >
                     Go
                 </x-button>

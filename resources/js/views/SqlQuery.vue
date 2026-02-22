@@ -11,7 +11,7 @@
                 <div class="sticky bottom-0 px-4 py-2">
                     <x-button
                         :disabled="!query || runningQuery"
-                        @click.native="runQuery"
+                        @click="runQuery"
                     >
                         Run
                     </x-button>
