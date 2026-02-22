@@ -3,6 +3,7 @@
 namespace Cuonggt\Dibi;
 
 use Cuonggt\Dibi\Repositories\MysqlDatabaseRepository;
+use Cuonggt\Dibi\Repositories\SqliteDatabaseRepository;
 use Cuonggt\Dibi\Repositories\SqlsrvDatabaseRepository;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
@@ -12,8 +13,8 @@ class DatabaseRepositoryFactory
     /**
      * Create a database repository instance for the given database connection.
      *
-     * @param  \Illuminate\Database\Connection  $provider
-     * @return \Cuonggt\Dibi\Contracts\DatabaseRepository
+     * @param  Connection  $provider
+     * @return Contracts\DatabaseRepository
      */
     public static function make(Connection $db)
     {
@@ -22,6 +23,8 @@ class DatabaseRepositoryFactory
                 return new MysqlDatabaseRepository($db);
             case 'sqlsrv':
                 return new SqlsrvDatabaseRepository($db);
+            case 'sqlite':
+                return new SqliteDatabaseRepository($db);
             default:
                 throw new InvalidArgumentException('Database driver ['.$db->getDriverName().'] is not supported.');
         }

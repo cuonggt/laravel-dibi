@@ -18,6 +18,9 @@ class FeatureTestCase extends TestCase
     {
         parent::setUp();
 
+        // Reset cached database repository so each test gets a fresh instance.
+        Dibi::$databaseRepository = null;
+
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
@@ -45,5 +48,14 @@ class FeatureTestCase extends TestCase
         Dibi::auth(function () {
             return true;
         });
+
+        Dibi::useDatabaseConnectionName('sqlite');
+
+        $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('database.connections.sqlite', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
     }
 }
