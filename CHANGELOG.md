@@ -1,6 +1,20 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.2.0...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.4.0...master)
+* Support Laravel 12 by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/70
+* fix: update CI workflow and remove deprecated PHPUnit config
+
+## [v0.4.0 (2024-06-09)](https://github.com/cuonggt/laravel-dibi/compare/v0.3.0...v0.4.0)
+* Support laravel 11 by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/66
+* Bump postcss from 8.4.24 to 8.4.31 in https://github.com/cuonggt/laravel-dibi/pull/57
+* Bump @babel/traverse from 7.22.5 to 7.23.2 in https://github.com/cuonggt/laravel-dibi/pull/58
+* Bump browserify-sign from 4.2.1 to 4.2.2 in https://github.com/cuonggt/laravel-dibi/pull/59
+* Bump axios from 0.21.4 to 1.6.0 in https://github.com/cuonggt/laravel-dibi/pull/60
+
+## [v0.3.0 (2023-10-16)](https://github.com/cuonggt/laravel-dibi/compare/v0.2.0...v0.3.0)
+* [feat: beautify raw sql query result](https://github.com/cuonggt/laravel-dibi/commit/d5cf98a)
+* [fix: rename Datatable.vue to DataTable.vue](https://github.com/cuonggt/laravel-dibi/commit/8cbcf24)
+* [fix: prop modal show should be boolean instead of object](https://github.com/cuonggt/laravel-dibi/commit/53ff563)
 
 ## [v0.2.0 (2023-07-04)](https://github.com/cuonggt/laravel-dibi/compare/v0.1.1...v0.2.0)
 * add split panes by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/55

@@ -10,11 +10,11 @@ on:
 
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
             MYSQL_ALLOW_EMPTY_PASSWORD: yes
             MYSQL_DATABASE: testdibi
@@ -25,28 +25,20 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [7.3, 7.4, '8.0', 8.1, 8.2]
-        laravel: [6, 7, 8, 9]
+        php: [8.1, 8.2, 8.3]
+        laravel: [9, 10, 11, 12]
         exclude:
-          - php: 7.3
-            laravel: 9
-          - php: 7.4
-            laravel: 9
           - php: 8.1
-            laravel: 6
+            laravel: 11
           - php: 8.1
-            laravel: 7
-          - php: 8.2
-            laravel: 6
-          - php: 8.2
-            laravel: 7
-          - php: 8.2
-            laravel: 8
+            laravel: 12
+          - php: 8.3
+            laravel: 9
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -58,14 +50,14 @@ jobs:
           coverage: none
 
       - name: Set Laravel version
-        uses: nick-invision/retry@v1
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
           max_attempts: 5
           command: composer require "laravel/framework=^${{ matrix.laravel }}" --no-interaction --no-update
 
       - name: Install dependencies
-        uses: nick-invision/retry@v1
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
           max_attempts: 5
