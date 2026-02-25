@@ -364,7 +364,7 @@ export default {
 
             try {
                 const response = await axios.post(
-                    `${Dibi.path}/api/tables/${this.tableName}/rows/filter?${queryParams}`,
+                    `${window.Dibi.path}/api/tables/${this.tableName}/rows/filter?${queryParams}`,
                     data,
                 );
 

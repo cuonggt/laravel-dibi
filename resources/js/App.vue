@@ -3,7 +3,7 @@
         <div class="flex shrink-0">
             <div class="flex flex-col w-64">
                 <div class="flex flex-col h-0 flex-1">
-                    <a :href="Dibi.path">
+                    <a :href="window.Dibi.path">
                         <div class="flex items-center h-16 px-4 bg-gray-900 text-xl text-white font-medium">
                             <svg
                                 fill="#25C4F2"

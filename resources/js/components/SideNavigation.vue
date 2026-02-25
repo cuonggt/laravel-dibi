@@ -53,9 +53,9 @@ export default {
     computed: {
         filteredTables() {
             if (!this.keyword) {
-                return Dibi.informationSchema.tables;
+                return window.Dibi.informationSchema.tables;
             }
-            return Dibi.informationSchema.tables.filter((table) => table.tableName.includes(this.keyword));
+            return window.Dibi.informationSchema.tables.filter((table) => table.tableName.includes(this.keyword));
         },
     },
 };

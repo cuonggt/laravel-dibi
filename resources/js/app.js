@@ -42,5 +42,6 @@ const app = createApp(App);
 app.use(router);
 app.use(Toast, { position: 'bottom-right', timeout: 6000 });
 app.mixin(Base);
+app.config.globalProperties.window = window;
 registerComponents(app);
 app.mount('#dibi');

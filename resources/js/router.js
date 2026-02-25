@@ -29,7 +29,7 @@ const router = createRouter({
             name: 'tables-show',
             props: route => ({
                 tableName: route.params.tableName,
-                currentTable: Dibi.informationSchema.tables.find(table => table.tableName == route.params.tableName),
+                currentTable: window.Dibi.informationSchema.tables.find(table => table.tableName == route.params.tableName),
             }),
         },
         {

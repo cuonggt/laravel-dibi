@@ -82,10 +82,10 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            connections: Dibi.databaseConnections,
-            currentDatabaseConnection: Dibi.currentDatabaseConnection,
-            database: Dibi.database,
-            tables: Dibi.informationSchema.tables,
+            connections: window.Dibi.databaseConnections,
+            currentDatabaseConnection: window.Dibi.currentDatabaseConnection,
+            database: window.Dibi.database,
+            tables: window.Dibi.informationSchema.tables,
         };
     },
     methods: {
@@ -94,11 +94,11 @@ export default {
                 return;
             }
 
-            await axios.post(`${Dibi.path}/api/select-connection`, {
+            await axios.post(`${window.Dibi.path}/api/select-connection`, {
                 connection,
             });
 
-            window.location.href = Dibi.path;
+            window.location.href = window.Dibi.path;
         },
     },
 };

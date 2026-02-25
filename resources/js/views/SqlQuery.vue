@@ -72,7 +72,7 @@ export default {
         async runQuery() {
             this.runningQuery = true;
             try {
-                const response = await axios.post(`${Dibi.path}/api/sql-query`, { sql_query: this.query });
+                const response = await axios.post(`${window.Dibi.path}/api/sql-query`, { sql_query: this.query });
                 this.result = response.data.results.pop();
                 if (this.result.statement == 'select' && Array.isArray(this.result.result) && this.result.result.length > 0) {
                     this.columns = _.map(Object.keys(this.result.result[0]), (key) => {
