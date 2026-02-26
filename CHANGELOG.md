@@ -1,8 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.4.0...master)
-* Support Laravel 12 by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/70
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...master)
+
+## [v0.6.0 (2026-02-26)](https://github.com/cuonggt/laravel-dibi/compare/v0.5.0...v0.6.0)
+* feat: migrate frontend from Vue 2 + Laravel Mix to Vue 3 + Vite
+* feat: add SQLite driver support
+* fix: use window.Dibi to fix undefined Dibi references
 * fix: update CI workflow and remove deprecated PHPUnit config
+
+## [v0.5.0 (2025-02-01)](https://github.com/cuonggt/laravel-dibi/compare/v0.4.0...v0.5.0)
+* Support Laravel 12 by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/70
 
 ## [v0.4.0 (2024-06-09)](https://github.com/cuonggt/laravel-dibi/compare/v0.3.0...v0.4.0)
 * Support laravel 11 by @cuonggt in https://github.com/cuonggt/laravel-dibi/pull/66
