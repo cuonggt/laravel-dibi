@@ -15,7 +15,7 @@
         "axios": "^1.6.0",
         "eslint": "^8.34.0",
         "eslint-plugin-vue": "^9.9.0",
-        "husky": "^8.0.3",
+        "husky": "^9.1.7",
         "lint-staged": "^13.1.2",
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",
