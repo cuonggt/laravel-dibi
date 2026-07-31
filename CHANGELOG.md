@@ -1,6 +1,9 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.7.0...master)
+* chore: upgrade ESLint to 10.x and migrate to flat config (`eslint.config.js`)
+* chore: upgrade lint-staged to 17.x (development now requires Node 22.22+)
+* fix: `npm run lint` now lints the project (the script previously matched no files)
 
 ## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
 * feat: support Laravel 13
