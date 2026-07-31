@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: "/"
+    schedule:
+      interval: weekly
+    # Dibi is a library and ships no composer.lock, so Dependabot cannot
+    # determine an installed version of the framework. The supported range
+    # is deliberately broad; consumers pin their own Laravel version.
+    ignore:
+      - dependency-name: "laravel/framework"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly

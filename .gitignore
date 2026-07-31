@@ -6,7 +6,6 @@ phpunit.xml
 .phpunit.cache
 .php-cs-fixer.cache
 .eslintcache
-package-lock.json
 pnpm-lock.yaml
 yarn.lock
 /.claude

@@ -3,6 +3,7 @@
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...master)
 * feat: support Laravel 13
 * fix: register the Dibi service provider in `bootstrap/providers.php` on Laravel 11 and above
+* chore: upgrade Vite to 8.x to resolve security advisories (re-run `php artisan dibi:publish` after updating)
 
 ## [v0.6.0 (2026-02-26)](https://github.com/cuonggt/laravel-dibi/compare/v0.5.0...v0.6.0)
 * feat: migrate frontend from Vue 2 + Laravel Mix to Vue 3 + Vite
