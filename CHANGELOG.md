@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.7.0...master)
+
+## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
 * feat: support Laravel 13
 * fix: register the Dibi service provider in `bootstrap/providers.php` on Laravel 11 and above
 * chore: upgrade Vite to 8.x to resolve security advisories (re-run `php artisan dibi:publish` after updating)
