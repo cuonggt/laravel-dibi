@@ -19,7 +19,7 @@
         "eslint": "^10.8.0",
         "eslint-plugin-vue": "^10.10.0",
         "husky": "^8.0.3",
-        "lint-staged": "^17.2.0",
+        "lint-staged": "^17.3.0",
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",
         "monaco-editor": "^0.56.0",
