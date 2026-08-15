@@ -24,7 +24,7 @@
         "mitt": "^3.0.1",
         "monaco-editor": "^0.56.0",
         "numeral": "^2.0.6",
-        "postcss": "^8.4.31",
+        "postcss": "^8.5.26",
         "splitpanes": "^3.1.0",
         "tailwindcss": "^4.3.3",
         "vite": "^8.2.0",
