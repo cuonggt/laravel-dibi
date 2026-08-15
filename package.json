@@ -16,7 +16,7 @@
         "@vitejs/plugin-vue": "^6.0.8",
         "autoprefixer": "^10.4.13",
         "axios": "^1.6.0",
-        "eslint": "^10.8.0",
+        "eslint": "^10.8.1",
         "eslint-plugin-vue": "^10.10.0",
         "husky": "^8.0.3",
         "lint-staged": "^17.2.0",
