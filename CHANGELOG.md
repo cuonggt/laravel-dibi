@@ -7,6 +7,7 @@
 * chore: upgrade TailwindCSS to 4.x and move to its CSS-first configuration (`tailwind.config.js` removed in favour of `resources/css/app.css`; re-run `php artisan dibi:publish` after updating)
 * fix: restore the `cursor: pointer` on buttons that TailwindCSS 4 dropped from Preflight
 * chore: run ESLint and the frontend build in CI, so dependency bumps that break the build are caught
+* fix: restore visible keyboard focus indicators on buttons and `<select>` elements (`focus:shadow-outline-*` was removed in TailwindCSS 2 and `focus:ring-indigo-500` had no ring width, so neither ever rendered any CSS)
 
 ## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
 * feat: support Laravel 13
