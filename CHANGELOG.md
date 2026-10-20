@@ -8,6 +8,10 @@
 * fix: restore the `cursor: pointer` on buttons that TailwindCSS 4 dropped from Preflight
 * chore: run ESLint and the frontend build in CI, so dependency bumps that break the build are caught
 * fix: restore visible keyboard focus indicators on buttons and `<select>` elements (`focus:shadow-outline-*` was removed in TailwindCSS 2 and `focus:ring-indigo-500` had no ring width, so neither ever rendered any CSS)
+* fix: bundle Monaco Editor with Dibi instead of fetching it from a public CDN at runtime, so the SQL query view works offline and on networks that block third-party hosts (re-run `php artisan dibi:publish` after updating)
+* fix: fall back to a plain textarea when the SQL editor cannot be loaded, instead of leaving an empty pane with no explanation
+* chore: load the SQL editor as a separate chunk, so only the SQL query view downloads it
+* chore: drop the unused `@monaco-editor/loader` dependency; the editor now ships at the `monaco-editor` version declared in `package.json`
 
 ## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
 * feat: support Laravel 13

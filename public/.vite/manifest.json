@@ -1,6 +1,16 @@
 {
+  "node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf": {
+    "file": "assets/codicon-Brq4_Ui5.ttf",
+    "src": "node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf"
+  },
+  "node_modules/monaco-editor/esm/vs/languages/definitions/sql/sql.js": {
+    "file": "assets/sql-NEE52Syq.js",
+    "name": "sql",
+    "src": "node_modules/monaco-editor/esm/vs/languages/definitions/sql/sql.js",
+    "isDynamicEntry": true
+  },
   "resources/css/app.css": {
-    "file": "assets/style-CXVbKtls.css",
+    "file": "assets/style-BmmwJb-g.css",
     "name": "style",
     "names": [
       "style.css"
@@ -9,12 +19,33 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CM0mPAH8.js",
+    "file": "assets/app-BFgFV8cS.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
+    "dynamicImports": [
+      "resources/js/monaco.js"
+    ],
     "css": [
       "assets/app-CQ0l0l-F.css"
+    ]
+  },
+  "resources/js/monaco.js": {
+    "file": "assets/monaco-DrhAjBFu.js",
+    "name": "monaco",
+    "src": "resources/js/monaco.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "dynamicImports": [
+      "node_modules/monaco-editor/esm/vs/languages/definitions/sql/sql.js"
+    ],
+    "css": [
+      "assets/monaco-BIbV1ylM.css"
+    ],
+    "assets": [
+      "assets/codicon-Brq4_Ui5.ttf"
     ]
   }
 }
