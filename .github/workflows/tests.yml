@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - master
+  # No base-branch filter, so a pull request stacked on another branch
+  # still runs CI rather than reporting no checks at all.
   pull_request:
-    branches:
-      - master
 
 jobs:
   tests:
