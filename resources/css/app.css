@@ -1,3 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss" source(none);
+
+@source "../**/*.blade.php";
+@source "../**/*.{js,ts,vue}";
+
+@plugin "@tailwindcss/forms";
+
+@theme {
+    --font-sans: Figtree, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/*
+ * Tailwind CSS v4 dropped the `button { cursor: pointer }` reset that v3
+ * shipped in Preflight. Restore it so buttons keep the pointer cursor.
+ */
+@layer base {
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+}

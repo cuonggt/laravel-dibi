@@ -53,7 +53,7 @@ Built with Vite. Entry point: `resources/js/app.js`. Root component: `resources/
 - **TableDetails** — data browser with pagination/filtering/sorting + structure tab
 - **SqlQuery** — Monaco Editor for SQL with split-pane results
 
-Components are globally registered in `resources/js/components.js`. Styling uses TailwindCSS 3 with the `@tailwindcss/forms` plugin. Monaco Editor provides SQL syntax highlighting.
+Components are globally registered in `resources/js/components.js`. Styling uses TailwindCSS 4 with the `@tailwindcss/forms` plugin, configured CSS-first in `resources/css/app.css` (there is no `tailwind.config.js`). Monaco Editor provides SQL syntax highlighting.
 
 Built assets output to `public/` and are served from `/vendor/dibi` path.
 
