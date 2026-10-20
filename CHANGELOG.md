@@ -4,6 +4,9 @@
 * chore: upgrade ESLint to 10.x and migrate to flat config (`eslint.config.js`)
 * chore: upgrade lint-staged to 17.x (development now requires Node 22.22+)
 * fix: `npm run lint` now lints the project (the script previously matched no files)
+* chore: upgrade TailwindCSS to 4.x and move to its CSS-first configuration (`tailwind.config.js` removed in favour of `resources/css/app.css`; re-run `php artisan dibi:publish` after updating)
+* fix: restore the `cursor: pointer` on buttons that TailwindCSS 4 dropped from Preflight
+* chore: run ESLint and the frontend build in CI, so dependency bumps that break the build are caught
 
 ## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
 * feat: support Laravel 13
