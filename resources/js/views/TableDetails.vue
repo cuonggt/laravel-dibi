@@ -22,7 +22,7 @@
                                     <div class="flex mt-4">
                                         <select
                                             v-model="filterForm.field"
-                                            class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8"
+                                            class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:ring-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8"
                                         >
                                             <option
                                                 v-for="column in currentTable.columns"
@@ -42,7 +42,7 @@
                                         <select
                                             v-show="filterForm.field != '__raw__'"
                                             v-model="filterForm.operator"
-                                            class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2"
+                                            class="py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:ring-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-8 ml-2"
                                         >
                                             <option value="=">
                                                 =
@@ -140,16 +140,16 @@
                         <div class="flex justify-between items-center">
                             <div class="flex">
                                 <button
-                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-r-none"
-                                    :class="tab == 'data' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-hidden focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-xs hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-r-none focus:relative focus:z-10"
+                                    :class="tab == 'data' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-hidden focus:border-gray-900 focus:ring-3 focus:ring-gray-500 disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-xs hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:ring-3 focus:ring-blue-500 active:text-gray-800 active:bg-gray-50'"
                                     :disabled="tab == 'data'"
                                     @click="tab = 'data'"
                                 >
                                     Data
                                 </button>
                                 <button
-                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-l-none rounded-r-none"
-                                    :class="tab == 'structure' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-hidden focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-xs hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                    class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150 rounded-l-none rounded-r-none focus:relative focus:z-10"
+                                    :class="tab == 'structure' ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-hidden focus:border-gray-900 focus:ring-3 focus:ring-gray-500 disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-xs hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:ring-3 focus:ring-blue-500 active:text-gray-800 active:bg-gray-50'"
                                     :disabled="tab == 'structure'"
                                     @click="tab = 'structure'"
                                 >
@@ -177,7 +177,7 @@
                                 <div>
                                     <button
                                         class="inline-flex items-center px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150"
-                                        :class="filterEnabled ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-hidden focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-xs hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'"
+                                        :class="filterEnabled ? 'bg-gray-800 border-transparent text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-hidden focus:border-gray-900 focus:ring-3 focus:ring-gray-500 disabled:opacity-75' : 'bg-white border-gray-300 text-gray-700 shadow-xs hover:text-gray-500 focus:outline-hidden focus:border-blue-300 focus:ring-3 focus:ring-blue-500 active:text-gray-800 active:bg-gray-50'"
                                         @click="toggleFilter"
                                     >
                                         Filters
@@ -185,7 +185,7 @@
                                 </div>
                                 <div class="flex">
                                     <button
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-r-none disabled:opacity-25"
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500 focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-r-none focus:relative focus:z-10 disabled:opacity-25"
                                         title="Previous page"
                                         :disabled="offset == 0 || loadingRecords"
                                         @click.prevent="selectPreviousPage"
@@ -193,7 +193,7 @@
                                         <icon-chevron-left size="4" />
                                     </button>
                                     <button
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none rounded-r-none"
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500 focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none rounded-r-none focus:relative focus:z-10"
                                         title="Page settings"
                                         :disabled="loadingRecords"
                                         @click.prevent="startSetting"
@@ -201,7 +201,7 @@
                                         <icon-cog size="4" />
                                     </button>
                                     <button
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none disabled:opacity-25"
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500 focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out rounded-l-none focus:relative focus:z-10 disabled:opacity-25"
                                         title="Next page"
                                         :disabled="!hasMorePages || loadingRecords"
                                         @click.prevent="selectNextPage"
