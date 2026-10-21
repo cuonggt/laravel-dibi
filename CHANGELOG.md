@@ -13,6 +13,8 @@
 * chore: load the SQL editor as a separate chunk, so only the SQL query view downloads it
 * chore: drop the unused `@monaco-editor/loader` dependency; the editor now ships at the `monaco-editor` version declared in `package.json`
 
+* chore: update npm dependencies, including vite 8.3.4, vue 3.5.41, eslint 10.8.1, axios 1.20.0, postcss 8.5.26, lint-staged 17.3.0 and transitive security advisories (re-run `php artisan dibi:publish` after updating)
+
 ## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
 * feat: support Laravel 13
 * fix: register the Dibi service provider in `bootstrap/providers.php` on Laravel 11 and above
