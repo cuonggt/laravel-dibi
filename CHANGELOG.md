@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.0...master)
+* chore: cover the MySQL repository with tests for its information_schema queries and row mapping
 
 ## [v1.0.0 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v0.9.0...v1.0.0)
 * chore: drop the unused `ramsey/uuid` dependency; Laravel requires it itself, so it stays installed either way
