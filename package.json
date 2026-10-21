@@ -33,7 +33,7 @@
         "vue-toastification": "^2.0.0-rc.5"
     },
     "lint-staged": {
-        "**/*.{js,ts,vue}": [
+        "**/*.{js,mjs,ts,vue}": [
             "eslint --cache --fix"
         ],
         "**/*.php": [
