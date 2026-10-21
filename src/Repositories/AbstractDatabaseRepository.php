@@ -49,6 +49,138 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
     }
 
     /**
+     * Split a script into the individual statements it contains.
+     *
+     * Semicolons only separate statements outside string literals, quoted
+     * identifiers and comments, so this scans the script rather than splitting
+     * on every semicolon. Blank statements are dropped, which also takes care
+     * of a trailing semicolon.
+     *
+     * Quoting styles from all supported drivers are recognised, since the same
+     * script may be pasted against any of them: single and double quotes,
+     * MySQL backticks and SQL Server square brackets. A doubled closing
+     * character escapes itself, and inside the two string quotes a backslash
+     * escapes the character after it, as MySQL allows.
+     *
+     * Statement bodies that contain semicolons, such as a trigger or procedure
+     * declared with BEGIN ... END, are still split at those semicolons; that
+     * needs the client to track a delimiter, which Dibi does not.
+     *
+     * @param  string  $sqlQuery
+     * @return array<string>
+     */
+    public function splitSqlQuery($sqlQuery)
+    {
+        $closedBy = ['\'' => '\'', '"' => '"', '`' => '`', '[' => ']'];
+
+        $statements = [];
+        $buffer = '';
+        $length = strlen($sqlQuery);
+        $position = 0;
+
+        while ($position < $length) {
+            $character = $sqlQuery[$position];
+            $pair = substr($sqlQuery, $position, 2);
+
+            if ($pair === '--' || $character === '#') {
+                $position = $this->consumeUntil($sqlQuery, $position, "\n", true, $buffer);
+
+                continue;
+            }
+
+            if ($pair === '/*') {
+                $position = $this->consumeUntil($sqlQuery, $position + 2, '*/', true, $buffer, $pair);
+
+                continue;
+            }
+
+            if (isset($closedBy[$character])) {
+                $position = $this->consumeQuoted($sqlQuery, $position, $closedBy[$character], $buffer);
+
+                continue;
+            }
+
+            if ($character === ';') {
+                $statements[] = $buffer;
+                $buffer = '';
+                $position++;
+
+                continue;
+            }
+
+            $buffer .= $character;
+            $position++;
+        }
+
+        $statements[] = $buffer;
+
+        return array_values(array_filter($statements, function ($statement) {
+            return trim($statement) !== '';
+        }));
+    }
+
+    /**
+     * Copy the script into the buffer up to and including the given marker.
+     *
+     * @return int
+     */
+    protected function consumeUntil($sqlQuery, $position, $marker, $inclusive, &$buffer, $prefix = '')
+    {
+        $end = strpos($sqlQuery, $marker, $position);
+
+        $end = $end === false
+            ? strlen($sqlQuery)
+            : $end + ($inclusive ? strlen($marker) : 0);
+
+        $buffer .= $prefix.substr($sqlQuery, $position, $end - $position);
+
+        return $end;
+    }
+
+    /**
+     * Copy a quoted run into the buffer, honouring the driver's escaping.
+     *
+     * @return int
+     */
+    protected function consumeQuoted($sqlQuery, $position, $closing, &$buffer)
+    {
+        $escapesWithBackslash = $closing === '\'' || $closing === '"';
+        $length = strlen($sqlQuery);
+
+        $buffer .= $sqlQuery[$position];
+        $position++;
+
+        while ($position < $length) {
+            $character = $sqlQuery[$position];
+
+            if ($escapesWithBackslash && $character === '\\' && $position + 1 < $length) {
+                $buffer .= substr($sqlQuery, $position, 2);
+                $position += 2;
+
+                continue;
+            }
+
+            if ($character === $closing) {
+                if (($sqlQuery[$position + 1] ?? null) === $closing) {
+                    $buffer .= substr($sqlQuery, $position, 2);
+                    $position += 2;
+
+                    continue;
+                }
+
+                $buffer .= $character;
+
+                return $position + 1;
+            }
+
+            $buffer .= $character;
+            $position++;
+        }
+
+        return $position;
+    }
+
+    /**
      * Determine which connection method should run the given query.
      *
      * Only `select` returns rows, so misreading the leading keyword means a
