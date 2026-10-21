@@ -2,7 +2,9 @@
 
 namespace Cuonggt\Dibi;
 
-class TableIndex extends DBObject
+use JsonSerializable;
+
+class TableIndex extends DBObject implements JsonSerializable
 {
     /**
      * @var string
@@ -48,4 +50,24 @@ class TableIndex extends DBObject
      * @var string
      */
     public $indexType;
+
+    /**
+     * Get the JSON serializable fields for the object.
+     *
+     * @return array
+     */
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'tableCatalog' => $this->tableCatalog,
+            'tableSchema' => $this->tableSchema,
+            'tableName' => $this->tableName,
+            'nonUnique' => $this->nonUnique,
+            'indexSchema' => $this->indexSchema,
+            'indexName' => $this->indexName,
+            'seqInIndex' => $this->seqInIndex,
+            'columnName' => $this->columnName,
+            'indexType' => $this->indexType,
+        ];
+    }
 }

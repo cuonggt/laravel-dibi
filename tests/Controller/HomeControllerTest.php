@@ -144,6 +144,30 @@ class HomeControllerTest extends FeatureTestCase
         }
     }
 
+    public function test_the_embedded_indexes_carry_the_mapped_fields_and_nothing_else(): void
+    {
+        DB::statement('CREATE INDEX package_tests_name_index ON package_tests (name)');
+
+        $tables = collect($this->embeddedVariables()['informationSchema']['tables'])
+            ->keyBy('tableName');
+
+        $index = collect($tables['package_tests']['indexes'])
+            ->firstWhere('indexName', 'package_tests_name_index');
+
+        $expected = [
+            'tableCatalog', 'tableSchema', 'tableName', 'nonUnique',
+            'indexSchema', 'indexName', 'seqInIndex', 'columnName', 'indexType',
+        ];
+
+        $this->assertSame($expected, array_keys($index));
+
+        $this->assertArrayNotHasKey(
+            'raw',
+            $index,
+            'The raw row duplicates every mapped field, so it should not be sent to the browser.'
+        );
+    }
+
     public function test_it_requires_authorization(): void
     {
         Dibi::auth(function () {
