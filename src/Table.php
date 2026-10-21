@@ -41,7 +41,7 @@ class Table extends DBObject implements JsonSerializable
      *
      * @return $this|array
      */
-    public function columns(array $columns = null)
+    public function columns(?array $columns = null)
     {
         if (is_null($columns)) {
             return $this->columns;
@@ -57,7 +57,7 @@ class Table extends DBObject implements JsonSerializable
      *
      * @return $this|array
      */
-    public function indexes(array $indexes = null)
+    public function indexes(?array $indexes = null)
     {
         if (is_null($indexes)) {
             return $this->indexes;
@@ -73,7 +73,7 @@ class Table extends DBObject implements JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'tableCatalog' => $this->tableCatalog,

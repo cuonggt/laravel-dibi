@@ -13,7 +13,7 @@ class InformationSchema implements JsonSerializable
         $this->tables = $tables;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'tables' => $this->tables,
