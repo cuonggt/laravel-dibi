@@ -5,6 +5,7 @@ namespace Cuonggt\Dibi\Tests;
 use Cuonggt\Dibi\Dibi;
 use Cuonggt\Dibi\DibiServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Cache;
 use Orchestra\Testbench\TestCase;
 
 class FeatureTestCase extends TestCase
@@ -18,8 +19,12 @@ class FeatureTestCase extends TestCase
     {
         parent::setUp();
 
-        // Reset cached database repository so each test gets a fresh instance.
+        // Dibi keeps these on static properties, which survive between tests in
+        // the same process, so reset them rather than leaking into the next one.
         Dibi::$databaseRepository = null;
+        Dibi::$databaseConnections = [];
+
+        Cache::forget('dibiConnection');
 
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
