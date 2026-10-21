@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.3...master)
+* chore: cover the SQLite repository with tests, completing test coverage of all three drivers
 
 ## [v1.0.3 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v1.0.2...v1.0.3)
 * fix: split a SQL script into statements only on semicolons that fall outside string literals, quoted identifiers and comments, so a query such as `SELECT ';'` no longer fails
