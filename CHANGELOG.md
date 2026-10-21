@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.9.0...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.0...master)
+
+## [v1.0.0 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v0.9.0...v1.0.0)
 * chore: drop the unused `ramsey/uuid` dependency; Laravel requires it itself, so it stays installed either way
 * **Breaking:** narrow the supported versions to those CI actually tests — PHP 8.1+ (was 7.3+) and Laravel 9 through 13 (was 6 through 13)
 * chore: run php-cs-fixer in CI, so PHP code style no longer depends on the local pre-commit hook
