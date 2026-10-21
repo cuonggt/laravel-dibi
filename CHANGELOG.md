@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.9.0...master)
+* chore: cover the authorization gate with tests, including that every route is denied by default outside the local environment
 
 ## [v0.9.0 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v0.8.0...v0.9.0)
 * chore: point `jsconfig.json` at the Vue 3.5 compiler target; it still declared 2.7 from before the Vue 3 migration
