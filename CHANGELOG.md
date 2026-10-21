@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.3...master)
+* chore: cover `DatabaseRepositoryFactory` with tests, including the error raised for an unsupported driver
 * chore: cover the SQLite repository with tests, completing test coverage of all three drivers
 
 ## [v1.0.3 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v1.0.2...v1.0.3)
