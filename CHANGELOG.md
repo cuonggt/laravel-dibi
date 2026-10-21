@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.7.0...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.8.0...master)
+
+## [v0.8.0 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v0.7.0...v0.8.0)
 * chore: upgrade ESLint to 10.x and migrate to flat config (`eslint.config.js`)
 * chore: upgrade lint-staged to 17.x (development now requires Node 22.22+)
 * fix: `npm run lint` now lints the project (the script previously matched no files)
@@ -12,7 +14,6 @@
 * fix: fall back to a plain textarea when the SQL editor cannot be loaded, instead of leaving an empty pane with no explanation
 * chore: load the SQL editor as a separate chunk, so only the SQL query view downloads it
 * chore: drop the unused `@monaco-editor/loader` dependency; the editor now ships at the `monaco-editor` version declared in `package.json`
-
 * chore: update npm dependencies, including vite 8.3.4, vue 3.5.41, eslint 10.8.1, axios 1.20.0, postcss 8.5.26, lint-staged 17.3.0 and transitive security advisories (re-run `php artisan dibi:publish` after updating)
 
 ## [v0.7.0 (2026-07-31)](https://github.com/cuonggt/laravel-dibi/compare/v0.6.0...v0.7.0)
