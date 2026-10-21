@@ -25,7 +25,25 @@ class EnsureUpToDateAssetsTest extends FeatureTestCase
 
         mkdir($this->publicPath, 0777, true);
 
-        $this->app->usePublicPath($this->publicPath);
+        $this->usePublicPath($this->publicPath);
+    }
+
+    /**
+     * Point public_path() at the given directory.
+     *
+     * Laravel 10 and above resolve it from a property on the application, set
+     * through usePublicPath(). Laravel 9 has no such method and reads the
+     * container binding instead.
+     */
+    protected function usePublicPath($path)
+    {
+        if (method_exists($this->app, 'usePublicPath')) {
+            $this->app->usePublicPath($path);
+
+            return;
+        }
+
+        $this->app->instance('path.public', $path);
     }
 
     protected function tearDown(): void
