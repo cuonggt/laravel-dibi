@@ -119,6 +119,88 @@ class SqlQueryControllerTest extends FeatureTestCase
         $this->assertArrayHasKey('result', $results[0]);
     }
 
+    public function test_it_recognises_a_select_followed_by_any_whitespace(): void
+    {
+        DB::table('package_tests')->insert(['id' => 1, 'name' => 'foo']);
+
+        foreach (["SELECT\t* FROM package_tests", "SELECT\n* FROM package_tests"] as $sql) {
+            $results = $this->run_query($sql);
+
+            $this->assertSame('select', $results[0]['statement']);
+            $this->assertSame('foo', $results[0]['result'][0]['name']);
+        }
+    }
+
+    public function test_it_recognises_every_statement_in_a_multi_statement_query(): void
+    {
+        DB::table('package_tests')->insert(['id' => 1, 'name' => 'foo']);
+
+        $results = $this->run_query("SELECT id FROM package_tests;\nSELECT name FROM package_tests");
+
+        $this->assertCount(2, $results);
+        $this->assertSame('select', $results[0]['statement']);
+        $this->assertSame(
+            'select',
+            $results[1]['statement'],
+            'A statement after the first is preceded by the whitespace left by the split.'
+        );
+        $this->assertSame('foo', $results[1]['result'][0]['name']);
+    }
+
+    public function test_it_treats_a_common_table_expression_as_a_select(): void
+    {
+        DB::table('package_tests')->insert(['id' => 1, 'name' => 'foo']);
+
+        $results = $this->run_query(
+            'WITH recent AS (SELECT * FROM package_tests) SELECT name FROM recent'
+        );
+
+        $this->assertSame('select', $results[0]['statement']);
+        $this->assertSame('foo', $results[0]['result'][0]['name']);
+    }
+
+    public function test_it_skips_comments_before_the_first_keyword(): void
+    {
+        DB::table('package_tests')->insert(['id' => 1, 'name' => 'foo']);
+
+        $queries = [
+            'line comment' => "-- a note\nSELECT * FROM package_tests",
+            'block comment' => '/* a note */ SELECT * FROM package_tests',
+            'multi-line block comment' => "/* a\n note */\nSELECT * FROM package_tests",
+            'several comments' => "-- one\n-- two\nSELECT * FROM package_tests",
+        ];
+
+        foreach ($queries as $label => $sql) {
+            $results = $this->run_query($sql);
+
+            $this->assertSame('select', $results[0]['statement'], "The {$label} should be skipped.");
+            $this->assertSame('foo', $results[0]['result'][0]['name']);
+        }
+    }
+
+    public function test_it_still_classifies_an_unknown_leading_keyword_as_a_statement(): void
+    {
+        $results = $this->run_query("-- make a table\nCREATE TABLE comment_test (id INTEGER)");
+
+        $this->assertSame('statement', $results[0]['statement']);
+    }
+
+    public function test_it_returns_a_json_array_when_a_leading_fragment_is_empty(): void
+    {
+        $results = $this->run_query(';SELECT 1 AS one');
+
+        $this->assertCount(1, $results);
+        $this->assertSame('select', $results[0]['statement']);
+    }
+
+    public function test_it_ignores_whitespace_only_fragments(): void
+    {
+        $results = $this->run_query("SELECT 1 AS one;\n \n");
+
+        $this->assertCount(1, $results);
+        $this->assertSame('select', $results[0]['statement']);
+    }
+
     public function test_it_requires_authorization(): void
     {
         \Cuonggt\Dibi\Dibi::auth(function () {
