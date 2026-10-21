@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.0...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.1...master)
+
+## [v1.0.1 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v1.0.0...v1.0.1)
 * fix: stop emitting PHP deprecation notices on every dashboard load — the table metadata objects were missing `jsonSerialize()` return types, used implicitly nullable parameters, and created dynamic properties on `TableIndex`
 * chore: cover the MySQL repository with tests for its information_schema queries and row mapping
 
