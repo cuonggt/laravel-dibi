@@ -88,10 +88,38 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
 
     /**
      * {@inheritdoc}
+     *
+     * SQL Server has no INFORMATION_SCHEMA view for indexes, so this reads the
+     * sys catalog views instead. Those are already scoped to the connected
+     * database, which is why this query takes no binding unlike the others.
+     * Column names are aliased to match the shape the other drivers return.
+     *
+     * Heaps are excluded, since they appear in sys.indexes with a null name.
+     * Columns an index merely INCLUDEs are reported with a key_ordinal of 0,
+     * which is how SQL Server distinguishes them from key columns; they are
+     * listed after the key columns of the same index.
      */
     protected function rawIndexes()
     {
-        return [];
+        return $this->db->select(
+            'SELECT
+                DB_NAME() AS TABLE_CATALOG,
+                s.name AS TABLE_SCHEMA,
+                t.name AS TABLE_NAME,
+                CASE WHEN i.is_unique = 1 THEN 0 ELSE 1 END AS NON_UNIQUE,
+                s.name AS INDEX_SCHEMA,
+                i.name AS INDEX_NAME,
+                ic.key_ordinal AS SEQ_IN_INDEX,
+                c.name AS COLUMN_NAME,
+                i.type_desc AS INDEX_TYPE
+            FROM sys.indexes i
+            INNER JOIN sys.tables t ON t.object_id = i.object_id
+            INNER JOIN sys.schemas s ON s.schema_id = t.schema_id
+            INNER JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id
+            INNER JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id
+            WHERE i.name IS NOT NULL
+            ORDER BY s.name ASC, t.name ASC, i.name ASC, ic.is_included_column ASC, ic.key_ordinal ASC'
+        );
     }
 
     /**
@@ -99,6 +127,16 @@ class SqlsrvDatabaseRepository extends AbstractDatabaseRepository
      */
     protected function mapRawIndexToObject($rawIndex)
     {
-        return (new TableIndex)->setRaw((array) $rawIndex)->map([]);
+        return (new TableIndex)->setRaw((array) $rawIndex)->map([
+            'tableCatalog' => $rawIndex->TABLE_CATALOG,
+            'tableSchema' => $rawIndex->TABLE_SCHEMA,
+            'tableName' => $rawIndex->TABLE_SCHEMA.'.'.$rawIndex->TABLE_NAME,
+            'nonUnique' => (bool) $rawIndex->NON_UNIQUE,
+            'indexSchema' => $rawIndex->INDEX_SCHEMA,
+            'indexName' => $rawIndex->INDEX_NAME,
+            'seqInIndex' => $rawIndex->SEQ_IN_INDEX,
+            'columnName' => $rawIndex->COLUMN_NAME,
+            'indexType' => $rawIndex->INDEX_TYPE,
+        ]);
     }
 }

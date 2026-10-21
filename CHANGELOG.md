@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.1...master)
+* fix: report indexes for SQL Server connections; the Structure tab previously showed none, because the driver never queried them
 
 ## [v1.0.1 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v1.0.0...v1.0.1)
 * fix: stop emitting PHP deprecation notices on every dashboard load — the table metadata objects were missing `jsonSerialize()` return types, used implicitly nullable parameters, and created dynamic properties on `TableIndex`
