@@ -95,3 +95,29 @@ jobs:
             exit 1
           fi
           echo "Committed assets match a fresh build."
+
+  code-style:
+    runs-on: ubuntu-latest
+
+    name: Code style (php-cs-fixer)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: curl, dom, json, libxml, mbstring, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer update --prefer-stable --no-interaction
+
+      - name: Check code style
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff

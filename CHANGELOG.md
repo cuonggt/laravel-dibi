@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.9.0...master)
+* chore: run php-cs-fixer in CI, so PHP code style no longer depends on the local pre-commit hook
 * chore: cover the authorization gate with tests, including that every route is denied by default outside the local environment
 
 ## [v0.9.0 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v0.8.0...v0.9.0)
