@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.2...master)
+* fix: split a SQL script into statements only on semicolons that fall outside string literals, quoted identifiers and comments, so a query such as `SELECT ';'` no longer fails
 
 ## [v1.0.2 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v1.0.1...v1.0.2)
 * fix: classify SQL statements by their leading keyword rather than the first space-delimited word, so queries using tabs or newlines after the keyword, common table expressions, leading comments and every statement after the first in a multi-statement query return their rows instead of a bare boolean

@@ -201,6 +201,24 @@ class SqlQueryControllerTest extends FeatureTestCase
         $this->assertSame('select', $results[0]['statement']);
     }
 
+    public function test_it_runs_a_query_whose_string_literal_contains_a_semicolon(): void
+    {
+        $results = $this->run_query("SELECT ';' AS separator");
+
+        $this->assertCount(1, $results);
+        $this->assertSame('select', $results[0]['statement']);
+        $this->assertSame(';', $results[0]['result'][0]['separator']);
+    }
+
+    public function test_it_separates_statements_whose_literals_contain_semicolons(): void
+    {
+        $results = $this->run_query("SELECT ';' AS a; SELECT ';;' AS b");
+
+        $this->assertCount(2, $results);
+        $this->assertSame(';', $results[0]['result'][0]['a']);
+        $this->assertSame(';;', $results[1]['result'][0]['b']);
+    }
+
     public function test_it_requires_authorization(): void
     {
         \Cuonggt\Dibi\Dibi::auth(function () {
