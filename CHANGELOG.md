@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.8.0...master)
+* chore: fail CI when the committed assets in `public/` are stale, so a dependency bump cannot ship a stale bundle
 
 ## [v0.8.0 (2026-10-21)](https://github.com/cuonggt/laravel-dibi/compare/v0.7.0...v0.8.0)
 * chore: upgrade ESLint to 10.x and migrate to flat config (`eslint.config.js`)

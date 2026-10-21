@@ -86,3 +86,12 @@ jobs:
 
       - name: Build assets
         run: npm run build
+
+      - name: Verify committed assets match the build
+        run: |
+          if [ -n "$(git status --porcelain -- public/)" ]; then
+            echo "::error::The assets committed in public/ are stale. Run 'npm run build' and commit the result."
+            git status --short -- public/
+            exit 1
+          fi
+          echo "Committed assets match a fresh build."
