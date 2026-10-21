@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v0.8.0...master)
+* chore: point `jsconfig.json` at the Vue 3.5 compiler target; it still declared 2.7 from before the Vue 3 migration
 * chore: rename `vite.config.js` to `.mjs` and drop its unused `@` path alias, so the config still loads once Vite makes its native config loader the default
 * chore: fail CI when the committed assets in `public/` are stale, so a dependency bump cannot ship a stale bundle
 
