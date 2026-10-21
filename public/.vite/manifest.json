@@ -19,7 +19,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BFgFV8cS.js",
+    "file": "assets/app-C0_1FNH3.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -31,7 +31,7 @@
     ]
   },
   "resources/js/monaco.js": {
-    "file": "assets/monaco-DrhAjBFu.js",
+    "file": "assets/monaco-B18Po5H1.js",
     "name": "monaco",
     "src": "resources/js/monaco.js",
     "isDynamicEntry": true,
@@ -45,6 +45,7 @@
       "assets/monaco-BIbV1ylM.css"
     ],
     "assets": [
+      "assets/editor.worker-0g2wMcbF.js",
       "assets/codicon-Brq4_Ui5.ttf"
     ]
   }
