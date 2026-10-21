@@ -5,7 +5,6 @@ namespace Cuonggt\Dibi\Repositories;
 use Cuonggt\Dibi\Contracts\DatabaseRepository;
 use Cuonggt\Dibi\InformationSchema;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 abstract class AbstractDatabaseRepository implements DatabaseRepository
 {
@@ -40,17 +39,53 @@ abstract class AbstractDatabaseRepository implements DatabaseRepository
      */
     public function runSqlQuery($sqlQuery)
     {
-        $statement = strtolower(Arr::first(explode(' ', $sqlQuery)));
-
-        if (! in_array($statement, ['select', 'insert', 'update', 'delete'])) {
-            $statement = 'statement';
-        }
+        $statement = $this->statementType($sqlQuery);
 
         return [
             'query' => $sqlQuery,
             'statement' => $statement,
             'result' => $this->db->{$statement}($sqlQuery),
         ];
+    }
+
+    /**
+     * Determine which connection method should run the given query.
+     *
+     * Only `select` returns rows, so misreading the leading keyword means a
+     * query appears to succeed while returning nothing. The keyword is matched
+     * as a word rather than split on a single space, so any whitespace may
+     * follow it, and comments before it are skipped.
+     *
+     * A common table expression is treated as a select. `WITH ... SELECT` is by
+     * far the usual form, and the rarer `WITH ... UPDATE` still performs its
+     * work when run through select(), merely returning no rows — whereas
+     * running `WITH ... SELECT` as a bare statement discards the rows entirely.
+     *
+     * @param  string  $sqlQuery
+     * @return string
+     */
+    protected function statementType($sqlQuery)
+    {
+        preg_match('/^\s*([a-z]+)/i', $this->stripLeadingComments($sqlQuery), $matches);
+
+        $keyword = strtolower($matches[1] ?? '');
+
+        if ($keyword === 'with') {
+            return 'select';
+        }
+
+        return in_array($keyword, ['select', 'insert', 'update', 'delete']) ? $keyword : 'statement';
+    }
+
+    /**
+     * Strip the whitespace and comments that precede a query's first keyword.
+     *
+     * @param  string  $sqlQuery
+     * @return string
+     */
+    protected function stripLeadingComments($sqlQuery)
+    {
+        return preg_replace('{^(?:\s++|--[^\n]*+(?:\n|$)|/\*.*?\*/)++}s', '', $sqlQuery);
     }
 
     /**

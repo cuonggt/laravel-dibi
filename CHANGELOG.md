@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.1...master)
+* fix: classify SQL statements by their leading keyword rather than the first space-delimited word, so queries using tabs or newlines after the keyword, common table expressions, leading comments and every statement after the first in a multi-statement query return their rows instead of a bare boolean
 * chore: cover the SQL query endpoint with tests for statement classification, multi-statement execution and authorization
 * fix: report indexes for SQL Server connections; the Structure tab previously showed none, because the driver never queried them
 
