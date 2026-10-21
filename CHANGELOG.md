@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.3...master)
+* chore: cover the published-asset check with tests, including both of the errors it raises and the console short-circuit that had kept it out of the suite entirely
 * chore: cover `DatabaseRepositoryFactory` with tests, including the error raised for an unsupported driver
 * chore: cover the SQLite repository with tests, completing test coverage of all three drivers
 
