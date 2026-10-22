@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.3...master)
+## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.4...master)
+
+## [v1.0.4 (2026-10-22)](https://github.com/cuonggt/laravel-dibi/compare/v1.0.3...v1.0.4)
 * fix: recover from a remembered database connection that can no longer be used, instead of failing every dashboard request until the cache is cleared; selecting a connection the application does not configure is now rejected
 * fix: stop sending each index row to the browser twice; `TableIndex` now serializes only its mapped fields, as the other table metadata objects already did
 * chore: cover the connection selection endpoint with tests
