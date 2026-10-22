@@ -90,13 +90,38 @@ class SelectConnectionControllerTest extends FeatureTestCase
         );
     }
 
-    public function test_a_connection_registered_but_absent_from_the_database_config_is_still_accepted(): void
+    public function test_it_rejects_a_connection_that_is_registered_but_never_configured(): void
     {
         Dibi::registerDatabaseConnections(['sqlite', 'never_configured']);
 
-        $this->post('/dibi/api/select-connection', ['connection' => 'never_configured'])->assertOk();
+        $this->postJson('/dibi/api/select-connection', ['connection' => 'never_configured'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['connection' => 'Invalid connection.']);
 
-        $this->assertSame('never_configured', Cache::get('dibiConnection'));
+        $this->assertNull(
+            Cache::get('dibiConnection'),
+            'Selecting it would leave every later request unable to connect.'
+        );
+    }
+
+    public function test_the_dashboard_survives_a_selection_that_can_no_longer_be_used(): void
+    {
+        Dibi::registerDatabaseConnections(['sqlite', 'sqlite_other']);
+
+        Cache::put('dibiConnection', 'sqlite_other');
+
+        $variables = $this->get('/dibi')->assertOk()->viewData('dibiScriptVariables');
+
+        $this->assertSame(
+            'sqlite',
+            $variables['currentDatabaseConnection'],
+            'An unusable selection should fall back to the first available connection.'
+        );
+
+        $this->assertNull(
+            Cache::get('dibiConnection'),
+            'The unusable selection should be discarded so it stops being retried.'
+        );
     }
 
     public function test_it_requires_authorization(): void

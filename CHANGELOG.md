@@ -1,6 +1,7 @@
 # Release Notes
 
 ## [Unreleased](https://github.com/cuonggt/laravel-dibi/compare/v1.0.3...master)
+* fix: recover from a remembered database connection that can no longer be used, instead of failing every dashboard request until the cache is cleared; selecting a connection the application does not configure is now rejected
 * fix: stop sending each index row to the browser twice; `TableIndex` now serializes only its mapped fields, as the other table metadata objects already did
 * chore: cover the connection selection endpoint with tests
 * chore: cover the dashboard controller with tests, including the JSON contract the frontend reads, and reset Dibi's static state between tests
