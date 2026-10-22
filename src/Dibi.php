@@ -96,13 +96,45 @@ class Dibi
     }
 
     /**
+     * Determine whether Dibi can use the given database connection.
+     *
+     * A connection has to be one Dibi was told about and one the application
+     * actually configures. A name registered with no matching entry under
+     * `database.connections` cannot be connected to, so accepting it would
+     * leave every request failing.
+     *
+     * @param  string|null  $connection
+     * @return bool
+     */
+    public static function hasDatabaseConnection($connection)
+    {
+        return in_array($connection, static::databaseConnections(), true)
+            && array_key_exists($connection, config('database.connections', []));
+    }
+
+    /**
      * Get the current database connection name.
+     *
+     * A selection is remembered in the cache indefinitely, so one that can no
+     * longer be used — because it was never configured, or its configuration
+     * has since been removed — is discarded rather than left to fail on every
+     * request. Dibi falls back to the first available connection.
      *
      * @return string
      */
     public static function currentDatabaseConnection()
     {
-        return Cache::get('dibiConnection') ?? Arr::first(static::databaseConnections());
+        $selected = Cache::get('dibiConnection');
+
+        if (static::hasDatabaseConnection($selected)) {
+            return $selected;
+        }
+
+        if (! is_null($selected)) {
+            Cache::forget('dibiConnection');
+        }
+
+        return Arr::first(static::databaseConnections());
     }
 
     /**

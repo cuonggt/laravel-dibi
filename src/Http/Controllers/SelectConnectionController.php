@@ -12,7 +12,7 @@ class SelectConnectionController extends Controller
 {
     public function select(Request $request)
     {
-        if (! in_array($request->connection, Dibi::databaseConnections())) {
+        if (! Dibi::hasDatabaseConnection($request->connection)) {
             throw ValidationException::withMessages([
                 'connection' => ['Invalid connection.'],
             ]);
