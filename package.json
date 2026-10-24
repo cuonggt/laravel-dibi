@@ -21,7 +21,7 @@
         "lint-staged": "^17.3.0",
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",
-        "monaco-editor": "^0.56.0",
+        "monaco-editor": "^0.57.0",
         "numeral": "^2.0.6",
         "postcss": "^8.5.26",
         "splitpanes": "^3.1.0",
